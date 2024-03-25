@@ -2,9 +2,9 @@ repository_type: pipeline
 
 lint:
   files_exist:
-    - assets/nf-core-iridanextexample_logo_light.png
-    - docs/images/nf-core-iridanextexample_logo_light.png
-    - docs/images/nf-core-iridanextexample_logo_dark.png
+    - assets/nf-core-gasnomenclature_logo_light.png
+    - docs/images/nf-core-gasnomenclature_logo_dark.png
+    - docs/images/nf-core-gasnomenclature_logo_light.png
     - .github/workflows/awstest.yml
     - .github/workflows/awsfulltest.yml
   files_unchanged:
