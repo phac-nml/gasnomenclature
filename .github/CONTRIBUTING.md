@@ -1,17 +1,17 @@
-# phac-nml/iridanextexample: Contributing Guidelines
+# phac-nml/gasnomenclature: Contributing Guidelines
 
 Hi there!
-Many thanks for taking an interest in improving phac-nml/iridanextexample.
+Many thanks for taking an interest in improving phac-nml/gasnomenclature.
 
-We try to manage the required tasks for phac-nml/iridanextexample using GitHub issues, you probably came to this page when creating one.
+We try to manage the required tasks for phac-nml/gasnomenclature using GitHub issues, you probably came to this page when creating one.
 Please use the pre-filled template to save time.
 
 ## Contribution workflow
 
-If you'd like to write some code for phac-nml/iridanextexample, the standard workflow is as follows:
+If you'd like to write some code for phac-nml/gasnomenclature, the standard workflow is as follows:
 
-1. Check that there isn't already an issue about your idea in the [phac-nml/iridanextexample issues](https://github.com/phac-nml/iridanextexample/issues) to avoid duplicating work. If there isn't one already, please create one so that others know you're working on this
-2. [Fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) the [phac-nml/iridanextexample repository](https://github.com/phac-nml/iridanextexample) to your GitHub account
+1. Check that there isn't already an issue about your idea in the [phac-nml/gasnomenclature issues](https://github.com/phac-nml/gasnomenclature/issues) to avoid duplicating work. If there isn't one already, please create one so that others know you're working on this
+2. [Fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) the [phac-nml/gasnomenclature repository](https://github.com/phac-nml/gasnomenclature) to your GitHub account
 3. Make the necessary changes / additions within your forked repository following [Pipeline conventions](#pipeline-contribution-conventions)
 4. Use `nf-core schema build` and add any new parameters to the pipeline JSON schema (requires [nf-core tools](https://github.com/nf-core/tools) >= 1.10).
 5. Submit a Pull Request against the `dev` branch and wait for the code to be reviewed and merged
@@ -19,6 +19,9 @@ If you'd like to write some code for phac-nml/iridanextexample, the standard wor
 If you're not used to this workflow with git, you can start with some [docs from GitHub](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests) or even their [excellent `git` resources](https://try.github.io/).
 
 ## Tests
+
+You can optionally test your changes by running the pipeline locally. Then it is recommended to use the `debug` profile to
+receive warnings about process selectors and other debug info. Example: `nextflow run . -profile debug,test,docker --outdir <OUTDIR>`.
 
 When you create a pull request with changes, [GitHub Actions](https://github.com/features/actions) will run automatic tests.
 Typically, pull-requests are only fully reviewed when these tests are passing, though of course we can help out before then.
@@ -49,11 +52,11 @@ These tests are run both with the latest available version of `Nextflow` and als
 
 ## Getting help
 
-For further information/help, please consult the [phac-nml/iridanextexample documentation](https://github.com/phac-nml/iridanextexample/).
+For further information/help, please consult the [phac-nml/gasnomenclature documentation](https://github.com/phac-nml/gasnomenclature/).
 
 ## Pipeline contribution conventions
 
-To make the phac-nml/iridanextexample code and processing logic more understandable for new contributors and to ensure quality, we semi-standardise the way the code and other contributions are written.
+To make the phac-nml/gasnomenclature code and processing logic more understandable for new contributors and to ensure quality, we semi-standardise the way the code and other contributions are written.
 
 ### Adding a new step
 
@@ -67,8 +70,7 @@ If you wish to contribute a new step, please use the following coding standards:
 6. Add sanity checks and validation for all relevant parameters.
 7. Perform local tests to validate that the new code works as expected.
 8. If applicable, add a new test command in `.github/workflow/ci.yml`.
-9. Update MultiQC config `assets/multiqc_config.yml` so relevant suffixes, file name clean up and module plots are in the appropriate order. If applicable, add a [MultiQC](https://https://multiqc.info/) module.
-10. Add a description of the output files and if relevant any appropriate images from the MultiQC report to `docs/output.md`.
+9. Add a description of the output files to `docs/output.md`.
 
 ### Default values
 
@@ -103,7 +105,7 @@ This repo includes a devcontainer configuration which will create a GitHub Codes
 
 To get started:
 
-- Open the repo in [Codespaces](https://github.com/phac-nml/iridanextexample/codespaces)
+- Open the repo in [Codespaces](https://github.com/phac-nml/gasnomenclature/codespaces)
 - Tools installed
   - nf-core
   - Nextflow

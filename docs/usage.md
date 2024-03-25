@@ -1,4 +1,4 @@
-# phac-nml/iridanextexample: Usage
+# phac-nml/gasnomenclature: Usage
 
 ## Introduction
 
@@ -18,7 +18,7 @@ The input samplesheet must contain three columns: `ID`, `fastq_1`, `fastq_2`. Th
 
 A final samplesheet file consisting of both single- and paired-end data may look something like the one below.
 
-```console
+```csv title="samplesheet.csv"
 sample,fastq_1,fastq_2
 SAMPLE1,sample1_R1.fastq.gz,sample1_R2.fastq.gz
 SAMPLE2,sample2_R1.fastq.gz,sample2_R2.fastq.gz
@@ -62,7 +62,7 @@ Do not use `-c <file>` to specify parameters as this will result in errors. Cust
 The above pipeline run specified with a params file in yaml format:
 
 ```bash
-nextflow run phac-nml/iridanextexample -profile docker -params-file params.yaml
+nextflow run phac-nml/gasnomenclature -profile docker -params-file params.yaml
 ```
 
 with `params.yaml` containing:
@@ -79,7 +79,7 @@ You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-c
 
 It is a good idea to specify a pipeline version when running the pipeline on your data. This ensures that a specific version of the pipeline code and software are used when you run your pipeline. If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code since.
 
-First, go to the [phac-nml/iridanextexample page](https://github.com/phac-nml/iridanextexample) and find the latest pipeline version - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`. Of course, you can switch to another version by changing the number after the `-r` flag.
+First, go to the [phac-nml/gasnomenclature page](https://github.com/phac-nml/gasnomenclature) and find the latest pipeline version - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`. Of course, you can switch to another version by changing the number after the `-r` flag.
 
 This version number will be logged in reports when you run the pipeline, so that you'll know what you used when you look back in the future.
 
