@@ -39,13 +39,13 @@ WorkflowMain.initialise(workflow, params, log, args)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { IRIDANEXT } from './workflows/gasnomenclature'
+include { GAS_NOMENCLATURE } from './workflows/gasnomenclature'
 
 //
 // WORKFLOW: Run main phac-nml/gasnomenclature analysis pipeline
 //
-workflow PHACNML_IRIDANEXT {
-    IRIDANEXT ()
+workflow GASNOMENCLATURE {
+    GAS_NOMENCLATURE ()
 }
 
 /*
@@ -59,7 +59,7 @@ workflow PHACNML_IRIDANEXT {
 // See: https://github.com/nf-core/rnaseq/issues/619
 //
 workflow {
-    PHACNML_IRIDANEXT ()
+    GASNOMENCLATURE ()
 }
 
 /*
