@@ -25,7 +25,6 @@ include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet  } from 'plugin/nf
 include { GENERATE_SAMPLE_JSON } from '../modules/local/generatesamplejson/main'
 include { SIMPLIFY_IRIDA_JSON  } from '../modules/local/simplifyiridajson/main'
 include { IRIDA_NEXT_OUTPUT    } from '../modules/local/iridanextoutput/main'
-include { ASSEMBLY_STUB        } from '../modules/local/assemblystub/main'
 include { GENERATE_SUMMARY     } from '../modules/local/generatesummary/main'
 
 /*
@@ -38,7 +37,10 @@ include { GENERATE_SUMMARY     } from '../modules/local/generatesummary/main'
 // MODULE: Installed directly from nf-core/modules
 //
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
-include { LOCIDEX_MERGE } from "../modules/local/locidex/merge/main"
+include { LOCIDEX_MERGE as LOCIDEX_MERGE_REF } from "../modules/local/locidex/merge/main"
+include { LOCIDEX_MERGE as LOCIDEX_MERGE_QUERY } from "../modules/local/locidex/merge/main"
+include { GAS_CALL } from "../modules/local/gas/call/main"
+include { PROFILE_DISTS } from "../modules/local/profile_dists/main"
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -52,16 +54,20 @@ workflow GAS_NOMENCLATURE {
 
     // Create a new channel of metadata from a sample sheet
     // NB: `input` corresponds to `params.input` and associated sample sheet schema
-    input = Channel.fromSamplesheet("input").map { meta, profile -> tuple(meta, file(profile))};
-    profiles = input.map{
-        it -> it[1]
-    }.collect()
-    LOCIDEX_MERGE(profiles)
+    input = Channel.fromSamplesheet("input");
+    profiles = input.branch{
+        ref: it[0].profile_type
+        query: !it[0].profile_type
+        errors: true // TODO add in check on file for erroneous values, may not be needed as nf-validation is working
+    }
 
-    //ASSEMBLY_STUB (
-    //    input
-    //)
-    //ch_versions = ch_versions.mix(ASSEMBLY_STUB.out.versions)
+    reference_values = profiles.ref.collect{ meta, profile -> profile}
+    query_values = profile.query.collect{ meta, profile -> proifile }
+    reference_values.view()
+    query_values.view()
+    //LOCIDEX_MERGE_REF(reference_values)
+    //LOCIDEX_MERGE_QUERY(query_values)
+
 
     // A channel of tuples of ({meta}, [read[0], read[1]], assembly)
     //ch_tuple_read_assembly = input.join(ASSEMBLY_STUB.out.assembly)

@@ -14,12 +14,19 @@
                 "unique": true,
                 "errorMessage": "Sample name must be provided and cannot contain spaces"
             },
-            "profile": {
+            "profile_type": {
+                "meta": ["profile_type"],
+                "description": "Determines has already been clustered (True) or if it is new, and requiring nomenclature assignment (False)",
+                "errorMessage": "Please specify if the mlst profile has already been clustered (True) or if it is new and requires nomenclature assignment (False)",
+                "type": "boolean"
+            },
+            "mlst_alleles": {
                 "type": "string",
-                "pattern": "^\\S+\\.json(\\.gz)?$",
-                "errorMessage": "Json Profile"
+                "format": "file-path",
+                "pattern": "^\\S+\\.mlst\\.json(\\.gz)?$",
+                "errorMessage": "MLST JSON file from locidex report, cannot contain spaces and must have the extension: '.mlst.json' or '.mlst.json.gz'"
             }
         },
-        "required": ["sample", "profile"]
+        "required": ["sample", "profile_type", "mlst_alleles"]
     }
 }
