@@ -25,7 +25,6 @@ include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet  } from 'plugin/nf
 include { GENERATE_SAMPLE_JSON } from '../modules/local/generatesamplejson/main'
 include { SIMPLIFY_IRIDA_JSON  } from '../modules/local/simplifyiridajson/main'
 include { IRIDA_NEXT_OUTPUT    } from '../modules/local/iridanextoutput/main'
-include { ASSEMBLY_STUB        } from '../modules/local/assemblystub/main'
 include { GENERATE_SUMMARY     } from '../modules/local/generatesummary/main'
 
 /*
@@ -39,6 +38,8 @@ include { GENERATE_SUMMARY     } from '../modules/local/generatesummary/main'
 //
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 include { LOCIDEX_MERGE } from "../modules/local/locidex/merge/main"
+include { GAS_CALL } from "../modules/local/gas/call/main"
+include { PROFILE_DISTS } from "../modules/local/profile_dists/main"
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -58,10 +59,6 @@ workflow GAS_NOMENCLATURE {
     }.collect()
     LOCIDEX_MERGE(profiles)
 
-    //ASSEMBLY_STUB (
-    //    input
-    //)
-    //ch_versions = ch_versions.mix(ASSEMBLY_STUB.out.versions)
 
     // A channel of tuples of ({meta}, [read[0], read[1]], assembly)
     //ch_tuple_read_assembly = input.join(ASSEMBLY_STUB.out.assembly)
