@@ -1,0 +1,40 @@
+nextflow_pipeline {
+
+    name "Integration test of nomenclature assignment pipeline"
+    script "main.nf"
+
+    test("Small-scale test of full pipeline"){
+        tag "pipeline"
+
+        when{
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet1.csv"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+
+            // Check merged profiles
+            // TODO check query profile is merged
+            def actual_profile_ref = path("$launchDir/results/locidex/merged/query/merged_value/merged_profiles_value.tsv")
+            def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected-profile1.tsv")
+            assert actual_profile_ref.text == expected_profile_tsv.text
+
+
+            // Check computed pairwise distances
+            def actual_distances = path("$launchDir/results/distances/results.text")
+            def expected_distances = path("$baseDir/tests/data/distances/expected_pairwise_dists.tsv")
+            assert actual_distances.text == expected_distances.text
+
+            // Check called clusters
+            def actual_calls = path("$launchDir/results/call/Called/results.text")
+            def expected_calls = path("$baseDir/tests/data/called/expected_results.txt")
+            assert actual_calls.text == expected_calls.text
+        }
+    }
+
+
+}
