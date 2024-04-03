@@ -19,7 +19,7 @@ nextflow_pipeline {
 
             // Check merged profiles
             // TODO check query profile is merged
-            def actual_profile_ref = path("$launchDir/results/locidex/merged/query/merged_value/merged_profiles_value.tsv")
+            def actual_profile_ref = path("$launchDir/results/locidex/merge/query/merged_value/merged_profiles_value.tsv")
             def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected-profile1.tsv")
             assert actual_profile_ref.text == expected_profile_tsv.text
 
