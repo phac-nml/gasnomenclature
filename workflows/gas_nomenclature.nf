@@ -49,7 +49,7 @@ include { PROFILE_DISTS } from "../modules/local/profile_dists/main"
 */
 
 
-def prepareFilePath(String filep, String debug_msg){
+def prepareFilePath(String filep, GString debug_msg){
     // Rerturns null if a file is not valid
     def return_path = null
     if(filep){
