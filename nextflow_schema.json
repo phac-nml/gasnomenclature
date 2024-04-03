@@ -10,7 +10,10 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["input", "outdir"],
+            "required": [
+                "input",
+                "outdir"
+            ],
             "properties": {
                 "input": {
                     "type": "string",
@@ -41,7 +44,11 @@
                     "default": "stub",
                     "fa_icon": "fas fa-desktop",
                     "description": "The sequence assembler to use for sequence assembly.",
-                    "enum": ["default", "stub", "experimental"]
+                    "enum": [
+                        "default",
+                        "stub",
+                        "experimental"
+                    ]
                 },
                 "random_seed": {
                     "type": "integer",
@@ -152,7 +159,14 @@
                     "description": "Method used to save pipeline results to output directory.",
                     "help_text": "The Nextflow `publishDir` option specifies which intermediate files should be saved to the output directory. This option tells the pipeline what method should be used to move these files. See [Nextflow docs](https://www.nextflow.io/docs/latest/process.html#publishdir) for details.",
                     "fa_icon": "fas fa-copy",
-                    "enum": ["symlink", "rellink", "link", "copy", "copyNoFollow", "move"],
+                    "enum": [
+                        "symlink",
+                        "rellink",
+                        "link",
+                        "copy",
+                        "copyNoFollow",
+                        "move"
+                    ],
                     "hidden": true
                 },
                 "email_on_fail": {
@@ -226,5 +240,58 @@
         {
             "$ref": "#/definitions/generic_options"
         }
-    ]
+    ],
+    "properties": {
+        "pd_outfmt": {
+            "type": "string",
+            "default": "pairwise"
+        },
+        "pd_distm": {
+            "type": "string",
+            "default": "scaled"
+        },
+        "pd_missing_threshold": {
+            "type": "integer",
+            "default": 1
+        },
+        "pd_sample_quality_threshold": {
+            "type": "integer",
+            "default": 1
+        },
+        "pd_match_threshold": {
+            "type": "integer",
+            "default": -1
+        },
+        "pd_file_type": {
+            "type": "string",
+            "default": "text"
+        },
+        "pd_mapping_file": {
+            "type": "string"
+        },
+        "pd_force": {
+            "type": "boolean"
+        },
+        "pd_skip": {
+            "type": "boolean"
+        },
+        "pd_columns": {
+            "type": "string"
+        },
+        "pd_count_missing": {
+            "type": "boolean",
+            "default": true
+        },
+        "gm_thresholds": {
+            "type": "string",
+            "default": "10,5,0"
+        },
+        "gm_delimiter": {
+            "type": "string",
+            "default": "\\'.\\"
+        },
+        "ref_clusters": {
+            "type": "string"
+        }
+    }
 }

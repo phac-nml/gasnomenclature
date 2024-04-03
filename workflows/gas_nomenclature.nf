@@ -49,13 +49,14 @@ include { PROFILE_DISTS } from "../modules/local/profile_dists/main"
 */
 
 
-def prepareFilePath(String filep){
+def prepareFilePath(String filep, String debug_msg){
     // Rerturns null if a file is not valid
     def return_path = null
     if(filep){
         file_in = path(filep)
         if(file_in.exists()){
             return_path = file_in
+            log.debug debug_msg
         }
     }else{
         return_path = []
@@ -74,7 +75,7 @@ workflow GAS_NOMENCLATURE {
     profiles = input.branch{
         ref: it[0].profile_type
         query: !it[0].profile_type
-        errors: true // TODO add in check on file for erroneous values, may not be needed as nf-validation is working
+        errors: true // To discuss, add in check on file for erroneous values, may not be needed as nf-validation is working
     }
 
     reference_values = profiles.ref.collect{ meta, profile -> profile}
@@ -92,13 +93,13 @@ workflow GAS_NOMENCLATURE {
 
     // PROFILE DISTS processes
 
-    mapping_file = prepareFilePath(params.pd_mapping_file)
+    mapping_file = prepareFilePath(params.pd_mapping_file, "Selecting ${params.pd_mapping_file} for --pd_mapping_file")
     if(mapping_file == null){
         exit 1, "${params.pd_mapping_file}: Does not exist but was passed to the pipeline. Exiting now."
     }
 
 
-    columns_file = prepareFilePath(params.pd_columns)
+    columns_file = prepareFilePath(params.pd_columns,  "Selecting ${params.pd_columns} for --pd_mapping_file")
     if(columns_file == null){
         exit 1, "${params.pd_columns}: Does not exist but was passed to the pipeline. Exiting now."
     }
