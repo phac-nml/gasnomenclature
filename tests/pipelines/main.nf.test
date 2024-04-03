@@ -26,7 +26,7 @@ nextflow_pipeline {
 
             // Check computed pairwise distances
             def actual_distances = path("$launchDir/results/distances/results.text")
-            def expected_distances = path("$baseDir/tests/data/distances/expected_pairwise_dists.tsv")
+            def expected_distances = path("$baseDir/tests/data/distances/expected_pairwise_dists.txt")
             assert actual_distances.text == expected_distances.text
 
             // Check called clusters
