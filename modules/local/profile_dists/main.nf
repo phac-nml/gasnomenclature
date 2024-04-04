@@ -1,24 +1,25 @@
 process PROFILE_DISTS{
     label "process_high"
-    tag "Pairwise Distance Generation: ${meta.id}"
+    tag "Gathering Distances Between Reference and Query Profiles"
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/profile_dists%3A1.0.0--pyh7cba7a3_0' :
         'quay.io/biocontainers/profile_dists:1.0.0--pyh7cba7a3_0' }"
 
     input:
-    tuple val(meta), path(query), path(ref)
+    path query
+    path ref
     val mapping_format
-    path(mapping_file)
-    path(columns)
+    path mapping_file
+    path columns
 
 
     output:
-    tuple val(meta), path("${prefix}_${mapping_format}/allele_map.json"), emit: allele_map
-    tuple val(meta), path("${prefix}_${mapping_format}/query_profile.{text,parquet}"), emit: query_profile
-    tuple val(meta), path("${prefix}_${mapping_format}/ref_profile.{text,parquet}"), emit: ref_profile
-    tuple val(meta), path("${prefix}_${mapping_format}/results.{text,parquet}"), emit: results
-    tuple val(meta), path("${prefix}_${mapping_format}/run.json"), emit: run
+    path("${prefix}/allele_map.json"), emit: allele_map
+    path("${prefix}/query_profile.{text,parquet}"), emit: query_profile
+    path("${prefix}/ref_profile.{text,parquet}"), emit: ref_profile
+    path("${prefix}/results.{text,parquet}"), emit: results
+    path("${prefix}/run.json"), emit: run
     path  "versions.yml", emit: versions
 
 
@@ -41,7 +42,7 @@ process PROFILE_DISTS{
         args = args + " --count_missing"
     }
     // --match_threshold $params.profile_dists.match_thresh \\
-    prefix = meta.id
+    prefix = "distances_${mapping_format}"
     """
     profile_dists --query $query --ref $ref $args --outfmt $mapping_format \\
                 --distm $params.pd_distm \\
@@ -50,7 +51,7 @@ process PROFILE_DISTS{
                 --sample_qual_thresh $params.pd_sample_quality_threshold \\
                 --max_mem ${task.memory.toGiga()} \\
                 --cpus ${task.cpus} \\
-                -o ${prefix}_${mapping_format}
+                -o ${prefix}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

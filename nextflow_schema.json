@@ -5,6 +5,73 @@
     "description": "IRIDA Next Example Pipeline",
     "type": "object",
     "definitions": {
+        "gas_call": {
+            "title": "GAS Call",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "gm_thresholds": {
+                    "type": "string",
+                    "default": "10,5,0"
+                },
+                "gm_delimiter": {
+                    "type": "string",
+                    "default": "\\'.\\"
+                },
+                "ref_clusters": {
+                    "type": "string"
+                }
+            }
+        },
+        "profile_dists": {
+            "title": "Profile Dists",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "pd_outfmt": {
+                    "type": "string",
+                    "default": "pairwise"
+                },
+                "pd_distm": {
+                    "type": "string",
+                    "default": "scaled"
+                },
+                "pd_missing_threshold": {
+                    "type": "number",
+                    "default": 1
+                },
+                "pd_sample_quality_threshold": {
+                    "type": "number",
+                    "default": 1
+                },
+                "pd_match_threshold": {
+                    "type": "number",
+                    "default": -1
+                },
+                "pd_file_type": {
+                    "type": "string",
+                    "default": "text"
+                },
+                "pd_mapping_file": {
+                    "type": "string"
+                },
+                "pd_force": {
+                    "type": "boolean"
+                },
+                "pd_skip": {
+                    "type": "boolean"
+                },
+                "pd_columns": {
+                    "type": "string"
+                },
+                "pd_count_missing": {
+                    "type": "boolean",
+                    "default": true
+                }
+            }
+        },
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
@@ -214,6 +281,12 @@
         }
     },
     "allOf": [
+        {
+            "$ref": "#/definitions/gas_call"
+        },
+        {
+            "$ref": "#/definitions/profile_dists"
+        },
         {
             "$ref": "#/definitions/input_output_options"
         },
