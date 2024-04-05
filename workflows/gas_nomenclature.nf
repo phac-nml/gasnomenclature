@@ -53,7 +53,7 @@ def prepareFilePath(String filep, GString debug_msg){
     // Rerturns null if a file is not valid
     def return_path = null
     if(filep){
-        file_in = path(filep)
+        file_in = file(filep)
         if(file_in.exists()){
             return_path = file_in
             log.debug debug_msg
