@@ -80,7 +80,7 @@ workflow GAS_NOMENCLATURE {
     // LOCIDEX modules
     ref_tag = Channel.value("ref")
     query_tag = Channel.value("value")
-    
+
     merged_references = LOCIDEX_MERGE_REF(reference_values, ref_tag)
     ch_versions = ch_versions.mix(merged_references.versions)
 
