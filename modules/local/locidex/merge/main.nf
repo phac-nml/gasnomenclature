@@ -22,6 +22,7 @@ process LOCIDEX_MERGE {
     locidex merge -i ${input_values.join(' ')} -o ${combined_dir}
 
     mv ${combined_dir}/*.tsv ${combined_dir}/merged_profiles_${input_tag}.tsv
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         locidex merge: \$(echo \$(locidex search -V 2>&1) | sed 's/^.*locidex //' )

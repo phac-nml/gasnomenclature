@@ -74,18 +74,18 @@ workflow GAS_NOMENCLATURE {
         errors: true // To discuss, add in check on file for erroneous values, may not be needed as nf-validation is working
     }
 
-    reference_values = profiles.ref.collect{ meta, profile -> profile}
+    reference_values = input.collect{ meta, profile -> profile}
     query_values = profiles.query.collect{ meta, profile -> profile }
 
     // LOCIDEX modules
     ref_tag = Channel.value("ref")
     query_tag = Channel.value("value")
+    
     merged_references = LOCIDEX_MERGE_REF(reference_values, ref_tag)
     ch_versions = ch_versions.mix(merged_references.versions)
 
     merged_queries = LOCIDEX_MERGE_QUERY(query_values, query_tag)
     ch_versions = ch_versions.mix(merged_queries.versions)
-
 
     // PROFILE DISTS processes
 
