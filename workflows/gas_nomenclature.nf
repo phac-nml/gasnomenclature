@@ -22,10 +22,10 @@ include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet  } from 'plugin/nf
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 
-include { GENERATE_SAMPLE_JSON } from '../modules/local/generatesamplejson/main'
-include { SIMPLIFY_IRIDA_JSON  } from '../modules/local/simplifyiridajson/main'
-include { IRIDA_NEXT_OUTPUT    } from '../modules/local/iridanextoutput/main'
-include { GENERATE_SUMMARY     } from '../modules/local/generatesummary/main'
+include { LOCIDEX_MERGE as LOCIDEX_MERGE_REF    } from "../modules/local/locidex/merge/main"
+include { LOCIDEX_MERGE as LOCIDEX_MERGE_QUERY  } from "../modules/local/locidex/merge/main"
+include { PROFILE_DISTS                         } from "../modules/local/profile_dists/main"
+include { GAS_CALL                              } from "../modules/local/gas/call/main"
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -37,10 +37,6 @@ include { GENERATE_SUMMARY     } from '../modules/local/generatesummary/main'
 // MODULE: Installed directly from nf-core/modules
 //
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
-include { LOCIDEX_MERGE as LOCIDEX_MERGE_REF } from "../modules/local/locidex/merge/main"
-include { LOCIDEX_MERGE as LOCIDEX_MERGE_QUERY } from "../modules/local/locidex/merge/main"
-include { GAS_CALL } from "../modules/local/gas/call/main"
-include { PROFILE_DISTS } from "../modules/local/profile_dists/main"
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -73,8 +69,8 @@ workflow GAS_NOMENCLATURE {
     // NB: `input` corresponds to `params.input` and associated sample sheet schema
     input = Channel.fromSamplesheet("input");
     profiles = input.branch{
-        ref: it[0].profile_type
-        query: !it[0].profile_type
+        ref: it[0].address
+        query: !it[0].address
         errors: true // To discuss, add in check on file for erroneous values, may not be needed as nf-validation is working
     }
 
