@@ -26,6 +26,7 @@ include { LOCIDEX_MERGE as LOCIDEX_MERGE_REF    } from "../modules/local/locidex
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_QUERY  } from "../modules/local/locidex/merge/main"
 include { PROFILE_DISTS                         } from "../modules/local/profile_dists/main"
 include { GAS_CALL                              } from "../modules/local/gas/call/main"
+include { FILTER_NEW                            } from "../modules/local/filter/main"
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -117,30 +118,9 @@ workflow GAS_NOMENCLATURE {
 
     ch_versions = ch_versions.mix(called_data.versions)
 
+    // Filter the new queried samples and addresses into a CSV/JSON file for the IRIDANext plug in
 
-    // A channel of tuples of ({meta}, [read[0], read[1]], assembly)
-    //ch_tuple_read_assembly = input.join(ASSEMBLY_STUB.out.assembly)
-
-    //GENERATE_SAMPLE_JSON (
-    //    ch_tuple_read_assembly
-    //)
-    //ch_versions = ch_versions.mix(GENERATE_SAMPLE_JSON.out.versions)
-
-    //GENERATE_SUMMARY (
-    //    ch_tuple_read_assembly.collect{ [it] }
-    //)
-    //ch_versions = ch_versions.mix(GENERATE_SUMMARY.out.versions)
-
-    //SIMPLIFY_IRIDA_JSON (
-    //    GENERATE_SAMPLE_JSON.out.json
-    //)
-    //ch_versions = ch_versions.mix(SIMPLIFY_IRIDA_JSON.out.versions)
-    //ch_simplified_jsons = SIMPLIFY_IRIDA_JSON.out.simple_json.map { meta, data -> data }.collect() // Collect JSONs
-
-    //IRIDA_NEXT_OUTPUT (
-    //    samples_data=ch_simplified_jsons
-    //)
-    //ch_versions = ch_versions.mix(IRIDA_NEXT_OUTPUT.out.versions)
+    new_addresses = FILTER_NEW(profiles.query, called_data.distances, "tsv", "csv")
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
