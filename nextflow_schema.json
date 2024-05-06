@@ -36,7 +36,7 @@
                 },
                 "pd_distm": {
                     "type": "string",
-                    "default": "scaled"
+                    "default": "hamming"
                 },
                 "pd_missing_threshold": {
                     "type": "number",

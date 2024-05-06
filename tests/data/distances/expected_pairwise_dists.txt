@@ -1,4 +1,5 @@
 query_id	ref_id	dist
-sampleQ	sample1	0.0
-sampleQ	sample2	33.333333333333336
-sampleQ	sample3	66.66666666666667
+sampleQ	sampleQ	0
+sampleQ	sample1	1
+sampleQ	sample2	1
+sampleQ	sample3	2
