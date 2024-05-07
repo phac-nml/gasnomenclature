@@ -14,7 +14,6 @@ process FILTER_NEW {
 
     output:
     path("new_addresses.csv"),  emit: csv
-    path("new_addresses.json"), emit: json
 
     script:
 
@@ -36,9 +35,6 @@ process FILTER_NEW {
 
     csvtk cut -f 1,2 ${outputFile}.tmp > ${outputFile}.${out_extension}
     rm ${outputFile}.tmp
-
-    # Convert the CSV file to a JSON file array with 'id' as the key
-    csvtk csv2json ${outputFile}.${out_extension} -k id > ${outputFile}.json
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
