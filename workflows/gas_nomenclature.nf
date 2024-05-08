@@ -22,6 +22,7 @@ include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet  } from 'plugin/nf
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 
+include { INPUT_CHECK                           } from "../modules/local/input_check/main"
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_REF    } from "../modules/local/locidex/merge/main"
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_QUERY  } from "../modules/local/locidex/merge/main"
 include { PROFILE_DISTS                         } from "../modules/local/profile_dists/main"
@@ -68,7 +69,12 @@ workflow GAS_NOMENCLATURE {
 
     // Create a new channel of metadata from a sample sheet
     // NB: `input` corresponds to `params.input` and associated sample sheet schema
-    input = Channel.fromSamplesheet("input");
+    input = Channel.fromSamplesheet("input")
+
+    // Ensure meta.id and mlst_file keys match
+    mlst_merged = INPUT_CHECK(input)
+
+    // Prepare reference and query TSV files for LOCIDEX_MERGE
     profiles = input.branch{
         ref: it[0].address
         query: !it[0].address
