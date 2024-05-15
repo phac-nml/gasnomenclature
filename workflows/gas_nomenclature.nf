@@ -26,7 +26,7 @@ include { LOCIDEX_MERGE as LOCIDEX_MERGE_REF    } from "../modules/local/locidex
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_QUERY  } from "../modules/local/locidex/merge/main"
 include { PROFILE_DISTS                         } from "../modules/local/profile_dists/main"
 include { GAS_CALL                              } from "../modules/local/gas/call/main"
-include { FILTER_NEW                            } from "../modules/local/filter/main"
+include { FILTER_QUERY                            } from "../modules/local/filter/main"
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -119,8 +119,8 @@ workflow GAS_NOMENCLATURE {
     ch_versions = ch_versions.mix(called_data.versions)
 
     // Filter the new queried samples and addresses into a CSV/JSON file for the IRIDANext plug in
-
-    new_addresses = FILTER_NEW(profiles.query, called_data.distances, "tsv", "csv")
+    new_addresses = FILTER_QUERY(profiles.query, called_data.distances, "tsv", "csv")
+    ch_versions = ch_versions.mix(new_addresses.versions)
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
