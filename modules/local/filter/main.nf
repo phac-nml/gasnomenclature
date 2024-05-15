@@ -1,4 +1,4 @@
-process FILTER_NEW {
+process FILTER_QUERY {
     tag "Filter New Query Addresses"
     label 'process_single'
 
@@ -14,6 +14,7 @@ process FILTER_NEW {
 
     output:
     path("new_addresses.csv"),  emit: csv
+    path("versions.yml"),       emit: versions
 
     script:
 
