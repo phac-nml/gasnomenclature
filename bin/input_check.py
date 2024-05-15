@@ -2,20 +2,16 @@
 
 import json
 import argparse
-import csv
+import sys
 
 
 def check_inputs(json_file, sample_id, output_file):
     # Define a variable to store the match status
-    json_data = json.load(open(json_file))
-    match_status = sample_id in json_data
+    match_status = sample_id in json.load(open(json_file))
 
-    # Write match status to error report CSV
-    if not match_status:
-        with open(output_file, "w", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow(["sample", "Sample ID matches MLST.JSON key?"])
-            writer.writerow([sample_id, match_status])
+    # Write match status to file
+    with open(output_file, "w") as f:
+        f.write(str(match_status))
 
 
 if __name__ == "__main__":
@@ -25,7 +21,7 @@ if __name__ == "__main__":
         "--sample_id", help="Missing sample meta.id path", required=True
     )
     parser.add_argument(
-        "--output", help="Requires an error report file path", required=True
+        "--output", help="Missing match_status file path", required=True
     )
     args = parser.parse_args()
 
