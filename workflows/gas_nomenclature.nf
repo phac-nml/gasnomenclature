@@ -23,7 +23,6 @@ include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet  } from 'plugin/nf
 //
 
 include { INPUT_CHECK                           } from "../modules/local/input_check/main"
-include { ERROR_REPORT                          } from "../modules/local/error_report/main"
 include { SAMPLE_FILTER                         } from "../modules/local/sample_filter/main"
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_REF    } from "../modules/local/locidex/merge/main"
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_QUERY  } from "../modules/local/locidex/merge/main"
@@ -76,9 +75,6 @@ workflow GAS_NOMENCLATURE {
     // Ensure meta.id and mlst_file keys match; generate error report for samples where id ≠ key
     id_key = INPUT_CHECK(input)
     ch_versions = ch_versions.mix(id_key.versions)
-
-    error_report = ERROR_REPORT(input)
-    ch_versions = ch_versions.mix(error_report.versions)
 
     // Update metadata to include the id_key.match data
     match = id_key.match.map { meta, file, json ->

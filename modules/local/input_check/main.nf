@@ -1,5 +1,5 @@
 process INPUT_CHECK{
-    tag "Check Sample Inputs"
+    tag "Check Sample Inputs and Generate Error Report"
     label 'process_single'
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -10,8 +10,9 @@ process INPUT_CHECK{
     tuple val(meta), path(mlst)
 
     output:
-    tuple val(meta), path("${meta.id}_match.txt"), path(mlst),  emit: match
-    path("versions.yml"),                                       emit: versions
+    tuple val(meta), path("${meta.id}_match.txt"), path(mlst),      emit: match
+    tuple val(meta), path("*_error_report.csv"), optional: true,    emit: error_report
+    path("versions.yml"),                                           emit: versions
 
     script:
 
@@ -19,12 +20,13 @@ process INPUT_CHECK{
     input_check.py \\
         --input ${mlst} \\
         --sample_id ${meta.id} \\
-        --output ${meta.id}_match.txt
+        --address ${meta.address} \\
+        --output_error ${meta.id}_error_report.csv \\
+        --output_match ${meta.id}_match.txt
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         python: \$(python --version | sed 's/Python //g')
     END_VERSIONS
     """
-
 }
