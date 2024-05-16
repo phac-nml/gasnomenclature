@@ -33,7 +33,7 @@ process FILTER_QUERY {
         --delimiter "${delimiter}" \\
         --out-delimiter "${out_delimiter}" | \\
     csvtk cut -f id,address > ${outputFile}.${out_extension}
-    
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         csvtk: \$(echo \$( csvtk version | sed -e "s/csvtk v//g" ))
