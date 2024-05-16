@@ -8,7 +8,7 @@ import csv
 
 def check_inputs(json_file, sample_id, address, output_match_file, output_error_file):
     # Define a variable to store the match_status (True or False)
-    with open(json_file, 'r') as f:
+    with open(json_file, "r") as f:
         json_data = json.load(f)
     match_status = sample_id in json_data
 
@@ -29,14 +29,27 @@ def check_inputs(json_file, sample_id, address, output_match_file, output_error_
             writer.writerow(["sample", "JSON_key", "error_message"])
             writer.writerow([sample_id, list(json_data.keys())[0], error_message])
 
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Check sample inputs and generate an error report.")
+    parser = argparse.ArgumentParser(
+        description="Check sample inputs and generate an error report."
+    )
     parser.add_argument("--input", help="Path to the mlst.json file.", required=True)
-    parser.add_argument("--sample_id", help="Sample ID to check in the JSON file.", required=True)
-    parser.add_argument("--address", help="Address to use in the error message.", required=True)
-    parser.add_argument("--output_error", help="Path to the error report file.", required=True)
-    parser.add_argument("--output_match", help="Path to the match status file.", required=True)
-    
+    parser.add_argument(
+        "--sample_id", help="Sample ID to check in the JSON file.", required=True
+    )
+    parser.add_argument(
+        "--address", help="Address to use in the error message.", required=True
+    )
+    parser.add_argument(
+        "--output_error", help="Path to the error report file.", required=True
+    )
+    parser.add_argument(
+        "--output_match", help="Path to the match status file.", required=True
+    )
+
     args = parser.parse_args()
 
-    check_inputs(args.input, args.sample_id, args.address, args.output_match, args.output_error)
+    check_inputs(
+        args.input, args.sample_id, args.address, args.output_match, args.output_error
+    )
