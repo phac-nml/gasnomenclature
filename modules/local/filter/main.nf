@@ -13,7 +13,7 @@ process FILTER_QUERY {
     val out_format
 
     output:
-    path("new_addresses.csv"),  emit: csv
+    path("new_addresses.*"),    emit: csv
     path("versions.yml"),       emit: versions
 
     script:
@@ -31,11 +31,8 @@ process FILTER_QUERY {
         ${addresses} \\
         --filter '\$id == \"$queryID\"' \\
         --delimiter "${delimiter}" \\
-        --out-delimiter "${out_delimiter}" \\
-        --out-file ${outputFile}.tmp
-
-    csvtk cut -f 1,2 ${outputFile}.tmp > ${outputFile}.${out_extension}
-    rm ${outputFile}.tmp
+        --out-delimiter "${out_delimiter}" | \\
+    csvtk cut -f id,address > ${outputFile}.${out_extension}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
