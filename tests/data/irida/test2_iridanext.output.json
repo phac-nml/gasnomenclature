@@ -4,7 +4,7 @@
         "samples": {
             "sampleR": [
                 {
-                    "path": "error/sampleR_error_report.csv"
+                    "path": "input/sampleR_error_report.csv"
                 }
             ]
         }

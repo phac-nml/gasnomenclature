@@ -37,6 +37,7 @@ nextflow_pipeline {
             assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/test_iridanext.output.json").json
 
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_samples = iridanext_json.files.samples
             def iridanext_metadata = iridanext_json.metadata.samples
 
             assert iridanext_metadata.sampleQ."address" == "1.1.3"
@@ -55,19 +56,16 @@ nextflow_pipeline {
 
         then {
             assert workflow.failed
-            assert (workflow.stdout =~ /Pipeline stopped: Reference sample ID and MLST JSON file key DO NOT MATCH/).find()
+            assert (workflow.stdout =~ /Pipeline exiting: sample with ID sample2 does not have matching MLST JSON file./).find()
 
             assert path("$launchDir/results").exists()
-            assert path("$launchDir/results/error").exists()
+            assert path("$launchDir/results/input").exists()
 
             // Ensure that despite pipeline failure, error_reports are generated for all samples added to pipeline (i.e. sampleQ query)
             def lines = []
 
-            lines = path("$launchDir/results/error/sample2_error_report.csv").readLines()
+            lines = path("$launchDir/results/input/sample2_error_report.csv").readLines()
             assert lines.contains("sample2,sample7,Pipeline stopped: Reference sample2's input ID and MLST JSON file key DO NOT MATCH")
-
-            lines = path("$launchDir/results/error/sampleQ_error_report.csv").readLines()
-            assert lines.contains("sampleQ,sampleF,Query sampleQ removed from pipeline")
         }
     }
 
@@ -84,14 +82,14 @@ nextflow_pipeline {
         then {
             assert workflow.success
             assert path("$launchDir/results").exists()
-            assert path("$launchDir/results/error").exists()
+            assert path("$launchDir/results/input").exists()
             assert path("$launchDir/results/filter").exists()
 
             // Check outputs
             def lines = []
 
             // Ensure that the error_report is generated for removed query sampleR
-            lines = path("$launchDir/results/error/sampleR_error_report.csv").readLines()
+            lines = path("$launchDir/results/input/sampleR_error_report.csv").readLines()
             assert lines.contains("sampleR,sampleF,Query sampleR removed from pipeline")
 
             // Check query output csv
@@ -105,7 +103,7 @@ nextflow_pipeline {
             def iridanext_samples = iridanext_json.files.samples
             def iridanext_metadata = iridanext_json.metadata.samples
 
-            assert iridanext_samples.sampleR.findAll { it.path == "error/sampleR_error_report.csv" }.size() == 1
+            assert iridanext_samples.sampleR.findAll { it.path == "input/sampleR_error_report.csv" }.size() == 1
             assert iridanext_metadata.sampleQ."address" == "1.1.3"
         }
     }
