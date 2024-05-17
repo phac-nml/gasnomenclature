@@ -40,6 +40,7 @@ nextflow_pipeline {
             def iridanext_samples = iridanext_json.files.samples
             def iridanext_metadata = iridanext_json.metadata.samples
 
+            assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
             assert iridanext_metadata.sampleQ."address" == "1.1.3"
         }
     }
