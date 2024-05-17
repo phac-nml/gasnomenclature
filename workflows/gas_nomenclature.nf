@@ -23,8 +23,6 @@ include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet  } from 'plugin/nf
 //
 
 include { INPUT_CHECK                           } from "../modules/local/input_check/main"
-include { ERROR_REPORT                          } from "../modules/local/error_report/main"
-include { SAMPLE_FILTER                         } from "../modules/local/sample_filter/main"
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_REF    } from "../modules/local/locidex/merge/main"
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_QUERY  } from "../modules/local/locidex/merge/main"
 include { PROFILE_DISTS                         } from "../modules/local/profile_dists/main"
@@ -77,9 +75,6 @@ workflow GAS_NOMENCLATURE {
     id_key = INPUT_CHECK(input)
     ch_versions = ch_versions.mix(id_key.versions)
 
-    error_report = ERROR_REPORT(input)
-    ch_versions = ch_versions.mix(error_report.versions)
-
     // Update metadata to include the id_key.match data
     match = id_key.match.map { meta, file, json ->
         def id_match = file.text.trim()
@@ -87,16 +82,20 @@ workflow GAS_NOMENCLATURE {
     }
 
     // If samples have a disparity between meta.id and JSON key: Exclude the queried samples OR halt the pipeline with an error if sample has an associated cluster address (reference)
-    filtered = SAMPLE_FILTER(match)
-    ch_versions = ch_versions.mix(filtered.versions)
-
-    new_input = filtered.out
+    new_input = match.filter { meta, json ->
+        if (meta.id_match == 'True') {
+            return true // Keep the sample
+        } else if (meta.address == null && meta.id_match == 'False') {
+            return false // Remove the sample
+        } else if (meta.address != null && meta.id_match == 'False') {
+            // Exit with error statement
+            throw new RuntimeException("Pipeline exiting: sample with ID ${meta.id} does not have matching MLST JSON file.")
+        }
+    }
 
     // Prepare reference and query TSV files for LOCIDEX_MERGE
     profiles = new_input.branch{
-        ref: it[0].address
         query: !it[0].address
-        errors: true // To discuss, add in check on file for erroneous values, may not be needed as nf-validation is working
     }
     reference_values = input.collect{ meta, profile -> profile}
     query_values = profiles.query.collect{ meta, profile -> profile }
