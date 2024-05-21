@@ -78,12 +78,12 @@ workflow GAS_NOMENCLATURE {
     // Update metadata to include the id_key.match data
     match = id_key.match.map { meta, file, json ->
         def id_match = file.text.trim()
-        [meta + [id_match: id_match], json]
+        [meta + [id_match: id_match == 'True'], json]
     }
 
     // If samples have a disparity between meta.id and JSON key: Exclude the queried samples OR halt the pipeline with an error if sample has an associated cluster address (reference)
     new_input = match.filter { meta, json ->
-        if (meta.id_match == 'True') {
+        if (meta.id_match) {
             return true // Keep the sample
         } else if (meta.address == null && meta.id_match == 'False') {
             return false // Remove the sample
