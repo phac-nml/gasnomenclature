@@ -85,9 +85,9 @@ workflow GAS_NOMENCLATURE {
     new_input = match.filter { meta, json ->
         if (meta.id_match) {
             return true // Keep the sample
-        } else if (meta.address == null && meta.id_match == 'False') {
+        } else if (meta.address == null && !meta.id_match) {
             return false // Remove the sample
-        } else if (meta.address != null && meta.id_match == 'False') {
+        } else if (meta.address != null && !meta.id_match) {
             // Exit with error statement
             throw new RuntimeException("Pipeline exiting: sample with ID ${meta.id} does not have matching MLST JSON file.")
         }
