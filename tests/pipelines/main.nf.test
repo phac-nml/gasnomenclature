@@ -4,7 +4,7 @@ nextflow_pipeline {
     script "main.nf"
 
     test("Small-scale test of full pipeline"){
-        tag "pipeline"
+        tag "pipeline_success"
 
         when{
             params {
@@ -23,7 +23,6 @@ nextflow_pipeline {
             def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected-profile1.tsv")
             assert actual_profile_ref.text == expected_profile_tsv.text
 
-
             // Check computed pairwise distances
             def actual_distances = path("$launchDir/results/distances/results.text")
             def expected_distances = path("$baseDir/tests/data/distances/expected_pairwise_dists.txt")
@@ -33,8 +32,81 @@ nextflow_pipeline {
             def actual_calls = path("$launchDir/results/call/Called/results.text")
             def expected_calls = path("$baseDir/tests/data/called/expected_results.txt")
             assert actual_calls.text == expected_calls.text
+
+            // Check IRIDA Next JSON output
+            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/test_iridanext.output.json").json
+
+            def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_metadata = iridanext_json.metadata.samples
+
+            assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
+            assert iridanext_metadata.sampleQ."address" == "1.1.3"
         }
     }
 
+    test("Integration test where input contains reference sample with mismatched MLST JSON file"){
+        tag "pipeline_failure"
+
+        when {
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet_test1.csv"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.failed
+            assert (workflow.stdout =~ /Pipeline exiting: sample with ID sample2 does not have matching MLST JSON file./).find()
+
+            assert path("$launchDir/results").exists()
+            assert path("$launchDir/results/input").exists()
+
+            // Ensure that despite pipeline failure, error_reports are generated for all samples added to pipeline (i.e. sampleQ query)
+            def lines = []
+
+            lines = path("$launchDir/results/input/sample2_error_report.csv").readLines()
+            assert lines.contains("sample2,sample7,Pipeline stopped: Reference sample2's input ID and MLST JSON file key DO NOT MATCH")
+        }
+    }
+
+    test("Integration test where input contains a single query sample with mismatched MLST JSON file"){
+        tag "pipeline_success_after_query_removal"
+
+        when{
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet_test2.csv"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+            assert path("$launchDir/results/input").exists()
+            assert path("$launchDir/results/filter").exists()
+
+            // Check outputs
+            def lines = []
+
+            // Ensure that the error_report is generated for removed query sampleR
+            lines = path("$launchDir/results/input/sampleR_error_report.csv").readLines()
+            assert lines.contains("sampleR,sampleF,Query sampleR removed from pipeline")
+
+            // Check query output csv
+            lines = path("$launchDir/results/filter/new_addresses.csv").readLines()
+            assert lines.contains("sampleQ,1.1.3")
+
+            // Check IRIDA Next JSON output
+            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/test2_iridanext.output.json").json
+
+            def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_metadata = iridanext_json.metadata.samples
+
+            assert iridanext_samples.sampleR.findAll { it.path == "input/sampleR_error_report.csv" }.size() == 1
+            assert iridanext_metadata.sampleQ."address" == "1.1.3"
+        }
+    }
 
 }
