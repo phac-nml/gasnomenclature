@@ -1,0 +1,19 @@
+{
+    "files": {
+        "global": [],
+        "samples": {
+            "sampleR": [
+                {
+                    "path": "input/sampleR_error_report.csv"
+                }
+            ]
+        }
+    },
+    "metadata": {
+        "samples": {
+            "sampleQ": {
+                "address": "1.1.3"
+            }
+        }
+    }
+}
