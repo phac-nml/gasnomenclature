@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This pipeline is an example that illustrates running a nf-core-compliant pipeline on IRIDA Next.
+This workflow takes provided JSON-formatted MLST allelic profiles and assigns cluster addresses to samples based on an existing cluster designations. This pipeline is designed to be integrated into IRIDA Next. However, it may be run as a stand-alone pipeline.
 
 ## Samplesheet input
 
@@ -14,22 +14,22 @@ You will need to create a samplesheet with information about the samples you wou
 
 ### Full samplesheet
 
-The input samplesheet must contain three columns: `ID`, `fastq_1`, `fastq_2`. The IDs within a samplesheet should be unique. All other columns will be ignored.
+The input samplesheet must contain three columns: `sample`, `mlst_alleles`, `address`. The sample names within a samplesheet should be unique. All other columns will be ignored.
 
-A final samplesheet file consisting of both single- and paired-end data may look something like the one below.
+A final samplesheet file consisting of mlst_alleles and addresses may look something like the one below:
 
 ```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-SAMPLE1,sample1_R1.fastq.gz,sample1_R2.fastq.gz
-SAMPLE2,sample2_R1.fastq.gz,sample2_R2.fastq.gz
-SAMPLE3,sample1_R1.fastq.gz,
+sample,mlst_alleles,address
+sampleA,sampleA.mlst.json.gz,1.1.1
+sampleQ,sampleQ.mlst.json.gz,2.2.2
+sampleF,sampleF.mlst.json,
 ```
 
-| Column    | Description                                                                                                                |
-| --------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `sample`  | Custom sample name. Samples should be unique within a samplesheet.                                                         |
-| `fastq_1` | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz". |
-| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz". |
+| Column         | Description                                                                                                                                                                                                                                                                                                                      |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sample`       | Custom sample name. Samples should be unique within a samplesheet.                                                                                                                                                                                                                                                               |
+| `mlst_alleles` | Full path to an MLST JSON file describing the loci/alleles for the sample against some MLST scheme. A way to generate this file is via [locidex](https://github.com/phac-nml/locidex). File can optionally be gzipped and must have the extension ".mlst.json", ".mlst.subtyping.json" (or with an additional ".gz" if gzipped). |
+| `address`      | Hierarchal clustering address. If left empty for a sample, the pipeline will perform de novo clustering based on the provided cluster designations and thresholds.                                                                                                                                                               |
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 

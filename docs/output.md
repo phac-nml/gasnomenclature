@@ -6,11 +6,13 @@ This document describes the output produced by the pipeline.
 
 The directories listed below will be created in the results directory after the pipeline has finished. All paths are relative to the top-level results directory.
 
-- assembly: very small mock assembly files for each sample
-- generate: intermediate files used in generating the IRIDA Next JSON output
-- pipeline_info: information about the pipeline's execution
-- simplify: simplified intermediate files used in generating the IRIDA Next JSON output
-- summary: summary report about the pipeline's execution and results
+- call: The cluster addresses from the [genomic_address_service](https://github.com/phac-nml/genomic_address_service).
+- cluster: The cluster file required by GAS_call.
+- distances: Distances between genomes from [profile_dists](https://github.com/phac-nml/profile_dists).
+- filter: The cluster addresses from only the query samples.
+- input: An error report that is only generated when sample IDs and MLST JSON files do not match.
+- locidex: The merged MLST JSON files for reference and query samples.
+- pipeline_info: Information about the pipeline's execution
 
 The IRIDA Next-compliant JSON output file will be named `iridanext.output.json.gz` and will be written to the top-level of the results directory. This file is compressed using GZIP and conforms to the [IRIDA Next JSON output specifications](https://github.com/phac-nml/pipeline-standards#42-irida-next-json).
 
@@ -18,60 +20,79 @@ The IRIDA Next-compliant JSON output file will be named `iridanext.output.json.g
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
-- [Assembly stub](#assembly-stub) - Performs a stub assembly by generating a mock assembly
-- [Generate sample JSON](#generate-sample-json) - Generates a JSON file for each sample
-- [Generate summary](#generate-summary) - Generates a summary text file describing the samples and assemblies
-- [Simplify IRIDA JSON](#simplify-irida-json) - Simplifies the sample JSONs by limiting nesting depth
+- [Input check](#input-check) - Performs a validation check on the samplesheet inputs to ensure that the sampleID precisely matches the MLST JSON key.
+- [Locidex merge](#locidex-merge) - Merges MLST profile JSON files into a single profiles file for reference and query samples.
+- [Profile dists](#profile-dists) - Computes pairwise distances between genomes using MLST allele differences.
+- [Cluster file](#cluster-file) - Generates the expected_clusters.txt file from reference sample addresses for use in GAS_call.
+- [GAS call](#gas-call) - Generates hierarchical cluster addresses.
+- [Filter query](#filter-query) - Filters and generates a csv file containing only the cluster addresses for query samples.
 - [IRIDA Next Output](#irida-next-output) - Generates a JSON output file that is compliant with IRIDA Next
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
 
-### Assembly stub
+### Input Check
 
 <details markdown="1">
 <summary>Output files</summary>
 
-- `assembly/`
-  - Mock assembly files: `ID.assembly.fa.gz`
+- `input/`
+  - `sampleID_error_report.csv`
 
 </details>
 
-### Generate sample JSON
+### Locidex merge
 
 <details markdown="1">
 <summary>Output files</summary>
 
-- `generate/`
-  - JSON files: `ID.json.gz`
+- `locidex/merge/`
+  - reference samples: `reference/merged_ref/merged_profiles_ref.tsv`
+  - query samples: `query/merged_value/merged_profile_value.tsv`
 
 </details>
 
-### Generate summary
+### Profile Dists
 
 <details markdown="1">
 <summary>Output files</summary>
 
-- `summary/`
-  - Text summary describing samples and assemblies: `summary.txt.gz`
+- `distances/`
+  - Mapping allele identifiers to integers: `allele_map.json`
+  - The query MLST profiles: `query_profile.text`
+  - The reference MLST profiles: `ref_profile.text`
+  - The computed distances based on MLST allele differences: `results.text`
+  - Information on the profile_dists run: `run.json`
 
 </details>
 
-### Simplify IRIDA JSON
+### Cluster File
 
 <details markdown="1">
 <summary>Output files</summary>
 
-- `simplify/`
-  - Simplified JSON files: `ID.simple.json.gz`
+- `cluster/`
+  - `expected_clusters.txt`
 
 </details>
 
-### IRIDA Next Output
+### GAS call
 
 <details markdown="1">
 <summary>Output files</summary>
 
-- `/`
-  - IRIDA Next-compliant JSON output: `iridanext.output.json.gz`
+- `call/`
+  - The computed cluster addresses: `clusters.text`
+  - Information on the GAS mcluster run: `run.json`
+  - Thesholds used to compute cluster addresses: `thresholds.json`
+
+</details>
+
+### Filter Query
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `filter/`
+  - `new_addresses.csv`
 
 </details>
 
