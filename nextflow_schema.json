@@ -19,7 +19,7 @@
                 },
                 "gm_delimiter": {
                     "type": "string",
-                    "default": "\\'.\\",
+                    "default": ".",
                     "description": "Delimiter desired for nomenclature code.",
                     "pattern": "^[A-Fa-f0-9\\._-]+$"
                 }
