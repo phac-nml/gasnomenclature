@@ -21,7 +21,7 @@
                     "type": "string",
                     "default": "\\'.\\",
                     "description": "Delimiter desired for nomenclature code.",
-                    "pattern": "^\\S+$"
+                    "pattern": "^[A-Fa-f0-9\\._-]+$"
                 }
             }
         },
