@@ -32,9 +32,6 @@ process PROFILE_DISTS{
     if(columns){
         args = args + " --columns $columns"
     }
-    if(params.pd_force){
-        args = args + " --force"
-    }
     if(params.pd_skip){
         args = args + " --skip"
     }
