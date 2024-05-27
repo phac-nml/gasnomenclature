@@ -132,7 +132,7 @@ workflow GAS_NOMENCLATURE {
                             columns_file)
     ch_versions = ch_versions.mix(distances.versions)
 
-    // Generate the expected_cluster file from the reference sample provided addresses
+    // Generate the expected_clusters.txt file from the addresses of the provided reference samples
     clusters = input.filter { meta, file ->
         meta.address != null
     }.collect { meta, file ->
