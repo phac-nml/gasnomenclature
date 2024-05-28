@@ -10,9 +10,9 @@ process CLUSTER_FILE {
 
     exec:
     def outputLines = []
-
+    print "${params.gm_delimiter}"
     // Determine the maximum number of levels to set the header requirements for each pipeline run
-    int maxLevels = meta.collect { sample -> sample.address.split("\\.").size() }.max() ?: 0
+    int maxLevels = meta.collect { sample -> sample.address.split("\\$params.gm_delimiter").size() }.max() ?: 0
 
     // Generate the header
     def header = ["id", "address"] + (1..maxLevels).collect { "level_$it" }
@@ -22,7 +22,7 @@ process CLUSTER_FILE {
     meta.each { sample ->
         def id = sample.id
         def address = sample.address
-        def levels = address.split("\\.")
+        def levels = address.split("\\$params.gm_delimiter")
         def line = [id, address] + levels.collect { it.toString() } + (levels.size()..<maxLevels).collect { "" }
         outputLines << line.join("\t")
     }
