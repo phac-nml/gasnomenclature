@@ -10,11 +10,19 @@ process CLUSTER_FILE {
 
     exec:
     def outputLines = []
-    print "${params.gm_delimiter}"
+
     // Determine the maximum number of levels to set the header requirements for each pipeline run
     int maxLevels = meta.collect { sample -> sample.address.split("\\$params.gm_delimiter").size() }.max() ?: 0
 
-    // Generate the header
+    // Verify each sample is consistent with $maxLevels
+    meta.each { sample ->
+        int level = sample.address.split("\\$params.gm_delimiter").size()
+        if (level != maxLevels) {
+            throw new Exception("Inconsistent levels found: expected $maxLevels but found $level in the following input sample: ${sample.id}")
+        }
+    }
+
+    // Generate the header for the expected_clusters.txt file
     def header = ["id", "address"] + (1..maxLevels).collect { "level_$it" }
     outputLines << header.join("\t")
 
@@ -27,7 +35,7 @@ process CLUSTER_FILE {
         outputLines << line.join("\t")
     }
 
-    // Write the text file
+    // Write the text file, iterating over each sample
     task.workDir.resolve("expected_clusters.txt").withWriter { writer ->
         outputLines.each { line ->
             writer.writeLine(line)
