@@ -18,7 +18,7 @@ process CLUSTER_FILE {
     meta.each { sample ->
         int level = sample.address.split("\\$params.gm_delimiter").size()
         if (level != maxLevels) {
-            throw new Exception("Inconsistent levels found: expected $maxLevels but found $level in the following input sample: ${sample.id}")
+            error ("Inconsistent levels found: expected $maxLevels levels but found $level levels in ${sample.id}")
         }
     }
 
