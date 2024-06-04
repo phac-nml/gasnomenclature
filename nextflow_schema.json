@@ -17,6 +17,12 @@
                     "description": "Thresholds delimited by ','. Values should match units from '--pd_distm' (either 'hamming' or 'scaled').",
                     "pattern": "^(\\d+(\\.\\d+)?,)*\\d+(\\.\\d+)?$"
                 },
+                "gm_method": {
+                    "type": "string",
+                    "default": "average",
+                    "description": "Clustering linkage method.",
+                    "enum": ["single", "average", "complete"]
+                },
                 "gm_delimiter": {
                     "type": "string",
                     "default": ".",

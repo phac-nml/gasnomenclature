@@ -26,6 +26,7 @@ process GAS_CALL{
     gas call --dists $distances \\
                 --rclusters $reference_clusters \\
                 --outdir ${prefix} \\
+                --method ${params.gm_method} \\
                 --threshold ${params.gm_thresholds} \\
                 --delimeter ${params.gm_delimiter}
 
