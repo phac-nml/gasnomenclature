@@ -20,7 +20,6 @@ process GAS_CALL{
     path  "versions.yml", emit: versions
 
     script:
-    // Need to add more args for gas call below
     prefix = "Called"
     """
     gas call --dists $distances \\
