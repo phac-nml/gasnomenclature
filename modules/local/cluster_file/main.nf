@@ -31,7 +31,7 @@ process CLUSTER_FILE {
         def id = sample.id
         def address = sample.address
         def levels = address.split("\\$params.gm_delimiter")
-        def line = [id, address] + levels.collect { it.toString() } + (levels.size()..<maxLevels).collect { "" }
+        def line = [id, address] + levels.collect { it.toString() }
         outputLines << line.join("\t")
     }
 
