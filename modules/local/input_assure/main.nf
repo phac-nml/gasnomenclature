@@ -1,4 +1,4 @@
-process INPUT_CHECK{
+process INPUT_ASSURE {
     tag "Check Sample Inputs and Generate Error Report"
     label 'process_single'
 
