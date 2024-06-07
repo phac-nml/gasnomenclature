@@ -75,15 +75,8 @@ workflow GAS_NOMENCLATURE {
     id_key = INPUT_ASSURE(input)
     ch_versions = ch_versions.mix(id_key.versions)
 
-    // Update metadata to include the id_key.match data
-    match = id_key.match.map { meta, file, json ->
-        def id_match = file.text.trim()
-        [meta + [id_match: id_match == 'True'], json]
-    }
-    match.view()
-
     // Prepare reference and query TSV files for LOCIDEX_MERGE
-    profiles = match.branch {
+    profiles = id_key.match.branch {
         query: !it[0].address
     }
     reference_values = input.collect{ meta, profile -> profile}

@@ -13,15 +13,11 @@ def open_file(file_path, mode):
     else:
         return open(file_path, mode)
 
-def check_inputs(json_file, sample_id, address, output_match_file, output_error_file):
+def check_inputs(json_file, sample_id, address, output_error_file):
     # Define a variable to store the match_status (True or False)
     with open(json_file, "rt") as f:
         json_data = json.load(f)
     match_status = sample_id in json_data
-
-    # Write match status to file
-    with open(output_match_file, "w") as f:
-        f.write(str(match_status))
 
     # Define the original key in the JSON data
     original_key = list(json_data.keys())[0]
@@ -58,12 +54,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--output_error", help="Path to the error report file.", required=True
     )
-    parser.add_argument(
-        "--output_match", help="Path to the match status file.", required=True
-    )
 
     args = parser.parse_args()
 
     check_inputs(
-        args.input, args.sample_id, args.address, args.output_match, args.output_error
+        args.input, args.sample_id, args.address, args.output_error
     )
