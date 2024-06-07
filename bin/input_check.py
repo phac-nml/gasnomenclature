@@ -24,9 +24,9 @@ def check_inputs(json_file, sample_id, address, output_error_file):
 
     # Define error message based on meta.address (query or reference)
     if address == "null":
-        error_message = f"Query {sample_id} ID did not match the JSON key in {json_file} - User must manually check input files to ensure correctness."
+        error_message = f"Query {sample_id} ID and JSON key in {json_file} DO NOT MATCH. The '{original_key}' key in {json_file} has been forcefully changed to '{sample_id}': User should manually check input files to ensure correctness."
     else:
-        error_message = f"Reference {sample_id}'s sample ID and JSON key in {json_file} DO NOT MATCH: the '{original_key}' key in {json_file} has been forcefully changed to '{sample_id}'."
+        error_message = f"Reference {sample_id} ID and JSON key in {json_file} DO NOT MATCH. The '{original_key}' key in {json_file} has been forcefully changed to '{sample_id}': User should manually check input files to ensure correctness."
 
     # Write sample ID and JSON key to error report CSV if not matched; include error message
     if not match_status:
