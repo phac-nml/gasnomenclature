@@ -21,7 +21,7 @@ process INPUT_ASSURE {
         --input ${mlst} \\
         --sample_id ${meta.id} \\
         --address ${meta.address} \\
-        --output_error ${meta.id}_error_report.csv 
+        --output_error ${meta.id}_error_report.csv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
