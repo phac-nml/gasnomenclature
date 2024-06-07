@@ -3,6 +3,35 @@ nextflow_process {
     script "modules/local/cluster_file/main.nf"
     process "CLUSTER_FILE"
 
+    test("Test when sample levels are equal") {
+
+        when {
+            process {
+                """
+                input[0] = Channel.of(
+                    [['id':'sample1', 'address':'1.1.1'],
+                    ['id':'sample2', 'address':'1.1.1'],
+                    ['id':'sample3', 'address':'1.1.2']]
+                    )
+                """
+            }
+
+            params {
+                outdir = "cluster_results"
+            }
+        }
+
+        then {
+            assert process.success
+            assert path("$launchDir/cluster_results").exists()
+
+            // Check expected_clusters
+            def actual_clusters = path("$launchDir/cluster_results/cluster/expected_clusters.txt")
+            def expected_clusters = path("$baseDir/tests/data/clusters/expected_clusters.txt")
+            assert actual_clusters.text == expected_clusters.text
+        }
+    }
+
     test("Test when sample levels are different") {
 
         when {
@@ -17,7 +46,7 @@ nextflow_process {
             }
 
             params {
-                outdir = "clusterfile_test_out"
+                outdir = "cluster_results"
             }
         }
 
