@@ -123,11 +123,8 @@ workflow GAS_NOMENCLATURE {
         exit 1, "${params.pd_columns}: Does not exist but was passed to the pipeline. Exiting now."
     }
 
-    mapping_format = Channel.value(params.pd_outfmt)
-
     distances = PROFILE_DISTS(merged_queries.combined_profiles,
                             merged_references.combined_profiles,
-                            mapping_format,
                             mapping_file,
                             columns_file)
     ch_versions = ch_versions.mix(distances.versions)
