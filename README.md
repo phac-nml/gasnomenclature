@@ -28,14 +28,13 @@ The main parameters are `--input` as defined above and `--output` for specifying
 
 The following can be used to adjust parameters for the [profile_dists][] tool.
 
-- `--pd_outfmt`: The output format for distances. For this pipeline the only valid value is _pairwise_ (required by [gas call][]).
 - `--pd_distm`: The distance method/unit, either _hamming_ or _scaled_. For _hamming_ distances, the distance values will be a non-negative integer. For _scaled_ distances, the distance values are between 0 and 1.
 - `--pd_missing_threshold`: The maximum proportion of missing data per locus for a locus to be kept in the analysis. Values from 0 to 1.
 - `--pd_sample_quality_threshold`: The maximum proportion of missing data per sample for a sample to be kept in the analysis. Values from 0 to 1.
 - `--pd_file_type`: Output format file type. One of _text_ or _parquet_.
 - `--pd_mapping_file`: A file used to map allele codes to integers for internal distance calculations. This is the same file as produced from the _profile dists_ step (the [allele_map.json](docs/output.md#profile-dists) file). Normally, this is unneeded unless you wish to override the automated process of mapping alleles to integers.
 - `--pd_skip`: Skip QA/QC steps. Can be used as a flag, `--pd_skip`, or passing a boolean, `--pd_skip true` or `--pd_skip false`.
-- `--pd_columns`: Defines the loci to keep within the analysis (default when unset is to keep all loci). Formatted as a single column file with one locus name per line. For example:
+- `--pd_columns`: Path to a file that defines the loci to keep within the analysis (default when unset is to keep all loci). Formatted as a single column file with one locus name per line. For example:
   - **Single column format**
     ```
     loci1
