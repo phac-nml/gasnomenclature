@@ -72,15 +72,15 @@ workflow GAS_NOMENCLATURE {
     input = Channel.fromSamplesheet("input")
 
     // Ensure meta.id and mlst_file keys match; generate error report for samples where id ≠ key
-    id_key = INPUT_ASSURE(input)
-    ch_versions = ch_versions.mix(id_key.versions)
+    input_assure = INPUT_ASSURE(input)
+    ch_versions = ch_versions.mix(input_assure.versions)
 
     // Prepare reference and query TSV files for LOCIDEX_MERGE
-    profiles = id_key.match.branch {
+    profiles = input_assure.result.branch {
         query: !it[0].address
     }
-    reference_values = input.collect{ meta, profile -> profile}
-    query_values = profiles.query.collect{ meta, profile -> profile }
+    reference_values = input_assure.result.collect{ meta, mlst -> mlst}
+    query_values = profiles.query.collect{ meta, mlst -> mlst }
 
     // LOCIDEX modules
     ref_tag = Channel.value("ref")

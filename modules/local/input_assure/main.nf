@@ -1,5 +1,5 @@
 process INPUT_ASSURE {
-    tag "Check Sample Inputs and Generate Error Report"
+    tag "Assures Inputs are Consistent"
     label 'process_single'
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -10,14 +10,14 @@ process INPUT_ASSURE {
     tuple val(meta), path(mlst)
 
     output:
-    tuple val(meta), path(mlst),      emit: match
+    tuple val(meta), path(mlst),                                    emit: result
     tuple val(meta), path("*_error_report.csv"), optional: true,    emit: error_report
     path("versions.yml"),                                           emit: versions
 
     script:
 
     """
-    input_check.py \\
+    input_assure.py \\
         --input ${mlst} \\
         --sample_id ${meta.id} \\
         --address ${meta.address} \\
