@@ -18,10 +18,14 @@ nextflow_pipeline {
             assert path("$launchDir/results").exists()
 
             // Check merged profiles
-            // TODO check query profile is merged
             def actual_profile_ref = path("$launchDir/results/locidex/merge/reference/merged_ref/merged_profiles_ref.tsv")
             def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected-profile1.tsv")
             assert actual_profile_ref.text == expected_profile_tsv.text
+
+            // Check query profiles
+            def actual_profile_query = path("$launchDir/results/locidex/merge/query/merged_value/merged_profiles_value.tsv")
+            def expected_profile_query_tsv = path("$baseDir/tests/data/profiles/expected-profile2.tsv")
+            assert actual_profile_query.text == expected_profile_query_tsv.text
 
             // Check computed pairwise distances
             def actual_distances = path("$launchDir/results/distances/results.text")
