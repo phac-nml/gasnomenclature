@@ -17,8 +17,8 @@
             "mlst_alleles": {
                 "type": "string",
                 "format": "file-path",
-                "pattern": "^\\S+\\.mlst\\.json(\\.gz)?$",
-                "errorMessage": "MLST JSON file from locidex report, cannot contain spaces and must have the extension: '.mlst.json' or '.mlst.json.gz'"
+                "pattern": "^\\S+\\.mlst(\\.subtyping)?\\.json(\\.gz)?$",
+                "errorMessage": "MLST JSON file from locidex report, cannot contain spaces and must have the extension: '.mlst.json', '.mlst.json.gz', '.mlst.subtyping.json', or 'mlst.subtyping.json.gz'"
             },
             "address": {
                 "type": "string",
