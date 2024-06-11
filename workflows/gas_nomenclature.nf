@@ -142,7 +142,9 @@ workflow GAS_NOMENCLATURE {
     ch_versions = ch_versions.mix(called_data.versions)
 
     // Filter the new queried samples and addresses into a CSV/JSON file for the IRIDANext plug in
-    new_addresses = FILTER_QUERY(profiles.query, called_data.distances, "tsv", "csv")
+    query_ids = profiles.query.collect { it[0].id }
+
+    new_addresses = FILTER_QUERY(query_ids, called_data.distances, "tsv", "csv")
     ch_versions = ch_versions.mix(new_addresses.versions)
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
