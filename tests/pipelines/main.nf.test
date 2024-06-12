@@ -126,7 +126,7 @@ nextflow_pipeline {
             // Check is sample1.mlst.json.gz exists and is gzipped
             def gzipped_json = path("$launchDir/results/input/sample1.mlst.json.gz")
             assert gzipped_json.exists()
-            
+
             // Check called clusters
             def actual_calls = path("$launchDir/results/call/Called/results.text")
             def expected_calls = path("$baseDir/tests/data/called/expected_results.txt")
@@ -147,7 +147,7 @@ nextflow_pipeline {
     test("Testing when query and reference sample IDs are mismatched with MLST JSON file keys"){
         // IDs in the sample sheet and IDs in the individual MLST JSON files will not match.
         // This tests the pipelines ability to handle and correct for this problem.
-        
+
         tag "mismatched_IDs"
 
         when{
@@ -160,14 +160,14 @@ nextflow_pipeline {
         then {
             assert workflow.success
             assert path("$launchDir/results").exists()
-            
+
             // Check outputs
             def lines = []
 
             // Ensure that the error_reports are generated for query and reference samples
             lines = path("$launchDir/results/input/sample2_error_report.csv").readLines()
             #assert lines.contains("sample2,[\'sample7\'],Reference sample2 ID and JSON key in sample7.mlst.json DO NOT MATCH. The 'sample7' key in sample7.mlst.json has been forcefully changed to 'sample2': User should manually check input files to ensure correctness.")
-            
+
             lines = path("$launchDir/results/input/sampleR_error_report.csv").readLines()
             assert lines.contains("sampleR,[\'sampleF\'],Query sampleR ID and JSON key in sampleF.mlst.json DO NOT MATCH. The 'sampleF' key in sampleF.mlst.json has been forcefully changed to 'sampleR': User should manually check input files to ensure correctness.")
 
@@ -176,7 +176,7 @@ nextflow_pipeline {
             assert lines.contains("sampleQ,2.2.3")
             assert lines.contains("sampleR,2.2.3")
 
-           // Check IRIDA Next JSON output
+            // Check IRIDA Next JSON output
             assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/mismatched_iridanext.output.json").json
 
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
