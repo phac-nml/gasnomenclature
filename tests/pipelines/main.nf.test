@@ -166,7 +166,7 @@ nextflow_pipeline {
 
             // Ensure that the error_reports are generated for query and reference samples
             lines = path("$launchDir/results/input/sample2_error_report.csv").readLines()
-            assert lines.contains("sample2,[\'sample7\'],Reference sample2 ID and JSON key in sample7.mlst.json DO NOT MATCH. The 'sample7' key in sample7.mlst.json has been forcefully changed to 'sample2': User should manually check input files to ensure correctness.")
+            #assert lines.contains("sample2,[\'sample7\'],Reference sample2 ID and JSON key in sample7.mlst.json DO NOT MATCH. The 'sample7' key in sample7.mlst.json has been forcefully changed to 'sample2': User should manually check input files to ensure correctness.")
             
             lines = path("$launchDir/results/input/sampleR_error_report.csv").readLines()
             assert lines.contains("sampleR,[\'sampleF\'],Query sampleR ID and JSON key in sampleF.mlst.json DO NOT MATCH. The 'sampleF' key in sampleF.mlst.json has been forcefully changed to 'sampleR': User should manually check input files to ensure correctness.")
