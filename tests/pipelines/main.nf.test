@@ -109,6 +109,41 @@ nextflow_pipeline {
         }
     }
 
+    test("Small-scale test of full pipeline with gzipped MLST JSON"){
+        tag "pipeline_success_gzipped_JSON"
+
+        when{
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet_gzip.csv"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+
+            // Check is sample1.mlst.json.gz exists and is gzipped
+            def gzipped_json = path("$launchDir/results/input/sample1.mlst.json.gz")
+            assert gzipped_json.exists()
+            
+            // Check called clusters
+            def actual_calls = path("$launchDir/results/call/Called/results.text")
+            def expected_calls = path("$baseDir/tests/data/called/expected_results.txt")
+            assert actual_calls.text == expected_calls.text
+
+            // Check IRIDA Next JSON output
+            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/test_iridanext.output.json").json
+
+            def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_metadata = iridanext_json.metadata.samples
+
+            assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
+            assert iridanext_metadata.sampleQ."address" == "1.1.3"
+        }
+    }
+
     test("Integration test where input contains reference sample with mismatched MLST JSON file"){
         tag "pipeline_failure"
 
