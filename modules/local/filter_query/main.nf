@@ -7,7 +7,7 @@ process FILTER_QUERY {
         'biocontainers/csvtk:0.22.0--h9ee0642_1' }"
 
     input:
-    val input_query
+    val query_ids
     path addresses
     val in_format
     val out_format
@@ -17,19 +17,19 @@ process FILTER_QUERY {
     path("versions.yml"),       emit: versions
 
     script:
-
-    def queryID = input_query[0].id
     def outputFile = "new_addresses"
-
     def delimiter = in_format == "tsv" ? "\t" : (in_format == "csv" ? "," : in_format)
     def out_delimiter = out_format == "tsv" ? "\t" : (out_format == "csv" ? "," : out_format)
     def out_extension = out_format == "tsv" ? 'tsv' : 'csv'
+
+    // Join the query IDs in the correct csvtk filter2 required format
+    def queryID = query_ids.collect { id -> "\$id == \"${id}\"" }.join(" || ")
 
     """
     # Filter the query samples only; keep only the 'id' and 'address' columns
     csvtk filter2 \\
         ${addresses} \\
-        --filter '\$id == \"$queryID\"' \\
+        --filter '$queryID' \\
         --delimiter "${delimiter}" \\
         --out-delimiter "${out_delimiter}" | \\
     csvtk cut -f id,address > ${outputFile}.${out_extension}
@@ -39,5 +39,7 @@ process FILTER_QUERY {
         csvtk: \$(echo \$( csvtk version | sed -e "s/csvtk v//g" ))
     END_VERSIONS
     """
+
+
 }
 

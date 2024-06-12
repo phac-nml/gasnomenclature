@@ -1,6 +1,7 @@
 process INPUT_CHECK{
     tag "Check Sample Inputs and Generate Error Report"
     label 'process_single'
+    fair true
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/python:3.8.3' :
