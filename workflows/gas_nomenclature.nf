@@ -26,6 +26,7 @@ include { INPUT_ASSURE                          } from "../modules/local/input_a
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_REF    } from "../modules/local/locidex/merge/main"
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_QUERY  } from "../modules/local/locidex/merge/main"
 include { PROFILE_DISTS                         } from "../modules/local/profile_dists/main"
+include { CLUSTER_FILE                          } from "../modules/local/cluster_file/main"
 include { GAS_CALL                              } from "../modules/local/gas/call/main"
 include { FILTER_QUERY                          } from "../modules/local/filter_query/main"
 
@@ -104,23 +105,28 @@ workflow GAS_NOMENCLATURE {
         exit 1, "${params.pd_columns}: Does not exist but was passed to the pipeline. Exiting now."
     }
 
-    mapping_format = Channel.value(params.pd_outfmt)
-
     distances = PROFILE_DISTS(merged_queries.combined_profiles,
                             merged_references.combined_profiles,
-                            mapping_format,
                             mapping_file,
                             columns_file)
     ch_versions = ch_versions.mix(distances.versions)
 
-    // GAS CALL
-    clusters = Channel.fromPath(params.ref_clusters, checkIfExists: true)
+    // Generate the expected_clusters.txt file from the addresses of the provided reference samples
+    clusters = input.filter { meta, file ->
+        meta.address != null
+    }.collect { meta, file ->
+        meta }
 
-    called_data = GAS_CALL(clusters, distances.results)
+    expected_clusters = CLUSTER_FILE(clusters)
+
+    // GAS CALL
+    called_data = GAS_CALL(expected_clusters.text, distances.results)
     ch_versions = ch_versions.mix(called_data.versions)
 
     // Filter the new queried samples and addresses into a CSV/JSON file for the IRIDANext plug in
-    new_addresses = FILTER_QUERY(profiles.query, called_data.distances, "tsv", "csv")
+    query_ids = profiles.query.collect { it[0].id }
+
+    new_addresses = FILTER_QUERY(query_ids, called_data.distances, "tsv", "csv")
     ch_versions = ch_versions.mix(new_addresses.versions)
 
     CUSTOM_DUMPSOFTWAREVERSIONS (

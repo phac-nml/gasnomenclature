@@ -18,15 +18,24 @@ nextflow_pipeline {
             assert path("$launchDir/results").exists()
 
             // Check merged profiles
-            // TODO check query profile is merged
             def actual_profile_ref = path("$launchDir/results/locidex/merge/reference/merged_ref/merged_profiles_ref.tsv")
             def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected-profile1.tsv")
             assert actual_profile_ref.text == expected_profile_tsv.text
+
+            // Check query profiles
+            def actual_profile_query = path("$launchDir/results/locidex/merge/query/merged_value/merged_profiles_value.tsv")
+            def expected_profile_query_tsv = path("$baseDir/tests/data/profiles/expected-profile2.tsv")
+            assert actual_profile_query.text == expected_profile_query_tsv.text
 
             // Check computed pairwise distances
             def actual_distances = path("$launchDir/results/distances/results.text")
             def expected_distances = path("$baseDir/tests/data/distances/expected_pairwise_dists.txt")
             assert actual_distances.text == expected_distances.text
+
+            // Verify cluster file
+            def actual_cluster = path("$launchDir/results/cluster/reference_clusters.txt")
+            def expected_cluster = path("$baseDir/tests/data/clusters/expected_clusters.txt")
+            assert actual_cluster.text == expected_cluster.text
 
             // Check called clusters
             def actual_calls = path("$launchDir/results/call/Called/results.text")
@@ -42,6 +51,61 @@ nextflow_pipeline {
 
             assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
             assert iridanext_metadata.sampleQ."address" == "1.1.3"
+        }
+    }
+
+    test("Small-scale test of full pipeline with multiple queries"){
+        tag "pipeline_success_multiple_queries"
+
+        when{
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet-multiple_queries.csv"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+
+            // Check merged profiles
+            def actual_profile_ref = path("$launchDir/results/locidex/merge/reference/merged_ref/merged_profiles_ref.tsv")
+            def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected-profile_queries1.tsv")
+            assert actual_profile_ref.text == expected_profile_tsv.text
+
+            // Check query profiles
+            def actual_profile_query = path("$launchDir/results/locidex/merge/query/merged_value/merged_profiles_value.tsv")
+            def expected_profile_query_tsv = path("$baseDir/tests/data/profiles/expected-profile_queries2.tsv")
+            assert actual_profile_query.text == expected_profile_query_tsv.text
+
+            // Check computed pairwise distances
+            def actual_distances = path("$launchDir/results/distances/results.text")
+            def expected_distances = path("$baseDir/tests/data/distances/expected_pairwise_queries_dists.txt")
+            assert actual_distances.text == expected_distances.text
+
+            // Verify cluster file
+            def actual_cluster = path("$launchDir/results/cluster/reference_clusters.txt")
+            def expected_cluster = path("$baseDir/tests/data/clusters/expected_clusters.txt")
+            assert actual_cluster.text == expected_cluster.text
+
+            // Check called clusters
+            def actual_calls = path("$launchDir/results/call/Called/results.text")
+            def expected_calls = path("$baseDir/tests/data/called/expected_results_queries.txt")
+            assert actual_calls.text == expected_calls.text
+
+            // Check IRIDA Next JSON output
+            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/queries_iridanext.output.json").json
+
+            def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_metadata = iridanext_json.metadata.samples
+
+            assert iridanext_metadata.size() == 2
+            assert iridanext_metadata.containsKey("sampleQ")
+            assert iridanext_metadata.containsKey("sampleN")
+
+            assert iridanext_metadata.sampleQ."address" == "2.2.3"
+            assert iridanext_metadata.sampleN.address == "2.2.3"
         }
     }
 

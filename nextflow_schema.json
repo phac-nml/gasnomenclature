@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-07/schema",
     "$id": "https://raw.githubusercontent.com/phac-nml/gasnomenclature/main/nextflow_schema.json",
     "title": "phac-nml/gasnomenclature pipeline parameters",
-    "description": "IRIDA Next Example Pipeline",
+    "description": "Gas Nomenclature assignment pipeline",
     "type": "object",
     "definitions": {
         "gas_call": {
@@ -13,14 +13,21 @@
             "properties": {
                 "gm_thresholds": {
                     "type": "string",
-                    "default": "10,5,0"
+                    "default": "10,5,0",
+                    "description": "Thresholds delimited by ','. Values should match units from '--pd_distm' (either 'hamming' or 'scaled').",
+                    "pattern": "^(\\d+(\\.\\d+)?,)*\\d+(\\.\\d+)?$"
+                },
+                "gm_method": {
+                    "type": "string",
+                    "default": "average",
+                    "description": "Clustering linkage method.",
+                    "enum": ["single", "average", "complete"]
                 },
                 "gm_delimiter": {
                     "type": "string",
-                    "default": "\\'.\\"
-                },
-                "ref_clusters": {
-                    "type": "string"
+                    "default": ".",
+                    "description": "Delimiter desired for nomenclature code.",
+                    "pattern": "^[A-Fa-f0-9\\._-]+$"
                 }
             }
         },
@@ -30,45 +37,55 @@
             "description": "",
             "default": "",
             "properties": {
-                "pd_outfmt": {
-                    "type": "string",
-                    "default": "pairwise"
-                },
                 "pd_distm": {
                     "type": "string",
+                    "description": "The distance method/unit",
+                    "enum": ["hamming", "scaled"],
                     "default": "hamming"
                 },
                 "pd_missing_threshold": {
                     "type": "number",
+                    "description": "The maximum proportion of missing data per locus for a locus to be kept in the analysis",
+                    "minimum": 0,
+                    "maximum": 1,
                     "default": 1
                 },
                 "pd_sample_quality_threshold": {
                     "type": "number",
+                    "description": "The maximum proportion of missing data per sample for a sample to be kept in the analysis",
+                    "minimum": 0,
+                    "maximum": 1,
                     "default": 1
-                },
-                "pd_match_threshold": {
-                    "type": "number",
-                    "default": -1
                 },
                 "pd_file_type": {
                     "type": "string",
+                    "description": "Output format file type",
+                    "enum": ["text", "parquet"],
                     "default": "text"
                 },
                 "pd_mapping_file": {
-                    "type": "string"
-                },
-                "pd_force": {
-                    "type": "boolean"
+                    "type": "string",
+                    "pattern": "^\\S+\\.json(\\.gz)?$",
+                    "description": "A file used to map allele codes to integers for internal distance calculations",
+                    "exists": true,
+                    "hidden": true,
+                    "format": "file-path"
                 },
                 "pd_skip": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "description": "Skip QA/QC steps"
                 },
                 "pd_columns": {
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^\\S+$",
+                    "description": "Defines the loci to keep within the analysis. Formatted as a single column file with one locus name per line or list of comma-separated loci",
+                    "exists": true,
+                    "format": "file-path"
                 },
                 "pd_count_missing": {
                     "type": "boolean",
-                    "default": true
+                    "description": "Count missing alleles as different",
+                    "default": false
                 }
             }
         },
@@ -95,27 +112,6 @@
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
                     "fa_icon": "fas fa-folder-open"
-                },
-                "project_name": {
-                    "type": "string",
-                    "default": "assembly",
-                    "pattern": "^\\S+$",
-                    "description": "The name of the project.",
-                    "fa_icon": "fas fa-tag"
-                },
-                "assembler": {
-                    "type": "string",
-                    "default": "stub",
-                    "fa_icon": "fas fa-desktop",
-                    "description": "The sequence assembler to use for sequence assembly.",
-                    "enum": ["default", "stub", "experimental"]
-                },
-                "random_seed": {
-                    "type": "integer",
-                    "default": 1,
-                    "fa_icon": "fas fa-dice-six",
-                    "description": "The random seed to use for sequence assembly.",
-                    "minimum": 1
                 },
                 "email": {
                     "type": "string",

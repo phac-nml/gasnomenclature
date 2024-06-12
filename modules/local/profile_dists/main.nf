@@ -9,7 +9,6 @@ process PROFILE_DISTS{
     input:
     path query
     path ref
-    val mapping_format
     path mapping_file
     path columns
 
@@ -32,9 +31,6 @@ process PROFILE_DISTS{
     if(columns){
         args = args + " --columns $columns"
     }
-    if(params.pd_force){
-        args = args + " --force"
-    }
     if(params.pd_skip){
         args = args + " --skip"
     }
@@ -42,9 +38,10 @@ process PROFILE_DISTS{
         args = args + " --count_missing"
     }
     // --match_threshold $params.profile_dists.match_thresh \\
-    prefix = "distances_${mapping_format}"
+    prefix = "distances_pairwise"
     """
-    profile_dists --query $query --ref $ref $args --outfmt $mapping_format \\
+    profile_dists --query $query --ref $ref $args \\
+                --outfmt pairwise \\
                 --distm $params.pd_distm \\
                 --file_type $params.pd_file_type \\
                 --missing_thresh $params.pd_missing_threshold \\
