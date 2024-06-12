@@ -6,7 +6,7 @@ process CLUSTER_FILE {
     val meta
 
     output:
-    path("expected_clusters.txt"), emit: text
+    path("reference_clusters.txt"), emit: text
 
     exec:
     def outputLines = []
@@ -37,7 +37,7 @@ process CLUSTER_FILE {
     }
 
     // Write the text file, iterating over each sample
-    task.workDir.resolve("expected_clusters.txt").withWriter { writer ->
+    task.workDir.resolve("reference_clusters.txt").withWriter { writer ->
         outputLines.each { line ->
             writer.writeLine(line)
         }

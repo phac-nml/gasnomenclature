@@ -33,7 +33,7 @@ nextflow_pipeline {
             assert actual_distances.text == expected_distances.text
 
             // Verify cluster file
-            def actual_cluster = path("$launchDir/results/cluster/expected_clusters.txt")
+            def actual_cluster = path("$launchDir/results/cluster/reference_clusters.txt")
             def expected_cluster = path("$baseDir/tests/data/clusters/expected_clusters.txt")
             assert actual_cluster.text == expected_cluster.text
 
@@ -84,7 +84,7 @@ nextflow_pipeline {
             assert actual_distances.text == expected_distances.text
 
             // Verify cluster file
-            def actual_cluster = path("$launchDir/results/cluster/expected_clusters.txt")
+            def actual_cluster = path("$launchDir/results/cluster/reference_clusters.txt")
             def expected_cluster = path("$baseDir/tests/data/clusters/expected_clusters.txt")
             assert actual_cluster.text == expected_cluster.text
 
