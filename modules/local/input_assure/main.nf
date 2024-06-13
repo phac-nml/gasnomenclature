@@ -10,7 +10,7 @@ process INPUT_ASSURE {
     tuple val(meta), path(mlst)
 
     output:
-    tuple val(meta), path(mlst),                                    emit: result
+    tuple val(meta), path("${meta.id}.mlst.json"),                  emit: result
     tuple val(meta), path("*_error_report.csv"), optional: true,    emit: error_report
     path("versions.yml"),                                           emit: versions
 
@@ -21,7 +21,8 @@ process INPUT_ASSURE {
         --input ${mlst} \\
         --sample_id ${meta.id} \\
         --address ${meta.address} \\
-        --output_error ${meta.id}_error_report.csv
+        --output_error ${meta.id}_error_report.csv \\
+        --output_json ${meta.id}.mlst.json
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

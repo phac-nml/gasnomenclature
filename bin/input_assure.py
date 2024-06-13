@@ -15,20 +15,20 @@ def open_file(file_path, mode):
         return open(file_path, mode)
 
 
-def check_inputs(json_file, sample_id, address, output_error_file):
+def check_inputs(json_file, sample_id, address, output_error_file, output_json_file):
     with open_file(json_file, "rt") as f:
         json_data = json.load(f)
 
     # Define a variable to store the match_status (True or False)
     match_status = sample_id in json_data
 
-    keys = list(json_data.keys())
-    original_key = keys[0] if keys else None
-
     # Initialize the error message
     error_message = None
 
     # Check for multiple keys in the JSON file and define error message
+    keys = list(json_data.keys())
+    original_key = keys[0] if keys else None
+
     if len(keys) == 0:
         error_message = f"{json_file} is completely empty!"
         print(error_message)
@@ -60,7 +60,7 @@ def check_inputs(json_file, sample_id, address, output_error_file):
             writer.writerow([sample_id, keys, error_message])
 
     # Write the updated JSON data back to the original file
-    with open_file(json_file, "wt") as f:
+    with open_file(output_json_file, "wt") as f:
         json.dump(json_data, f, indent=4)
 
 
@@ -78,7 +78,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "--output_error", help="Path to the error report file.", required=True
     )
+    parser.add_argument(
+        "--output_json", help="Path to the MLST JSON file.", required=True
+    )
 
     args = parser.parse_args()
 
-    check_inputs(args.input, args.sample_id, args.address, args.output_error)
+    check_inputs(
+        args.input, args.sample_id, args.address, args.output_error, args.output_json
+    )
