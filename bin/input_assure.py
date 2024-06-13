@@ -4,6 +4,7 @@ import json
 import argparse
 import csv
 import gzip
+import sys
 
 
 def open_file(file_path, mode):
@@ -13,7 +14,6 @@ def open_file(file_path, mode):
     else:
         return open(file_path, mode)
 
-
 def check_inputs(json_file, sample_id, address, output_error_file):
     with open_file(json_file, "rt") as f:
         json_data = json.load(f)
@@ -22,13 +22,17 @@ def check_inputs(json_file, sample_id, address, output_error_file):
     match_status = sample_id in json_data
 
     keys = list(json_data.keys())
-    original_key = keys[0]
+    original_key = keys[0] if keys else None
 
     # Initialize the error message
     error_message = None
 
     # Check for multiple keys in the JSON file and define error message
-    if len(keys) > 1:
+    if len(keys) == 0:
+        error_message = f"{json_file} is completely empty!"
+        print(error_message)
+        sys.exit(1)
+    elif len(keys) > 1:
         # Check if sample_id matches any key
         if not match_status:
             error_message = f"No key in the MLST JSON file ({json_file}) matches the specified sample ID '{sample_id}'. The first key '{original_key}' has been forcefully changed to '{sample_id}' and all other keys have been removed."

@@ -289,4 +289,20 @@ nextflow_pipeline {
             assert iridanext_metadata.sampleQ."address" == "1.1.3"
         }
     }
+
+    test("Testing when provided MLST JSON file(s) are empty."){
+        tag "empty_JSON"
+
+        when{
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet_emptyJSON.csv"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.failed
+            assert (workflow.stdout =~ /sample2_empty.mlst.json is completely empty!/).find()
+        }
+    }
 }
