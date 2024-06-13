@@ -14,6 +14,7 @@ def open_file(file_path, mode):
     else:
         return open(file_path, mode)
 
+
 def check_inputs(json_file, sample_id, address, output_error_file):
     with open_file(json_file, "rt") as f:
         json_data = json.load(f)
