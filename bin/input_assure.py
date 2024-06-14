@@ -60,7 +60,7 @@ def check_inputs(json_file, sample_id, address, output_error_file, output_json_f
             writer.writerow([sample_id, keys, error_message])
 
     # Write the updated JSON data back to the original file
-    with open_file(output_json_file, "wt") as f:
+    with gzip.open(output_json_file, "wt") as f:
         json.dump(json_data, f, indent=4)
 
 
@@ -79,7 +79,7 @@ if __name__ == "__main__":
         "--output_error", help="Path to the error report file.", required=True
     )
     parser.add_argument(
-        "--output_json", help="Path to the MLST JSON file.", required=True
+        "--output_json", help="Path to the MLST JSON file (gzipped).", required=True
     )
 
     args = parser.parse_args()

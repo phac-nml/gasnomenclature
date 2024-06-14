@@ -123,8 +123,8 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/results").exists()
 
-            // Check that sample1.mlst.json.gz has been open, read, and that a new file has been generated
-            assert path("$launchDir/results/input/sample1.mlst.json").exists()
+            // Check that sample1.mlst.json.gz has been open, read, and that a new gzipped file has been generated
+            assert path("$launchDir/results/input/sample1.mlst.json.gz").exists()
 
             // Check called clusters
             def actual_calls = path("$launchDir/results/call/Called/results.text")
