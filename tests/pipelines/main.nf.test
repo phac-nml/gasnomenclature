@@ -105,41 +105,16 @@ nextflow_pipeline {
             assert iridanext_metadata.containsKey("sampleN")
 
             assert iridanext_metadata.sampleQ."address" == "2.2.3"
-            assert iridanext_metadata.sampleN.address == "2.2.3"
+            assert iridanext_metadata.sampleN."address" == "2.2.3"
         }
     }
 
-    test("Integration test where input contains reference sample with mismatched MLST JSON file"){
-        tag "pipeline_failure"
-
-        when {
-            params {
-                input = "$baseDir/tests/data/samplesheets/samplesheet_test1.csv"
-                outdir = "results"
-            }
-        }
-
-        then {
-            assert workflow.failed
-            assert (workflow.stdout =~ /Pipeline exiting: sample with ID sample2 does not have matching MLST JSON file./).find()
-
-            assert path("$launchDir/results").exists()
-            assert path("$launchDir/results/input").exists()
-
-            // Ensure that despite pipeline failure, error_reports are generated for all samples added to pipeline (i.e. sampleQ query)
-            def lines = []
-
-            lines = path("$launchDir/results/input/sample2_error_report.csv").readLines()
-            assert lines.contains("sample2,sample7,Pipeline stopped: Reference sample2's input ID and MLST JSON file key DO NOT MATCH")
-        }
-    }
-
-    test("Integration test where input contains a single query sample with mismatched MLST JSON file"){
-        tag "pipeline_success_after_query_removal"
+    test("Small-scale test of full pipeline with gzipped MLST JSON"){
+        tag "Gzipped_MLST_JSON"
 
         when{
             params {
-                input = "$baseDir/tests/data/samplesheets/samplesheet_test2.csv"
+                input = "$baseDir/tests/data/samplesheets/samplesheet_gzip.csv"
                 outdir = "results"
             }
         }
@@ -147,30 +122,186 @@ nextflow_pipeline {
         then {
             assert workflow.success
             assert path("$launchDir/results").exists()
-            assert path("$launchDir/results/input").exists()
-            assert path("$launchDir/results/filter").exists()
 
-            // Check outputs
-            def lines = []
+            // Check that sample1.mlst.json.gz has been open, read, and that a new gzipped file has been generated
+            assert path("$launchDir/results/input/sample1.mlst.json.gz").exists()
 
-            // Ensure that the error_report is generated for removed query sampleR
-            lines = path("$launchDir/results/input/sampleR_error_report.csv").readLines()
-            assert lines.contains("sampleR,sampleF,Query sampleR removed from pipeline")
-
-            // Check query output csv
-            lines = path("$launchDir/results/filter/new_addresses.csv").readLines()
-            assert lines.contains("sampleQ,1.1.3")
+            // Check called clusters
+            def actual_calls = path("$launchDir/results/call/Called/results.text")
+            def expected_calls = path("$baseDir/tests/data/called/expected_results.txt")
+            assert actual_calls.text == expected_calls.text
 
             // Check IRIDA Next JSON output
-            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/test2_iridanext.output.json").json
+            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/test_iridanext.output.json").json
 
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
             def iridanext_samples = iridanext_json.files.samples
             def iridanext_metadata = iridanext_json.metadata.samples
 
-            assert iridanext_samples.sampleR.findAll { it.path == "input/sampleR_error_report.csv" }.size() == 1
+            assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
             assert iridanext_metadata.sampleQ."address" == "1.1.3"
         }
     }
 
+    test("Testing when query and reference sample IDs are mismatched with MLST JSON file keys"){
+        // IDs in the sample sheet and IDs in the individual MLST JSON files will not match.
+        // This tests the pipelines ability to handle and correct for this problem.
+
+        tag "mismatched_IDs"
+
+        when{
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet-mismatched_IDs.csv"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+
+            // Check outputs
+            def lines = []
+
+            // Ensure that the error_reports are generated for query and reference samples
+            lines = path("$launchDir/results/input/sample2_error_report.csv").readLines()
+            assert lines.contains("sample2,[\'sample7\'],Reference sample2 ID and JSON key in sample7.mlst.json DO NOT MATCH. The 'sample7' key in sample7.mlst.json has been forcefully changed to 'sample2': User should manually check input files to ensure correctness.")
+
+            lines = path("$launchDir/results/input/sampleR_error_report.csv").readLines()
+            assert lines.contains("sampleR,[\'sampleF\'],Query sampleR ID and JSON key in sampleF.mlst.json DO NOT MATCH. The 'sampleF' key in sampleF.mlst.json has been forcefully changed to 'sampleR': User should manually check input files to ensure correctness.")
+
+            // Check filter_query csv file
+            lines = path("$launchDir/results/filter/new_addresses.csv").readLines()
+            assert lines.contains("sampleQ,2.2.3")
+            assert lines.contains("sampleR,2.2.3")
+
+            // Check IRIDA Next JSON output
+            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/mismatched_iridanext.output.json").json
+
+            def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_metadata = iridanext_json.metadata.samples
+
+            assert iridanext_metadata.size() == 2
+            assert iridanext_metadata.containsKey("sampleQ")
+            assert iridanext_metadata.containsKey("sampleR")
+
+            assert iridanext_metadata.sampleQ."address" == "2.2.3"
+            assert iridanext_metadata.sampleR."address" == "2.2.3"
+        }
+    }
+
+    test("Testing data removal in MLST JSON with a matching sampleID key."){
+        // There are multiple sample entries (keys) in the MLST JSON and one of them matches the sampleID.
+        // This test evaluates the pipeline's ability to address this issue by removing keys that do not match the sampleID.
+
+        tag "multiple_keys_with_matching_ID"
+
+        when{
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet-multiple_keys.csv"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+
+            // Check called clusters
+            def actual_calls = path("$launchDir/results/call/Called/results.text")
+            def expected_calls = path("$baseDir/tests/data/called/expected_results.txt")
+            assert actual_calls.text == expected_calls.text
+
+            // Check outputs
+            def lines = []
+
+            // Ensure that the error_reports are generated for query and reference samples
+            lines = path("$launchDir/results/input/sample3_error_report.csv").readLines()
+            assert lines.contains('sample3,"[\'extra_key\', \'sample3\']","MLST JSON file (sample3_multiplekeys.mlst.json) contains multiple keys: [\'extra_key\', \'sample3\']. The MLST JSON file has been modified to retain only the \'sample3\' entry"')
+
+            // Check filtered query csv results
+            lines = path("$launchDir/results/filter/new_addresses.csv").readLines()
+            assert lines.contains("sampleQ,1.1.3")
+
+            // Check IRIDA Next JSON output
+            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/multiplekeys_iridanext.output.json").json
+
+            def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_metadata = iridanext_json.metadata.samples
+
+            assert iridanext_samples.sample3.size() == 1
+            assert iridanext_samples.sample3[0].path == 'input/sample3_error_report.csv'
+
+            assert iridanext_metadata.size() == 1
+            assert iridanext_metadata.containsKey("sampleQ")
+            assert iridanext_metadata.sampleQ."address" == "1.1.3"
+        }
+    }
+
+    test("Testing the removal of data in MLST JSON with no sampleID match."){
+        // There are multiple sample entries (keys) in the MLST JSON and none of them match the sampleID..
+        // This test ensures the pipeline can handle and resolve this issue by retaining only the first JSON key entry and renaming it to match the sampleID.
+
+        tag "multiple_keys_without_matching_ID"
+
+        when{
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet-multiplekeys_nomatch.csv"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+
+            // Check called clusters
+            def actual_calls = path("$launchDir/results/call/Called/results.text")
+            def expected_calls = path("$baseDir/tests/data/called/expected_results.txt")
+            assert actual_calls.text == expected_calls.text
+
+            // Check outputs
+            def lines = []
+
+            // Ensure that the error_reports are generated for query and reference samples
+            lines = path("$launchDir/results/input/sample3_error_report.csv").readLines()
+            assert lines.contains("sample3,\"[\'sample4\', \'extra_key\']\",No key in the MLST JSON file (sample3_multiplekeys_nomatch.mlst.json) matches the specified sample ID \'sample3\'. The first key \'sample4\' has been forcefully changed to \'sample3\' and all other keys have been removed.")
+
+            // Check filtered query csv results
+            lines = path("$launchDir/results/filter/new_addresses.csv").readLines()
+            assert lines.contains("sampleQ,1.1.3")
+
+            // Check IRIDA Next JSON output
+            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/multiplekeys_iridanext.output.json").json
+
+            def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_metadata = iridanext_json.metadata.samples
+
+            assert iridanext_samples.sample3.size() == 1
+            assert iridanext_samples.sample3[0].path == 'input/sample3_error_report.csv'
+
+            assert iridanext_metadata.size() == 1
+            assert iridanext_metadata.containsKey("sampleQ")
+            assert iridanext_metadata.sampleQ."address" == "1.1.3"
+        }
+    }
+
+    test("Testing when provided MLST JSON file(s) are empty."){
+        tag "empty_JSON"
+
+        when{
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet_emptyJSON.csv"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.failed
+            assert (workflow.stdout =~ /sample2_empty.mlst.json is completely empty!/).find()
+        }
+    }
 }

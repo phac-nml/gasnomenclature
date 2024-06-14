@@ -1,5 +1,7 @@
 sample,mlst_alleles,address
-sampleQ,https://raw.githubusercontent.com/phac-nml/gasnomenclature/dev/tests/data/reports/sampleF.mlst.json,
+sampleQ,https://raw.githubusercontent.com/phac-nml/gasnomenclature/dev/tests/data/reports/sampleQ.mlst.json,
+sampleR,https://raw.githubusercontent.com/phac-nml/gasnomenclature/dev/tests/data/reports/sampleF.mlst.json,
 sample1,https://raw.githubusercontent.com/phac-nml/gasnomenclature/dev/tests/data/reports/sample1.mlst.json,1.1.1
 sample2,https://raw.githubusercontent.com/phac-nml/gasnomenclature/dev/tests/data/reports/sample7.mlst.json,1.1.1
 sample3,https://raw.githubusercontent.com/phac-nml/gasnomenclature/dev/tests/data/reports/sample3.mlst.json,1.1.2
+

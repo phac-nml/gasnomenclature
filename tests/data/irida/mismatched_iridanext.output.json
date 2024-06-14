@@ -6,13 +6,21 @@
                 {
                     "path": "input/sampleR_error_report.csv"
                 }
+            ],
+            "sample2": [
+                {
+                    "path": "input/sample2_error_report.csv"
+                }
             ]
         }
     },
     "metadata": {
         "samples": {
             "sampleQ": {
-                "address": "1.1.3"
+                "address": "2.2.3"
+            },
+            "sampleR": {
+                "address": "2.2.3"
             }
         }
     }
