@@ -56,6 +56,44 @@ nextflow_pipeline {
         }
     }
 
-   
+    test("Full pipeline hashes and missing data count missing as differences") {
+        tag "pipeline_hashes_missing_count_missing"
+
+        when {
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet-hash_missing.csv"
+                outdir = "results"
+
+                gm_thresholds = "1"
+                pd_count_missing = true
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+
+            // Check computed pairwise distances
+            def actual_distances = path("$launchDir/results/distances/results.text")
+            def expected_distances = path("$baseDir/tests/data/distances/expected_dists_count-missing.txt")
+            assert actual_distances.text == expected_distances.text
+
+            // Check called clusters
+            def actual_calls = path("$launchDir/results/call/Called/results.text")
+            def expected_calls = path("$baseDir/tests/data/called/expected_results_count-missing.txt")
+            assert actual_calls.text == expected_calls.text
+
+            // Check IRIDA Next JSON output
+            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/count-missing_iridanext.output.json").json
+
+            def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_metadata = iridanext_json.metadata.samples
+
+            assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
+            assert iridanext_metadata.sampleQ."address" == "1"
+        }
+    }
+
 }
 
