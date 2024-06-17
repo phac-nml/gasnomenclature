@@ -1,0 +1,13 @@
+{
+    "files": {
+        "global": [],
+        "samples": {}
+    },
+    "metadata": {
+        "samples": {
+            "sampleQ": {
+                "address": "1"
+            }
+        }
+    }
+}
