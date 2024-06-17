@@ -134,5 +134,41 @@ nextflow_pipeline {
             assert iridanext_metadata.sampleQ."address" == "1"
         }
     }
+
+    test("Test fail pipeline if non-existent columns file is passed") {
+        tag "pipeline_failure_columns_no_exist"
+
+        when {
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet-hash_missing.csv"
+                outdir = "results"
+
+                pd_columns = "./no-exist"
+            }
+        }
+
+        then {
+            assert workflow.failed
+            assert workflow.stderr.contains("* --pd_columns: the file or directory './no-exist' does not exist.")
+        }
+    }
+
+    test("Test failure of pipeline when keeping no loci") {
+        tag "pipeline_keep_zero_loci"
+
+        when {
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet-hash_missing.csv"
+                outdir = "results"
+
+                gm_thresholds = "0"
+                pd_columns = "$baseDir/tests/data/columns/keep-zero-loci-empty-file.txt"
+            }
+        }
+
+        then {
+            assert workflow.failed
+        }
+    }
 }
 
