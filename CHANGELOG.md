@@ -5,8 +5,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## In-development
 
-- Fixed nf-core tools linting failures introduced in version 2.12.1.
-- Added phac-nml prefix to nf-core config
+## 1.0.5 - 2024/06/17
+
+- Updated modules to include:
+
+  - `input_assure`: Performs a validation check on the samplesheet inputs to ensure that the sampleID precisely matches the MLST JSON key and enforces necessary changes where discrepancies are found.
+  - `cluster_file`: Generates the expected_clusters.txt file from reference sample addresses for use in GAS_call.
+  - `filter_query`: Filters and generates a csv file containing only the cluster addresses for query samples.
+
+- Pinned nf-iridanext plugin
+- Added tests for the full pipeline, independant modules, and input parameters
+- Updated documentation and configuration files
 
 ## 1.0.3 - 2024/02/23
 
