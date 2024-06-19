@@ -97,12 +97,12 @@ nextflow_pipeline {
         }
     }
 
-    test("Test pipeline with single threshold set to 1") {
-        tag "pipeline_thresh_1"
+    test("Test fail pipeline with single threshold set to 1") {
+        tag "pipeline_thresh_1_fail"
 
         when {
             params {
-                input = "$baseDir/tests/data/samplesheets/samplesheet1.csv"
+                input = "$baseDir/tests/data/samplesheets/samplesheet_thresh_1.csv"
                 outdir = "results"
 
                 gm_thresholds = "1"
@@ -115,12 +115,50 @@ nextflow_pipeline {
         }
     }
 
-    test("Test pipeline with threshold set to 1,0") {
-        tag "pipeline_thresh_1.0"
+    test("Test pipeline with single threshold set to 1") {
+        tag "pipeline_thresh_1_success"
 
         when {
             params {
-                input = "$baseDir/tests/data/samplesheets/samplesheet1.csv"
+                input = "$baseDir/tests/data/samplesheets/samplesheet_thresh_1.csv"
+                outdir = "results"
+
+                gm_thresholds = "1"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+
+            // Check computed pairwise distances
+            def actual_distances = path("$launchDir/results/distances/results.text")
+            def expected_distances = path("$baseDir/tests/data/distances/expected_dists_thresh_1.txt")
+            assert actual_distances.text == expected_distances.text
+
+            // Check called clusters
+            def actual_calls = path("$launchDir/results/call/Called/results.text")
+            def expected_calls = path("$baseDir/tests/data/called/expected_results_thresh_1.txt")
+            assert actual_calls.text == expected_calls.text
+
+            // Check IRIDA Next JSON output
+            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/thresh1_iridanext.output.json").json
+
+            def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_metadata = iridanext_json.metadata.samples
+
+            assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
+            assert iridanext_metadata.sampleQ."address" == "1"
+        }
+    }
+
+    test("Test fail pipeline with threshold set to 1,0") {
+        tag "pipeline_thresh_1_0_fail"
+
+        when {
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet_thresh_1_0.csv"
                 outdir = "results"
 
                 gm_thresholds = "1,0"
@@ -130,6 +168,44 @@ nextflow_pipeline {
         then {
             assert workflow.failed
             assert (workflow.stdout =~ /Error \[1.0, 0.0\]  supplied thresholds do not equal the number of threshold columns in reference_clusters.txt/).find()
+        }
+    }
+
+    test("Test pipeline with threshold set to 1,0") {
+        tag "pipeline_thresh_1_0_success"
+
+        when {
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet_thresh_1_0.csv"
+                outdir = "results"
+
+                gm_thresholds = "1,0"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+
+            // Check computed pairwise distances
+            def actual_distances = path("$launchDir/results/distances/results.text")
+            def expected_distances = path("$baseDir/tests/data/distances/expected_dists_thresh_1_0.txt")
+            assert actual_distances.text == expected_distances.text
+
+            // Check called clusters
+            def actual_calls = path("$launchDir/results/call/Called/results.text")
+            def expected_calls = path("$baseDir/tests/data/called/expected_results_thresh_1_0.txt")
+            assert actual_calls.text == expected_calls.text
+
+            // Check IRIDA Next JSON output
+            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/thresh1.0_iridanext.output.json").json
+
+            def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_metadata = iridanext_json.metadata.samples
+
+            assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
+            assert iridanext_metadata.sampleQ."address" == "1.2"
         }
     }
 }
