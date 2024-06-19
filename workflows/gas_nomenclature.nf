@@ -125,7 +125,7 @@ workflow GAS_NOMENCLATURE {
         exit 1, "--gm_thresholds ${params.gm_thresholds}: Cannot pass null or empty string"
     }
 
-    gm_thresholds_list = params.gm_thresholds.split(',')
+    gm_thresholds_list = params.gm_thresholds.toString().split(',')
     if (params.pd_distm == 'hamming') {
         if (gm_thresholds_list.any { it != null && it.contains('.') }) {
             exit 1, ("'--pd_distm ${params.pd_distm}' is set, but '--gm_thresholds ${params.gm_thresholds}' contains fractions."
