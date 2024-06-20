@@ -20,7 +20,7 @@ The IRIDA Next-compliant JSON output file will be named `iridanext.output.json.g
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
-- [Input check](#input-check) - Performs a validation check on the samplesheet inputs to ensure that the sampleID precisely matches the MLST JSON key.
+- [Input assure](#input-assure) - Performs a validation check on the samplesheet inputs to ensure that the sampleID precisely matches the MLST JSON key and enforces necessary changes where discrepancies are found.
 - [Locidex merge](#locidex-merge) - Merges MLST profile JSON files into a single profiles file for reference and query samples.
 - [Profile dists](#profile-dists) - Computes pairwise distances between genomes using MLST allele differences.
 - [Cluster file](#cluster-file) - Generates the expected_clusters.txt file from reference sample addresses for use in GAS_call.
@@ -29,13 +29,14 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [IRIDA Next Output](#irida-next-output) - Generates a JSON output file that is compliant with IRIDA Next
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
 
-### Input Check
+### Input Assure
 
 <details markdown="1">
 <summary>Output files</summary>
 
 - `input/`
   - `sampleID_error_report.csv`
+  - `sampleID.mlst.json.gz`
 
 </details>
 
