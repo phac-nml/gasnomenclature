@@ -24,11 +24,27 @@ Details on the columns can be found in the [Full samplesheet](docs/usage.md#full
 
 The main parameters are `--input` as defined above and `--output` for specifying the output results directory. You may wish to provide `-profile singularity` to specify the use of singularity containers and `-r [branch]` to specify which GitHub branch you would like to run.
 
-## Profile dists
+## Distance Method and Thresholds
+
+Profile_Dists and the Genomic Address Service workflows can use two distance methods: hamming or scaled.
+
+### Hamming Distances
+
+Hamming distances are integers representing the number of differing loci between two sequences and will range between [0, n], where `n` is the total number of loci. When using Hamming distances, you must specify `--pd_distm hamming` and provide Hamming distance thresholds as integers between [0, n]: `--gm_thresholds "10,5,0"` (10, 5, and 0 loci).
+
+### Scaled Distances
+
+Scaled distances are floats representing the percentage of differing loci between two sequences and will range between [0.0, 100.0]. When using scaled distances, you must specify `--pd_distm scaled` and provide percentages between [0.0, 100.0] as thresholds: `--gm_thresholds "50,20,0"` (50%, 20%, and 0% of loci).
+
+### Thresholds
+
+The `--gm_thresholds` parameter is used to set thresholds for each cluster level, which in turn are used to assign cluster addresses at each level. When specifying `--pd_distm hamming` and `--gm_thresholds "10,5,0"`, all sequences that have no more than 10 loci differences will be assigned the same cluster code for the first level, no more than 5 for the second level, and only sequences that have no loci differences will be assigned the same cluster code for the third level.
+
+## Profile_dists
 
 The following can be used to adjust parameters for the [profile_dists][] tool.
 
-- `--pd_distm`: The distance method/unit, either _hamming_ or _scaled_. For _hamming_ distances, the distance values will be a non-negative integer. For _scaled_ distances, the distance values are between 0 and 1.
+- `--pd_distm`: The distance method/unit, either _hamming_ or _scaled_. For _hamming_ distances, the distance values will be a non-negative integer. For _scaled_ distances, the distance values are between 0.0 and 100.0. Please see the [Distance Method and Thresholds](#distance-method-and-thresholds) section for more information.
 - `--pd_missing_threshold`: The maximum proportion of missing data per locus for a locus to be kept in the analysis. Values from 0 to 1.
 - `--pd_sample_quality_threshold`: The maximum proportion of missing data per sample for a sample to be kept in the analysis. Values from 0 to 1.
 - `--pd_file_type`: Output format file type. One of _text_ or _parquet_.
@@ -47,7 +63,7 @@ The following can be used to adjust parameters for the [profile_dists][] tool.
 
 The following can be used to adjust parameters for the [gas call][] tool.
 
-- `--gm_thresholds`: Thresholds delimited by `,`. Values should match units from `--pd_distm` (either _hamming_ or _scaled_).
+- `--gm_thresholds`: Thresholds delimited by `,`. Values should match units from `--pd_distm` (either _hamming_ or _scaled_). Please see the [Distance Method and Thresholds](#distance-method-and-thresholds) section for more information.
 - `--gm_method`: The linkage method to use for clustering. Value should be one of _single_, _average_, or _complete_.
 - `--gm_delimiter`: Delimiter desired for nomenclature code. Must be alphanumeric or one of `._-`.
 
