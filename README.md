@@ -36,9 +36,15 @@ Hamming distances are integers representing the number of differing loci between
 
 Scaled distances are floats representing the percentage of differing loci between two sequences and will range between [0.0, 100.0]. When using scaled distances, you must specify `--pd_distm scaled` and provide percentages between [0.0, 100.0] as thresholds: `--gm_thresholds "50,20,0"` (50%, 20%, and 0% of loci).
 
-### Thresholds
+### Thresholds and Linkage Methods
 
-The `--gm_thresholds` parameter is used to set thresholds for each cluster level, which in turn are used to assign cluster addresses at each level. When specifying `--pd_distm hamming` and `--gm_thresholds "10,5,0"`, all sequences that have no more than 10 loci differences will be assigned the same cluster code for the first level, no more than 5 for the second level, and only sequences that have no loci differences will be assigned the same cluster code for the third level.
+The `--gm_thresholds` parameter sets thresholds for each cluster level, which dictate how sequences are assigned cluster codes. These thresholds specify the maximum allowable differences in loci between sequences sharing the same cluster code at each level. The consistency of these thresholds in ensuring uniform cluster codes across levels depends on the `--gm_method` parameter, which determines the linkage method used for clustering.
+
+- _Complete Linkage_: When using complete linkage clustering, sequences are grouped such that identical cluster codes at a particular level guarantee that all sequences in that cluster are within the specified threshold distance. For example, specifying `--pd_distm hamming` and `--gm_thresholds "10,5,0"` would mean that sequences with no more than 10 loci differences are assigned the same cluster code at the first level, no more than 5 differences at the second level, and identical sequences at the third level.
+
+- _Average Linkage_: With average linkage clustering, sequences may share the same cluster code if their average distance is below the specified threshold. For instance, sequences with average distances less than 10, 5, and 0 for each level respectively may share the same cluster code.
+
+- _Single Linkage_: Single linkage clustering can result in merging distant samples into the same cluster if there exists a third sample that bridges the distance between them. This method does not provide strict guarantees on the maximum distance within a cluster, potentially allowing distant sequences to share the same cluster code.
 
 ## Profile_dists
 
