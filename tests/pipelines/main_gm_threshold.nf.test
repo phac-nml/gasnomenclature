@@ -65,14 +65,14 @@ nextflow_pipeline {
                 input = "$baseDir/tests/data/samplesheets/samplesheet1.csv"
                 outdir = "results"
 
-                gm_thresholds = "1,0.5,2"
+                gm_thresholds = "200,50,0"
                 pd_distm = "scaled"
             }
         }
 
         then {
             assert workflow.failed
-            assert workflow.stdout.contains("ERROR ~ '--pd_distm scaled' is set, but '--gm_thresholds 1,0.5,2' contains thresholds outside of range [0,1]."
+            assert workflow.stdout.contains("ERROR ~ '--pd_distm scaled' is set, but '--gm_thresholds 200,50,0' contains thresholds outside of range [0,100]."
                                             + " Please either set '--pd_distm hamming' or adjust the threshold values.")
         }
     }
