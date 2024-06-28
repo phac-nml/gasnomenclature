@@ -1,0 +1,5 @@
+dists	sampleQ	sample1	sample2	sample3
+sampleQ	0	1	1	2
+sample1	1	0	0	1
+sample2	1	0	0	1
+sample3	2	1	1	0

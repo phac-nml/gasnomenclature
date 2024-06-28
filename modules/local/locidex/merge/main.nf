@@ -9,17 +9,20 @@ process LOCIDEX_MERGE {
     'quay.io/biocontainers/locidex:0.1.1--pyhdfd78af_0' }"
 
     input:
-    val input_values // [file(sample1), file(sample2), file(sample3), etc...]
+    path input_values // [file(sample1), file(sample2), file(sample3), etc...]
+    val input_tag // makes output unique and denotes the item as the reference or query to preven name collision
 
     output:
     path("${combined_dir}/*.tsv"), emit: combined_profiles
-    path("${combined_dir}/*.json"), emit: report
     path "versions.yml", emit: versions
 
     script:
-    combined_dir = "merged"
+    combined_dir = "merged_${input_tag}"
     """
     locidex merge -i ${input_values.join(' ')} -o ${combined_dir}
+
+    mv ${combined_dir}/*.tsv ${combined_dir}/merged_profiles_${input_tag}.tsv
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         locidex merge: \$(echo \$(locidex search -V 2>&1) | sed 's/^.*locidex //' )

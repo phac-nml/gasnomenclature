@@ -1,0 +1,16 @@
+{
+    "files": {
+        "global": [],
+        "samples": {}
+    },
+    "metadata": {
+        "samples": {
+            "sampleQ": {
+                "address": "2.2.3"
+            },
+            "sampleN": {
+                "address": "2.2.3"
+            }
+        }
+    }
+}
