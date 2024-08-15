@@ -6,7 +6,7 @@ process LOCIDEX_MERGE {
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
     'https://depot.galaxyproject.org/singularity/locidex:0.1.1--pyhdfd78af_0' :
-    'quay.io/biocontainers/locidex:0.1.1--pyhdfd78af_0' }"
+    'biocontainers/locidex:0.1.1--pyhdfd78af_0' }"
 
     input:
     path input_values // [file(sample1), file(sample2), file(sample3), etc...]
