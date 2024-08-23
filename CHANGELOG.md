@@ -3,10 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [0.2.0] - 2024/08/23
 
 ### `Changed`
 
+- Upgraded `locidex/merge` to version `0.2.3` and updated `input_assure.py` and test data for compatibility with the new `mlst.json` allele file format [PR20](https://github.com/phac-nml/gasnomenclature/pull/20)
 - Removed `quay.io` docker repository tags from modules [PR19](https://github.com/phac-nml/gasnomenclature/pull/19)
 
 ## [0.1.0] - 2024/06/28
@@ -19,3 +20,4 @@ Initial release of the Genomic Address Nomenclature pipeline to be used to assig
 - Output of assigned cluster addresses for any **query** samples using [profile_dists](https://github.com/phac-nml/profile_dists) and [gas call](https://github.com/phac-nml/genomic_address_service).
 
 [0.1.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.1.0
+[0.2.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.2.0
