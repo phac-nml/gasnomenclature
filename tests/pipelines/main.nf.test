@@ -317,7 +317,7 @@ nextflow_pipeline {
 
             // Ensure that the error_reports are generated for query and reference samples
             lines = path("$launchDir/results/input/sample3_error_report.csv").readLines()
-            assert lines.contains("sample3,\"[\'sample4\', \'extra_key\']\",No key in the MLST JSON file (sample3_multiplekeys_nomatch.mlst.json) matches the specified sample ID \'sample3\'. The first key \'sample4\' has been forcefully changed to \'sample3\' and all other keys have been removed.")
+            assert lines.contains('sample3,"[\'extra_key\', \'sample4\']",No key in the MLST JSON file (sample3_multiplekeys_nomatch.mlst.json) matches the specified sample ID \'sample3\'. The first key \'extra_key\' has been forcefully changed to \'sample3\' and all other keys have been removed.')
 
             // Check filtered query csv results
             lines = path("$launchDir/results/filter/new_addresses.csv").readLines()
@@ -351,7 +351,7 @@ nextflow_pipeline {
 
         then {
             assert workflow.failed
-            assert (workflow.stdout =~ /sample2_empty.mlst.json is completely empty!/).find()
+            assert (workflow.stdout =~ /sample2_empty.mlst.json is missing the 'profile' section or is completely empty!/).find()
         }
     }
 }
