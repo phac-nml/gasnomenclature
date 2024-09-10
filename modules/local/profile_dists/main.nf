@@ -3,8 +3,9 @@ process PROFILE_DISTS{
     tag "Gathering Distances Between Reference and Query Profiles"
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/profile_dists%3A1.0.0--pyh7cba7a3_0' :
-        'biocontainers/profile_dists:1.0.0--pyh7cba7a3_0' }"
+        'docker.io/mwells14/profile_dists:1.0.2' :
+        task.ext.override_configured_container_registry != false ? 'docker.io/mwells14/profile_dists:1.0.2' :
+        'mwells14/profile_dists:1.0.2' }" 
 
     input:
     path query
