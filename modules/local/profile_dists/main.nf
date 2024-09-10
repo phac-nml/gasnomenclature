@@ -5,7 +5,7 @@ process PROFILE_DISTS{
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'docker.io/mwells14/profile_dists:1.0.2' :
         task.ext.override_configured_container_registry != false ? 'docker.io/mwells14/profile_dists:1.0.2' :
-        'mwells14/profile_dists:1.0.2' }" 
+        'mwells14/profile_dists:1.0.2' }"
 
     input:
     path query
