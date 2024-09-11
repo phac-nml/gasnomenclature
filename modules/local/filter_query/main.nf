@@ -22,24 +22,27 @@ process FILTER_QUERY {
     def out_delimiter = out_format == "tsv" ? "\t" : (out_format == "csv" ? "," : out_format)
     def out_extension = out_format == "tsv" ? 'tsv' : 'csv'
 
-    // Join the query IDs in the correct csvtk filter2 required format
-    def queryID = query_ids.collect { id -> "\$id == \"${id}\"" }.join(" || ")
+    // Write the query IDs to a temporary file
+    def queryFile = file("query_ids.txt")
+    queryFile.text = query_ids.join("\n")
 
     """
     # Filter the query samples only; keep only the 'id' and 'address' columns
-    csvtk filter2 \\
+    csvtk grep \\
         ${addresses} \\
-        --filter '$queryID' \\
+        -f 1 \\
+        -P ${queryFile} \\
         --delimiter "${delimiter}" \\
         --out-delimiter "${out_delimiter}" | \\
     csvtk cut -f id,address > ${outputFile}.${out_extension}
+
+    # Remove the query_ids file after the command runs
+    rm -f ${queryFile}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         csvtk: \$(echo \$( csvtk version | sed -e "s/csvtk v//g" ))
     END_VERSIONS
     """
-
-
 }
 
