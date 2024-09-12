@@ -22,22 +22,15 @@ process FILTER_QUERY {
     def out_delimiter = out_format == "tsv" ? "\t" : (out_format == "csv" ? "," : out_format)
     def out_extension = out_format == "tsv" ? 'tsv' : 'csv'
 
-    // Write the query IDs to a temporary file
-    def queryFile = file("query_ids.txt")
-    queryFile.text = query_ids.join("\n")
-
     """
     # Filter the query samples only; keep only the 'id' and 'address' columns
     csvtk grep \\
         ${addresses} \\
         -f 1 \\
-        -P ${queryFile} \\
+        -P ${query_ids} \\
         --delimiter "${delimiter}" \\
         --out-delimiter "${out_delimiter}" | \\
     csvtk cut -f id,address > ${outputFile}.${out_extension}
-
-    # Remove the query_ids file after the command runs
-    rm -f ${queryFile}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -45,4 +38,3 @@ process FILTER_QUERY {
     END_VERSIONS
     """
 }
-
