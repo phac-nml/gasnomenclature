@@ -22,14 +22,12 @@ process FILTER_QUERY {
     def out_delimiter = out_format == "tsv" ? "\t" : (out_format == "csv" ? "," : out_format)
     def out_extension = out_format == "tsv" ? 'tsv' : 'csv'
 
-    // Join the query IDs in the correct csvtk filter2 required format
-    def queryID = query_ids.collect { id -> "\$id == \"${id}\"" }.join(" || ")
-
     """
     # Filter the query samples only; keep only the 'id' and 'address' columns
-    csvtk filter2 \\
+    csvtk grep \\
         ${addresses} \\
-        --filter '$queryID' \\
+        -f 1 \\
+        -P ${query_ids} \\
         --delimiter "${delimiter}" \\
         --out-delimiter "${out_delimiter}" | \\
     csvtk cut -f id,address > ${outputFile}.${out_extension}
@@ -39,7 +37,4 @@ process FILTER_QUERY {
         csvtk: \$(echo \$( csvtk version | sed -e "s/csvtk v//g" ))
     END_VERSIONS
     """
-
-
 }
-
