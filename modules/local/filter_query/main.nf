@@ -7,7 +7,7 @@ process FILTER_QUERY {
         'biocontainers/csvtk:0.22.0--h9ee0642_1' }"
 
     input:
-    val query_ids
+    path query_ids
     path addresses
     val in_format
     val out_format
