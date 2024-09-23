@@ -44,3 +44,4 @@ Initial release of the Genomic Address Nomenclature pipeline to be used to assig
 [0.2.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.2.0
 [0.2.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.2.1
 [0.2.2]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.2.2
+[0.2.3]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.2.3
