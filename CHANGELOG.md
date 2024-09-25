@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.3] - 2024/09/25
+
+### `Changed`
+
+- Updated `FILTER_QUERY` process to treat `query_ids` as a file input (path instead of val) for proper file path handling across environments [PR27](https://github.com/phac-nml/gasnomenclature/pull/27)
+- Addressed [Issue26](https://github.com/phac-nml/gasnomenclature/issues/26)
+
 ## [0.2.2] - 2024/09/13
 
 ### `Changed`
@@ -37,3 +44,4 @@ Initial release of the Genomic Address Nomenclature pipeline to be used to assig
 [0.2.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.2.0
 [0.2.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.2.1
 [0.2.2]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.2.2
+[0.2.3]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.2.3
