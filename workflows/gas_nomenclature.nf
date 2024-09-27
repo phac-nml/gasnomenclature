@@ -25,10 +25,10 @@ include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet  } from 'plugin/nf
 include { INPUT_ASSURE                          } from "../modules/local/input_assure/main"
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_REF    } from "../modules/local/locidex/merge/main"
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_QUERY  } from "../modules/local/locidex/merge/main"
-include { APPEND_PROFILES                       } from "../modules/local/append_profiles/main"      
+include { APPEND_PROFILES                       } from "../modules/local/append_profiles/main"
 include { PROFILE_DISTS                         } from "../modules/local/profile_dists/main"
 include { CLUSTER_FILE                          } from "../modules/local/cluster_file/main"
-include { APPEND_CLUSTERS                       } from "../modules/local/append_clusters/main"      
+include { APPEND_CLUSTERS                       } from "../modules/local/append_clusters/main"
 include { GAS_CALL                              } from "../modules/local/gas/call/main"
 include { FILTER_QUERY                          } from "../modules/local/filter_query/main"
 
@@ -103,7 +103,7 @@ workflow GAS_NOMENCLATURE {
         }
 
         merged_references = APPEND_PROFILES(references.combined_profiles, additional_profiles)
-    } else { 
+    } else {
         merged_references = references.combined_profiles
     }
 
@@ -134,7 +134,7 @@ workflow GAS_NOMENCLATURE {
         meta }
 
     initial_clusters = CLUSTER_FILE(clusters)
-        
+
     // Run APPEND_CLUSTERS if db_clusters parameter provided
     if(params.db_clusters) {
         additional_clusters = prepareFilePath(params.db_clusters, "Appending additional cluster addresses from ${params.db_clusters}")
@@ -145,8 +145,8 @@ workflow GAS_NOMENCLATURE {
         expected_clusters = APPEND_CLUSTERS(initial_clusters, additional_clusters)
     } else {
         expected_clusters = initial_clusters
-    }    
-        
+    }
+
     // GAS CALL processes
 
     if(params.gm_thresholds == null || params.gm_thresholds == ""){
