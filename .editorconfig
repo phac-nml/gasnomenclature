@@ -33,5 +33,5 @@ indent_style = unset
 
 # ignore nf-test json file
 [tests/data/irida/sample_name_add_iridanext.output.json]
-end_of_line = unset
+insert_final_newline = unset
 trim_trailing_whitespace = unset
