@@ -1,0 +1,31 @@
+{
+    "files": {
+        "global": [
+            
+        ],
+        "samples": {
+            "sample_1": [
+                {
+                    "path": "input/sample_1_error_report.csv"
+                }
+            ],
+            "sample_2_sample2": [
+                {
+                    "path": "input/sample_2_sample2_error_report.csv"
+                }
+            ],
+            "sample_2": [
+                {
+                    "path": "input/sample_2_error_report.csv"
+                }
+            ]
+        }
+    },
+    "metadata": {
+        "samples": {
+            "sample_1": {
+                "address": "1.1.3"
+            }
+        }
+    }
+}
