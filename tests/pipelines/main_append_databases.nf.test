@@ -3,7 +3,7 @@ nextflow_pipeline {
     name "Integration Tests for appending additional profiles and cluster addresses"
     script "main.nf"
 
-    test("Test fail pipeline profile and cluster databases provided") {
+    test("Test pipeline when profile and cluster databases provided") {
         tag "pipeline_databases_appended"
 
         when {
@@ -51,4 +51,41 @@ nextflow_pipeline {
             assert iridanext_metadata.sampleQ."address" == "1.1.3"
         }
     }
+
+    test("Test fail pipeline if only the profiles database provided") {
+        tag "pipeline_failure_only_profiles_database"
+
+        when {
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet1.csv"
+                outdir = "results"
+
+                db_profiles = "$baseDir/tests/data/databases/additional_profiles.tsv"
+            }
+        }
+
+        then {
+            assert workflow.failed
+            assert workflow.stdout.contains("Both '--db_profiles' and '--db_clusters' parameters must be provided together.")
+        }
+    }
+
+    test("Test fail pipeline if only the clusters database provided") {
+        tag "pipeline_failure_only_clusters_database"
+
+        when {
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet1.csv"
+                outdir = "results"
+
+                db_clusters = "$baseDir/tests/data/databases/additional_clusters.tsv"
+            }
+        }
+
+        then {
+            assert workflow.failed
+            assert workflow.stdout.contains("Both '--db_profiles' and '--db_clusters' parameters must be provided together.")
+        }
+    }
 }
+
