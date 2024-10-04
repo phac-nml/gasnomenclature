@@ -73,6 +73,28 @@ The following can be used to adjust parameters for the [gas call][] tool.
 - `--gm_method`: The linkage method to use for clustering. Value should be one of _single_, _average_, or _complete_.
 - `--gm_delimiter`: Delimiter desired for nomenclature code. Must be alphanumeric or one of `._-`.
 
+## Optional Profile and Cluster Address Databases (as used by IRIDA-Next)
+
+In addition to the reference samples included in the input samplesheet (which already contain a pre-computed cluster address), users can incorporate additional pre-computed reference profiles and cluster addresses by providing them as parameterized databases.
+
+- `--db_profiles`: Specifies the path to the database containing pre-merged MLST profiles in tab-separated format. The database should follow this structure:
+
+| sample_id | l1  | l2  | l3  |
+| --------- | --- | --- | --- |
+| sampleA   | 1   | 1   | 1   |
+| sampleB   | 1   | 1   | 2   |
+| sampleC   | 2   | 1   | 1   |
+
+- `--db_clusters`: Specifies the path to the database containing cluster addresses for additional samples in tab-separated format. The structure of this database should be as follows:
+
+| id      | address | level_1 | level_2 | level_3 |
+| ------- | ------- | ------- | ------- | ------- |
+| sampleA | 1.1.1   | 1       | 1       | 1       |
+| sampleB | 1.1.2   | 1       | 1       | 2       |
+| sampleC | 2.1.1   | 2       | 1       | 1       |
+
+_Note: To add additional reference samples to the pipeline, both `--db_profiles` and `--db_clusters` must be provided together, and all `sample_id`'s in `--db_profiles` must match the `id`'s in `--db_clusters`_
+
 ## Other
 
 Other parameters (defaults from nf-core) are defined in [nextflow_schema.json](nextflow_schmea.json).

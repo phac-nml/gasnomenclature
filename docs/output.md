@@ -6,6 +6,7 @@ This document describes the output produced by the pipeline.
 
 The directories listed below will be created in the results directory after the pipeline has finished. All paths are relative to the top-level results directory.
 
+- append: Contains reference MLST profile and cluster address files if additional databases were provided by the user.
 - call: The cluster addresses from the [genomic_address_service](https://github.com/phac-nml/genomic_address_service).
 - cluster: The cluster file required by GAS_call.
 - distances: Distances between genomes from [profile_dists](https://github.com/phac-nml/profile_dists).
@@ -22,8 +23,10 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 - [Input assure](#input-assure) - Performs a validation check on the samplesheet inputs to ensure that the sampleID precisely matches the MLST JSON key and enforces necessary changes where discrepancies are found.
 - [Locidex merge](#locidex-merge) - Merges MLST profile JSON files into a single profiles file for reference and query samples.
+- [Append profiles](#append-profiles) - Appends additional MLST profile information to reference samples if provided by user.
 - [Profile dists](#profile-dists) - Computes pairwise distances between genomes using MLST allele differences.
 - [Cluster file](#cluster-file) - Generates the expected_clusters.txt file from reference sample addresses for use in GAS_call.
+- [Append clusters](#append-clusters) - Appends additional cluster information to reference samples if provided by user.
 - [GAS call](#gas-call) - Generates hierarchical cluster addresses.
 - [Filter query](#filter-query) - Filters and generates a csv file containing only the cluster addresses for query samples.
 - [IRIDA Next Output](#irida-next-output) - Generates a JSON output file that is compliant with IRIDA Next
@@ -51,6 +54,16 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 </details>
 
+### Append Profiles
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `append/`
+  - profiles: `profiles_ref.tsv`
+
+</details>
+
 ### Profile Dists
 
 <details markdown="1">
@@ -72,6 +85,16 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 - `cluster/`
   - `expected_clusters.txt`
+
+</details>
+
+### Append Clusters
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `append/`
+  - clusters: `reference_clusters.tsv`
 
 </details>
 
