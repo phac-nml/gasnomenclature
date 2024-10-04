@@ -1,0 +1,54 @@
+nextflow_pipeline {
+
+    name "Integration Tests for appending additional profiles and cluster addresses"
+    script "main.nf"
+
+    test("Test fail pipeline profile and cluster databases provided") {
+        tag "pipeline_databases_appended"
+
+        when {
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet1.csv"
+                outdir = "results"
+
+                db_profiles = "$baseDir/tests/data/databases/additional_profiles.tsv"
+                db_clusters = "$baseDir/tests/data/databases/additional_clusters.tsv"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+
+            // Check merged profiles after appending additional database of profiles
+            def actual_profile_ref = path("$launchDir/results/append/profiles_ref.tsv")
+            def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected_profiles_append.tsv")
+            assert actual_profile_ref.text == expected_profile_tsv.text
+
+            // Check computed pairwise distances
+            def actual_distances = path("$launchDir/results/distances/results.text")
+            def expected_distances = path("$baseDir/tests/data/distances/expected_dists_append.txt")
+            assert actual_distances.text == expected_distances.text
+
+            // Verify cluster file after appending additional database of cluster addresses
+            def actual_cluster = path("$launchDir/results/append/reference_clusters.tsv")
+            def expected_cluster = path("$baseDir/tests/data/clusters/expected_clusters_append.txt")
+            assert actual_cluster.text == expected_cluster.text
+
+            // Check called clusters
+            def actual_calls = path("$launchDir/results/call/Called/results.text")
+            def expected_calls = path("$baseDir/tests/data/called/expected_results_append.txt")
+            assert actual_calls.text == expected_calls.text
+
+            // Check IRIDA Next JSON output
+            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/append_iridanext.output.json").json
+
+            def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_metadata = iridanext_json.metadata.samples
+
+            assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
+            assert iridanext_metadata.sampleQ."address" == "1.1.3"
+        }
+    }
+}
