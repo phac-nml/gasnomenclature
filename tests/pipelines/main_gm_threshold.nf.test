@@ -111,7 +111,7 @@ nextflow_pipeline {
 
         then {
             assert workflow.failed
-            assert (workflow.stdout =~ /Error \[1.0\]  supplied thresholds do not equal the number of threshold columns in reference_clusters.txt/).find()
+            assert (workflow.stdout =~ /Error \[1.0\]  supplied thresholds do not equal the number of threshold columns in clusters.tsv/).find()
         }
     }
 
@@ -167,7 +167,7 @@ nextflow_pipeline {
 
         then {
             assert workflow.failed
-            assert (workflow.stdout =~ /Error \[1.0, 0.0\]  supplied thresholds do not equal the number of threshold columns in reference_clusters.txt/).find()
+            assert (workflow.stdout =~ /Error \[1.0, 0.0\]  supplied thresholds do not equal the number of threshold columns in clusters.tsv/).find()
         }
     }
 
