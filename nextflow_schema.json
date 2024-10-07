@@ -89,6 +89,27 @@
                 }
             }
         },
+        "databases": {
+            "title": "Databases",
+            "type": "object",
+            "description": "The optional databases of profiles and cluster addresses that can be used.",
+            "fa_icon": "fas fa-terminal",
+            "default": "",
+            "properties": {
+                "db_profiles": {
+                    "type": "string",
+                    "pattern": "^\\S+\\.tsv$",
+                    "format": "file-path",
+                    "description": "Path to optional tab-separated file containing additional sample profiles"
+                },
+                "db_clusters": {
+                    "type": "string",
+                    "pattern": "^\\S+\\.tsv$",
+                    "format": "file-path",
+                    "description": "Path to optional text file containing additional sample cluster addresses"
+                }
+            }
+        },
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
@@ -119,30 +140,6 @@
                     "fa_icon": "fas fa-envelope",
                     "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
                     "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
-                }
-            }
-        },
-
-        "databases": {
-            "title": "Databases",
-            "type": "object",
-            "description": "The optional databases of profiles and cluster addresses that can be used.",
-            "fa_icon": "fas fa-terminal",
-            "default": "",
-            "properties": {
-                "db_profiles": {
-                    "type": "string",
-                    "pattern": "^\\S+\\.tsv$",
-                    "format": "file-path",
-                    "hidden": true,
-                    "description": "Path to optional tab-separated file containing additional sample profiles"
-                },
-                "db_clusters": {
-                    "type": "string",
-                    "pattern": "^\\S+\\.tsv$",
-                    "format": "file-path",
-                    "hidden": true,
-                    "description": "Path to optional text file containing additional sample cluster addresses"
                 }
             }
         },
