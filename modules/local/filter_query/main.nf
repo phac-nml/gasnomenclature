@@ -13,7 +13,7 @@ process FILTER_QUERY {
     val out_format
 
     output:
-    path("new_addresses.*"),    emit: csv
+    path("new_addresses.*"),    emit: tsv
     path("versions.yml"),       emit: versions
 
     script:
@@ -24,13 +24,16 @@ process FILTER_QUERY {
 
     """
     # Filter the query samples only; keep only the 'id' and 'address' columns
+    csvtk cut -t -f 2 ${query_ids} > query_list.txt # Need to use the second column to pull meta.id because there is no header
+    csvtk add-header ${query_ids} -t -n irida_id,id > id.txt
     csvtk grep \\
         ${addresses} \\
         -f 1 \\
-        -P ${query_ids} \\
+        -P query_list.txt \\
         --delimiter "${delimiter}" \\
         --out-delimiter "${out_delimiter}" | \\
-    csvtk cut -f id,address > ${outputFile}.${out_extension}
+    csvtk cut -t -f id,address > tmp.tsv
+    csvtk join -t -f id id.txt tmp.tsv > ${outputFile}.${out_extension}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
