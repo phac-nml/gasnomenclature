@@ -221,9 +221,9 @@ nextflow_pipeline {
             assert lines.contains("sampleR,[\'sampleF\'],Query sampleR ID and JSON key in sampleF.mlst.json DO NOT MATCH. The 'sampleF' key in sampleF.mlst.json has been forcefully changed to 'sampleR': User should manually check input files to ensure correctness.")
 
             // Check filter_query csv file
-            lines = path("$launchDir/results/filter/new_addresses.csv").readLines()
-            assert lines.contains("sampleQ,2.2.3")
-            assert lines.contains("sampleR,2.2.3")
+            lines = path("$launchDir/results/filter/new_addresses.tsv").readLines()
+            assert lines.contains("sampleQ\tsampleQ\t2.2.3")
+            assert lines.contains("sampleR\tsampleR\t2.2.3")
 
             // Check IRIDA Next JSON output
             assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/mismatched_iridanext.output.json").json
@@ -271,8 +271,8 @@ nextflow_pipeline {
             assert lines.contains('sample3,"[\'extra_key\', \'sample3\']","MLST JSON file (sample3_multiplekeys.mlst.json) contains multiple keys: [\'extra_key\', \'sample3\']. The MLST JSON file has been modified to retain only the \'sample3\' entry"')
 
             // Check filtered query csv results
-            lines = path("$launchDir/results/filter/new_addresses.csv").readLines()
-            assert lines.contains("sampleQ,1.1.3")
+            lines = path("$launchDir/results/filter/new_addresses.tsv").readLines()
+            assert lines.contains("sampleQ\tsampleQ\t1.1.3")
 
             // Check IRIDA Next JSON output
             assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/multiplekeys_iridanext.output.json").json
@@ -320,8 +320,8 @@ nextflow_pipeline {
             assert lines.contains('sample3,"[\'extra_key\', \'sample4\']",No key in the MLST JSON file (sample3_multiplekeys_nomatch.mlst.json) matches the specified sample ID \'sample3\'. The first key \'extra_key\' has been forcefully changed to \'sample3\' and all other keys have been removed.')
 
             // Check filtered query csv results
-            lines = path("$launchDir/results/filter/new_addresses.csv").readLines()
-            assert lines.contains("sampleQ,1.1.3")
+            lines = path("$launchDir/results/filter/new_addresses.tsv").readLines()
+            assert lines.contains("sampleQ\tsampleQ\t1.1.3")
 
             // Check IRIDA Next JSON output
             assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/multiplekeys_iridanext.output.json").json
@@ -385,8 +385,9 @@ nextflow_pipeline {
             assert lines.contains("sample_2_sample2,[\'sample2\'],Reference sample_2_sample2 ID and JSON key in sample2.mlst.json DO NOT MATCH. The 'sample2' key in sample2.mlst.json has been forcefully changed to 'sample_2_sample2': User should manually check input files to ensure correctness.")
 
             // Check filter_query csv file
-            lines = path("$launchDir/results/filter/new_addresses.csv").readLines()
-            assert lines.contains("sample_1,1.1.3")
+            lines = path("$launchDir/results/filter/new_addresses.tsv").readLines()
+            assert lines.contains("sampleQ\tsample_1\t2.2.3")
+            assert lines.contains("sampleR\tsample4\t2.2.3")
 
             // Check IRIDA Next JSON output
             assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/sample_name_add_iridanext.output.json").json

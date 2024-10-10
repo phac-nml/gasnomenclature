@@ -93,7 +93,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 <summary>Output files</summary>
 
 - `filter/`
-  - `new_addresses.csv`
+  - `new_addresses.tsv`
 
 </details>
 

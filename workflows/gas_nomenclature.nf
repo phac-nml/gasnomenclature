@@ -106,6 +106,11 @@ workflow GAS_NOMENCLATURE {
     reference_values = input_assure.result.collect{ meta, mlst -> mlst}
     query_values = profiles.query.collect{ meta, mlst -> mlst }
 
+    // Query Map: Use to return meta.irida_id to output for mapping to IRIDA-Next JSON
+    query_map = profiles.query.map{ meta, mlst->
+        tuple(meta.id, meta.irida_id)
+    }.collect()
+
     // LOCIDEX modules
     ref_tag = Channel.value("ref")
     query_tag = Channel.value("value")
@@ -166,15 +171,18 @@ workflow GAS_NOMENCLATURE {
     called_data = GAS_CALL(expected_clusters.text, distances.results)
     ch_versions = ch_versions.mix(called_data.versions)
 
-    // Filter the new queried samples and addresses into a CSV/JSON file for the IRIDANext plug in
-    query_ids = profiles.query.collectFile { it[0].id + '\n' }
+    // Filter the new queried samples and addresses into a CSV/JSON file for the IRIDANext plug in and
+    // add a column with IRIDA ID to allow for IRIDANext plugin to include metadata
+    query_irida_ids = profiles.query.collectFile {  it[0].irida_id + '\t' + it[0].id + '\n'}
 
-    new_addresses = FILTER_QUERY(query_ids, called_data.distances, "tsv", "csv")
+    new_addresses = FILTER_QUERY(query_irida_ids, called_data.distances, "tsv", "tsv")
     ch_versions = ch_versions.mix(new_addresses.versions)
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
+
+
 
 }
 
