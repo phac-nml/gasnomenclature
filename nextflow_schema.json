@@ -98,13 +98,13 @@
             "properties": {
                 "db_profiles": {
                     "type": "string",
-                    "pattern": "^\\S+\\.tsv$",
+                    "pattern": "^\\S+\\.tsv(\\.gz)?$",
                     "format": "file-path",
                     "description": "Path to optional tab-separated file containing additional sample profiles"
                 },
                 "db_clusters": {
                     "type": "string",
-                    "pattern": "^\\S+\\.tsv$",
+                    "pattern": "^\\S+\\.tsv(\\.gz)?$",
                     "format": "file-path",
                     "description": "Path to optional text file containing additional sample cluster addresses"
                 }
