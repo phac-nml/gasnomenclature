@@ -75,23 +75,24 @@ The following can be used to adjust parameters for the [gas call][] tool.
 
 ## Optional Profile and Cluster Address Databases (as used by IRIDA-Next)
 
-In addition to the reference samples included in the input samplesheet (which already contain a pre-computed cluster address), users can incorporate additional pre-computed reference profiles and cluster addresses by providing them as parameterized databases.
+In addition to the reference samples included in the input samplesheet (which already contain pre-computed cluster addresses), users can incorporate additional pre-computed reference profiles and cluster addresses by providing them as parameterized databases.
+Note that any address levels present in the additional databases but absent from the input samplesheet addresses will be disregarded.
 
-- `--db_profiles`: Specifies the path to the database containing pre-merged MLST profiles in tab-separated format. The database should follow this structure:
+- `--db_profiles`: Specifies the path to the database containing pre-merged MLST profiles in tab-separated format. To ensure compatibility, the database structure must adhere to the expected header format corresponding to the samples included in the input samplesheet:
 
-| sample_id | l1  | l2  | l3  |
-| --------- | --- | --- | --- |
-| sampleA   | 1   | 1   | 1   |
-| sampleB   | 1   | 1   | 2   |
-| sampleC   | 2   | 1   | 1   |
+| sample_id | l1  | l2  | ... | ln  |
+| --------- | --- | --- | --- | --- |
+| sampleA   | 1   | 1   | ... | 1   |
+| sampleB   | 1   | 1   | ... | 2   |
+| sampleC   | 2   | 1   | ... | 1   |
 
-- `--db_clusters`: Specifies the path to the database containing cluster addresses for additional samples in tab-separated format. The structure of this database should be as follows:
+- `--db_clusters`: Specifies the path to the database containing cluster addresses for additional samples in tab-separated format. To ensure compatibility, the database structure must adhere to the expected header format corresponding to the samples included in the input samplesheet:
 
-| id      | address | level_1 | level_2 | level_3 |
-| ------- | ------- | ------- | ------- | ------- |
-| sampleA | 1.1.1   | 1       | 1       | 1       |
-| sampleB | 1.1.2   | 1       | 1       | 2       |
-| sampleC | 2.1.1   | 2       | 1       | 1       |
+| id      | address | level_1 | level_2 | ... | level_n |
+| ------- | ------- | ------- | ------- | --- | ------- |
+| sampleA | 1.1.1   | 1       | 1       | ... | 1       |
+| sampleB | 1.1.2   | 1       | 1       | ... | 2       |
+| sampleC | 2.1.1   | 2       | 1       | ... | 1       |
 
 _Note: To add additional reference samples to the pipeline, both `--db_profiles` and `--db_clusters` must be provided together, and all `sample_id`'s in `--db_profiles` must match the `id`'s in `--db_clusters`_
 
