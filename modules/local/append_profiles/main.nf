@@ -15,9 +15,18 @@ process APPEND_PROFILES {
 
     script:
     """
+    # Function to get the header of the files, handling gzipped files 
+    get_header() {
+        if [ "\${1##*.}" = "gz" ]; then
+            zcat "\$1" | head -n 1
+        else
+            head -n 1 "\$1"
+        fi    
+    }
+
     # Compare headers and exit if they do not match
-    ref_headers=\$(head -n 1 "${reference_profiles}")
-    add_headers=\$(head -n 1 "${additional_profiles}")
+    ref_headers=\$(get_header "${reference_profiles}")
+    add_headers=\$(get_header "${additional_profiles}")
 
     if [ "\$ref_headers" != "\$add_headers" ]; then
         echo "Error: Column headers do not match between reference_profiles and --db_profiles."
