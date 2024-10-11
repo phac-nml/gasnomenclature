@@ -15,7 +15,16 @@ process APPEND_CLUSTERS {
 
     script:
     """
-    csvtk concat -t ${initial_clusters} ${additional_clusters} > reference_clusters.tsv
+    # Compare headers ad exit if they do not match
+    init_headers=\$(head -n 1 "${initial_clusters}")
+    add_headers=\$(head -n 1 "${additional_clusters}")
 
+    if [ "\$init_headers" != "\$add_headers" ]; then
+        echo "Error: Column headers do not match between initial_clusters and --db_clusters."
+        exit 1
+    fi
+
+    csvtk concat -t ${initial_clusters} ${additional_clusters} > all_clusters.tsv
+    csvtk uniq -t -f id all_clusters.tsv > reference_clusters.tsv
     """
 }

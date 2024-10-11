@@ -11,10 +11,21 @@ process APPEND_PROFILES {
     path(additional_profiles)
 
     output:
-    path("*.tsv")
+    path("profiles_ref.tsv")
 
     script:
     """
-    csvtk concat -t ${reference_profiles} ${additional_profiles} > profiles_ref.tsv
+    # Compare headers and exit if they do not match
+    ref_headers=\$(head -n 1 "${reference_profiles}")
+    add_headers=\$(head -n 1 "${additional_profiles}")
+
+    if [ "\$ref_headers" != "\$add_headers" ]; then
+        echo "Error: Column headers do not match between reference_profiles and --db_profiles."
+        exit 1
+    fi
+
+    # Merge profiles ensuring only unique samples are added
+    csvtk concat -t ${reference_profiles} ${additional_profiles} > profiles.tsv
+    csvtk uniq -t -f sample_id profiles.tsv > profiles_ref.tsv
     """
 }
