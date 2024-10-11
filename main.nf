@@ -28,7 +28,7 @@ if (params.validate_params) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-if ((params.db_profiles && !params.db_clusters) || (!params.db_profiles && params.db_clusters)) {
+if (params.db_profiles as boolean != params.db_clusters as boolean) {
     error "Both '--db_profiles' and '--db_clusters' parameters must be provided together."
 }
 
