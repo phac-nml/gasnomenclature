@@ -15,13 +15,13 @@ process APPEND_PROFILES {
 
     script:
     """
-    # Function to get the header of the files, handling gzipped files 
+    # Function to get the header of the files, handling gzipped files
     get_header() {
         if [ "\${1##*.}" = "gz" ]; then
             zcat "\$1" | head -n 1
         else
             head -n 1 "\$1"
-        fi    
+        fi
     }
 
     # Compare headers and exit if they do not match
