@@ -26,7 +26,7 @@ nextflow_process {
             assert path("$launchDir/cluster_results").exists()
 
             // Check reference_clusters file
-            def actual_clusters = path("$launchDir/cluster_results/cluster/reference_clusters.txt")
+            def actual_clusters = path("$launchDir/cluster_results/cluster/clusters.tsv")
             def expected_clusters = path("$baseDir/tests/data/clusters/expected_clusters.txt")
             assert actual_clusters.text == expected_clusters.text
         }
