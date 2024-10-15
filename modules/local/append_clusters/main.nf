@@ -33,7 +33,6 @@ process APPEND_CLUSTERS {
         exit 1
     fi
 
-    csvtk concat -t ${initial_clusters} ${additional_clusters} > all_clusters.tsv
-    csvtk uniq -t -f id all_clusters.tsv > reference_clusters.tsv
+    csvtk concat -t ${initial_clusters} ${additional_clusters} | csvtk sort -t -k id | csvtk uniq -t -f id > reference_clusters.tsv
     """
 }

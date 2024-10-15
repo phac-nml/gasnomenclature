@@ -34,7 +34,6 @@ process APPEND_PROFILES {
     fi
 
     # Merge profiles ensuring only unique samples are added
-    csvtk concat -t ${reference_profiles} ${additional_profiles} > profiles.tsv
-    csvtk uniq -t -f sample_id profiles.tsv > profiles_ref.tsv
+    csvtk concat -t ${reference_profiles} ${additional_profiles} | csvtk sort -t -k sample_id | csvtk uniq -t -f sample_id > profiles_ref.tsv
     """
 }
