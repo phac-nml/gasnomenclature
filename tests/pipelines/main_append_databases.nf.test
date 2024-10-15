@@ -122,8 +122,8 @@ nextflow_pipeline {
         }
     }
 
-    test("Test pipeline when appended profiles have sample_id overlap") {
-        tag "pipeline_databases_profile_sampleid_overlap"
+    test("Test pipeline when appended profiles or clusters have sample_id overlap") {
+        tag "pipeline_databases_sampleid_overlap"
 
         when {
             params {
