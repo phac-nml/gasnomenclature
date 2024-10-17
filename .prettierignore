@@ -10,3 +10,4 @@ testing/
 testing*
 *.pyc
 bin/
+tests/data/irida/sample_name_add_iridanext.output.json

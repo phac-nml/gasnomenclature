@@ -1,5 +1,5 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
+    "$schema": "https://json-schema.org/draft-07/schema",
     "$id": "https://raw.githubusercontent.com/phac-nml/gasnomenclature/main/nextflow_schema.json",
     "title": "phac-nml/gasnomenclature pipeline parameters",
     "description": "Gas Nomenclature assignment pipeline",
@@ -84,8 +84,7 @@
                 },
                 "pd_count_missing": {
                     "type": "boolean",
-                    "description": "Count missing alleles as different",
-                    "default": false
+                    "description": "Count missing alleles as different"
                 }
             }
         },
