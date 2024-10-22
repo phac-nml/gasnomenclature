@@ -146,7 +146,7 @@ nextflow_pipeline {
 
             // Verify cluster file after appending additional database of cluster addresses
             def actual_cluster = path("$launchDir/results/append/reference_clusters.tsv")
-            def expected_cluster = path("$baseDir/tests/data/clusters/expected_clusters_overlap.txt")
+            def expected_cluster = path("$baseDir/tests/data/clusters/expected_clusters_overlap.tsv")
             assert actual_cluster.text == expected_cluster.text
 
             // Check called clusters
