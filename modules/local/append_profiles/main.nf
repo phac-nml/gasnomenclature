@@ -48,5 +48,5 @@ process APPEND_PROFILES {
     csvtk mutate2 -t -n new_sample_id -e '(\$source == "db" && \$frequency > 1) ? "db_" + \$sample_id : \$sample_id' | \
     csvtk cut -t -F -f new_sample_id,l* | \
     csvtk rename -t -f new_sample_id -n sample_id > profiles_ref.tsv
-     """
+    """
 }

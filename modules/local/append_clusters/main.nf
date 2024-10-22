@@ -48,5 +48,5 @@ process APPEND_CLUSTERS {
     csvtk mutate2 -t -n new_id -e '(\$source == "db" && \$frequency > 1) ? "db_" + \$id : \$id' | \
     csvtk cut -t -F -f new_id,address,level_* | \
     csvtk rename -t -f new_id -n id > reference_clusters.tsv
-     """
+    """
 }
