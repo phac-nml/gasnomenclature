@@ -84,8 +84,7 @@
                 },
                 "pd_count_missing": {
                     "type": "boolean",
-                    "description": "Count missing alleles as different",
-                    "default": false
+                    "description": "Count missing alleles as different"
                 }
             }
         },

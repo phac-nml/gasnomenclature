@@ -30,3 +30,8 @@ indent_style = unset
 # ignore python
 [*.{py}]
 indent_style = unset
+
+# ignore nf-test json file
+[tests/data/irida/*.json]
+insert_final_newline = unset
+trim_trailing_whitespace = unset

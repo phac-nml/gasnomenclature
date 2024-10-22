@@ -70,20 +70,48 @@ workflow GAS_NOMENCLATURE {
 
     ch_versions = Channel.empty()
 
+    // Track processed IDs
+    def processedIDs = [] as Set
+
     // Create a new channel of metadata from a sample sheet
     // NB: `input` corresponds to `params.input` and associated sample sheet schema
     input = Channel.fromSamplesheet("input")
+    // and remove non-alphanumeric characters in sample_names (meta.id), whilst also correcting for duplicate sample_names (meta.id)
+    .map { meta, mlst_file ->
+            if (!meta.id) {
+                meta.id = meta.irida_id
+            } else {
+                // Non-alphanumeric characters (excluding _,-,.) will be replaced with "_"
+                meta.id = meta.id.replaceAll(/[^A-Za-z0-9_.\-]/, '_')
+            }
+            // Ensure ID is unique by appending meta.irida_id if needed
+            while (processedIDs.contains(meta.id)) {
+                meta.id = "${meta.id}_${meta.irida_id}"
+            }
+            // Add the ID to the set of processed IDs
+            processedIDs << meta.id
+
+            tuple(meta, mlst_file)}
+
+
 
     // Ensure meta.id and mlst_file keys match; generate error report for samples where id ≠ key
     input_assure = INPUT_ASSURE(input)
     ch_versions = ch_versions.mix(input_assure.versions)
 
-    // Prepare reference and query TSV files for LOCIDEX_MERGE
+    // Collect samples without address
     profiles = input_assure.result.branch {
         query: !it[0].address
     }
+
+    // Prepare reference and query TSV files for LOCIDEX_MERGE
     reference_values = input_assure.result.collect{ meta, mlst -> mlst}
     query_values = profiles.query.collect{ meta, mlst -> mlst }
+
+    // Query Map: Use to return meta.irida_id to output for mapping to IRIDA-Next JSON
+    query_map = profiles.query.map{ meta, mlst->
+        tuple(meta.id, meta.irida_id)
+    }.collect()
 
     // LOCIDEX modules
     ref_tag = Channel.value("ref")
@@ -171,15 +199,18 @@ workflow GAS_NOMENCLATURE {
     called_data = GAS_CALL(expected_clusters, distances.results)
     ch_versions = ch_versions.mix(called_data.versions)
 
-    // Filter the new queried samples and addresses into a CSV/JSON file for the IRIDANext plug in
-    query_ids = profiles.query.collectFile { it[0].id + '\n' }
+    // Filter the new queried samples and addresses into a CSV/JSON file for the IRIDANext plug in and
+    // add a column with IRIDA ID to allow for IRIDANext plugin to include metadata
+    query_irida_ids = profiles.query.collectFile {  it[0].irida_id + '\t' + it[0].id + '\n'}
 
-    new_addresses = FILTER_QUERY(query_ids, called_data.distances, "tsv", "csv")
+    new_addresses = FILTER_QUERY(query_irida_ids, called_data.distances, "tsv", "tsv")
     ch_versions = ch_versions.mix(new_addresses.versions)
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
+
+
 
 }
 
