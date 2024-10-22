@@ -33,6 +33,20 @@ process APPEND_CLUSTERS {
         exit 1
     fi
 
-    csvtk concat -t ${initial_clusters} ${additional_clusters} | csvtk sort -t -k id | csvtk uniq -t -f id > reference_clusters.tsv
-    """
+    # Add a "source" column to differentiate the reference profiles and additional profiles
+    csvtk mutate2 -t -n source -e " 'ref' " ${initial_clusters} > reference_clusters_source.tsv
+    csvtk mutate2 -t -n source -e " 'db' " ${additional_clusters} > additional_clusters_source.tsv
+
+    # Combine profiles from both the reference and database into a single file
+    csvtk concat -t reference_clusters_source.tsv additional_clusters_source.tsv | csvtk sort -t -k id > combined_profiles.tsv
+
+    # Calculate the frequency of each sample_id across both sources
+    csvtk freq -t -f id combined_profiles.tsv > sample_counts.tsv
+
+    # For any sample_id that appears in both the reference and database, add a 'db_' prefix to the sample_id from the database
+    csvtk join -t -f id combined_profiles.tsv sample_counts.tsv | \
+    csvtk mutate2 -t -n new_id -e '(\$source == "db" && \$frequency > 1) ? "db_" + \$id : \$id' | \
+    csvtk cut -t -F -f new_id,address,level_* | \
+    csvtk rename -t -f new_id -n id > reference_clusters.tsv
+     """
 }

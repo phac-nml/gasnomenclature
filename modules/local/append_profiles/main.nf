@@ -33,7 +33,20 @@ process APPEND_PROFILES {
         exit 1
     fi
 
-    # Merge profiles ensuring only unique samples are added
-    csvtk concat -t ${reference_profiles} ${additional_profiles} | csvtk sort -t -k sample_id | csvtk uniq -t -f sample_id > profiles_ref.tsv
-    """
+    # Add a "source" column to differentiate the reference profiles and additional profiles
+    csvtk mutate2 -t -n source -e " 'ref' " ${reference_profiles} > reference_profiles_source.tsv
+    csvtk mutate2 -t -n source -e " 'db' " ${additional_profiles} > additional_profiles_source.tsv
+
+    # Combine profiles from both the reference and database into a single file
+    csvtk concat -t reference_profiles_source.tsv additional_profiles_source.tsv | csvtk sort -t -k sample_id > combined_profiles.tsv
+
+    # Calculate the frequency of each sample_id across both sources
+    csvtk freq -t -f sample_id combined_profiles.tsv > sample_counts.tsv
+
+    # For any sample_id that appears in both the reference and database, add a 'db_' prefix to the sample_id from the database
+    csvtk join -t -f sample_id combined_profiles.tsv sample_counts.tsv | \
+    csvtk mutate2 -t -n new_sample_id -e '(\$source == "db" && \$frequency > 1) ? "db_" + \$sample_id : \$sample_id' | \
+    csvtk cut -t -F -f new_sample_id,l* | \
+    csvtk rename -t -f new_sample_id -n sample_id > profiles_ref.tsv
+     """
 }
