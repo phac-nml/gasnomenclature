@@ -15,24 +15,24 @@ process APPEND_CLUSTERS {
 
     script:
     """
-    # Function to get the header of the files, handling gzipped files
-    get_header() {
-        if [ "\${1##*.}" = "gz" ]; then
-            zcat "\$1" | head -n 1
+    # Function to get the first address line from the files, handling gzipped files
+    get_address() {
+        if [[ "\${1##*.}" == "gz" ]]; then
+            zcat "\$1" | awk 'NR>1 {print \$2}' | head -n 1
         else
-            head -n 1 "\$1"
+            awk 'NR>1 {print \$2}' "\$1" | head -n 1
         fi
     }
 
-    # Compare headers and exit if they do not match
-    init_headers=\$(get_header "${initial_clusters}")
-    add_headers=\$(get_header "${additional_clusters}")
+    # Check if two files hace consistent decimal splits in the address column
+    init_splits=\$(get_address "${initial_clusters}" | awk -F '.' '{print NF}')
+    add_splits=\$(get_address "${additional_clusters}" | awk -F '.' '{print NF}')
 
-    if [ "\$init_headers" != "\$add_headers" ]; then
-        echo "Error: Column headers do not match between initial_clusters and --db_clusters."
+    if [ "\$init_splits" != "\$add_splits" ]; then
+        echo "Error: Address levels do not match between initial_clusters and --db_clusters."
         exit 1
     fi
-
+   
     # Add a "source" column to differentiate the reference profiles and additional profiles
     csvtk mutate2 -t -n source -e " 'ref' " ${initial_clusters} > reference_clusters_source.tsv
     csvtk mutate2 -t -n source -e " 'db' " ${additional_clusters} > additional_clusters_source.tsv
@@ -45,8 +45,7 @@ process APPEND_CLUSTERS {
 
     # For any sample_id that appears in both the reference and database, add a 'db_' prefix to the sample_id from the database
     csvtk join -t -f id combined_profiles.tsv sample_counts.tsv | \
-    csvtk mutate2 -t -n new_id -e '(\$source == "db" && \$frequency > 1) ? "db_" + \$id : \$id' | \
-    csvtk cut -t -F -f new_id,address,level_* | \
-    csvtk rename -t -f new_id -n id > reference_clusters.tsv
+    csvtk mutate2 -t -n id -e '(\$source == "db" && \$frequency > 1) ? "db_" + \$id : \$id' | \
+    csvtk cut -t -f id,address > reference_clusters.tsv
     """
 }
