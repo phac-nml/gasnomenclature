@@ -1,6 +1,6 @@
-id	address	level_1	level_2	level_3
-sample1	1.1.1	1	1	1
-sample2	1.1.1	1	1	1
-sample3	1.1.2	1	1	2
-sampleQ	2.2.3	2	2	3
-sampleN	2.2.3	2	2	3
+id	address
+sample1	1.1.1
+sample2	1.1.1
+sample3	1.1.2
+sampleQ	1.1.3
+sampleN	2.2.4

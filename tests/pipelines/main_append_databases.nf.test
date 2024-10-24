@@ -190,7 +190,7 @@ nextflow_pipeline {
 
         then {
             assert workflow.failed
-            assert workflow.stdout.contains("  Error: Column headers do not match between initial_clusters and --db_clusters.")
+            assert workflow.stdout.contains("  Error: Address levels do not match between initial_clusters and --db_clusters.")
         }
     }
 

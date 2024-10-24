@@ -1,5 +1,5 @@
-id	address	level_1
-sample1	1	1
-sample2	1	1
-sample3	2	2
-sampleQ	1	1
+id	address
+sample1	1
+sample2	1
+sample3	2
+sampleQ	1

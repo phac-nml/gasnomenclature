@@ -24,15 +24,14 @@ process CLUSTER_FILE {
     }
 
     // Generate the header for the expected_clusters.txt file
-    def header = ["id", "address"] + (1..maxLevels).collect { "level_$it" }
+    def header = ["id", "address"]
     outputLines << header.join("\t")
 
     // Iterate over each sample in the meta list and pull the relevant information for the text file
     meta.each { sample ->
         def id = sample.id
         def address = sample.address
-        def levels = address.split(delimiter)
-        def line = [id, address] + levels.collect { it.toString() }
+        def line = [id, address]
         outputLines << line.join("\t")
     }
 
