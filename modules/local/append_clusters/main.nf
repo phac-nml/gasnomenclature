@@ -32,7 +32,7 @@ process APPEND_CLUSTERS {
         echo "Error: Address levels do not match between initial_clusters and --db_clusters."
         exit 1
     fi
-   
+
     # Add a "source" column to differentiate the reference profiles and additional profiles
     csvtk mutate2 -t -n source -e " 'ref' " ${initial_clusters} > reference_clusters_source.tsv
     csvtk mutate2 -t -n source -e " 'db' " ${additional_clusters} > additional_clusters_source.tsv
