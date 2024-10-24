@@ -25,8 +25,10 @@ include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet  } from 'plugin/nf
 include { INPUT_ASSURE                          } from "../modules/local/input_assure/main"
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_REF    } from "../modules/local/locidex/merge/main"
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_QUERY  } from "../modules/local/locidex/merge/main"
+include { APPEND_PROFILES                       } from "../modules/local/append_profiles/main"
 include { PROFILE_DISTS                         } from "../modules/local/profile_dists/main"
 include { CLUSTER_FILE                          } from "../modules/local/cluster_file/main"
+include { APPEND_CLUSTERS                       } from "../modules/local/append_clusters/main"
 include { GAS_CALL                              } from "../modules/local/gas/call/main"
 include { FILTER_QUERY                          } from "../modules/local/filter_query/main"
 
@@ -115,11 +117,25 @@ workflow GAS_NOMENCLATURE {
     ref_tag = Channel.value("ref")
     query_tag = Channel.value("value")
 
-    merged_references = LOCIDEX_MERGE_REF(reference_values, ref_tag)
-    ch_versions = ch_versions.mix(merged_references.versions)
+    references = LOCIDEX_MERGE_REF(reference_values, ref_tag)
+    ch_versions = ch_versions.mix(references.versions)
 
-    merged_queries = LOCIDEX_MERGE_QUERY(query_values, query_tag)
-    ch_versions = ch_versions.mix(merged_queries.versions)
+    queries = LOCIDEX_MERGE_QUERY(query_values, query_tag)
+    ch_versions = ch_versions.mix(queries.versions)
+
+    // Run APPEND_PROFILES if db_profiles parameter provided; update merged_profiles and merged_queries
+    if(params.db_profiles) {
+        additional_profiles = prepareFilePath(params.db_profiles, "Appending additional samples from ${params.db_profiles} to reference profiles")
+        if(additional_profiles == null) {
+        exit 1, "${params.db_profiles}: Does not exist but was passed to the pipeline. Exiting now."
+        }
+
+        merged_references = APPEND_PROFILES(references.combined_profiles, additional_profiles)
+    } else {
+        merged_references = references.combined_profiles
+    }
+
+    merged_queries = queries.combined_profiles
 
     // PROFILE DISTS processes
 
@@ -133,8 +149,8 @@ workflow GAS_NOMENCLATURE {
         exit 1, "${params.pd_columns}: Does not exist but was passed to the pipeline. Exiting now."
     }
 
-    distances = PROFILE_DISTS(merged_queries.combined_profiles,
-                            merged_references.combined_profiles,
+    distances = PROFILE_DISTS(merged_queries,
+                            merged_references,
                             mapping_file,
                             columns_file)
     ch_versions = ch_versions.mix(distances.versions)
@@ -145,7 +161,19 @@ workflow GAS_NOMENCLATURE {
     }.collect { meta, file ->
         meta }
 
-    expected_clusters = CLUSTER_FILE(clusters)
+    initial_clusters = CLUSTER_FILE(clusters)
+
+    // Run APPEND_CLUSTERS if db_clusters parameter provided
+    if(params.db_clusters) {
+        additional_clusters = prepareFilePath(params.db_clusters, "Appending additional cluster addresses from ${params.db_clusters}")
+        if(additional_clusters == null) {
+        exit 1, "${params.db_clusters}: Does not exist but was passed to the pipeline. Exiting now."
+        }
+
+        expected_clusters = APPEND_CLUSTERS(initial_clusters, additional_clusters)
+    } else {
+        expected_clusters = initial_clusters
+    }
 
     // GAS CALL processes
 
@@ -168,7 +196,7 @@ workflow GAS_NOMENCLATURE {
         exit 1, "'--pd_distm ${params.pd_distm}' is an invalid value. Please set to either 'hamming' or 'scaled'."
     }
 
-    called_data = GAS_CALL(expected_clusters.text, distances.results)
+    called_data = GAS_CALL(expected_clusters, distances.results)
     ch_versions = ch_versions.mix(called_data.versions)
 
     // Filter the new queried samples and addresses into a CSV/JSON file for the IRIDANext plug in and

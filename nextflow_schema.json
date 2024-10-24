@@ -88,6 +88,27 @@
                 }
             }
         },
+        "databases": {
+            "title": "Databases",
+            "type": "object",
+            "description": "The optional databases of profiles and cluster addresses that can be used.",
+            "fa_icon": "fas fa-terminal",
+            "default": "",
+            "properties": {
+                "db_profiles": {
+                    "type": "string",
+                    "pattern": "^\\S+\\.tsv(\\.gz)?$",
+                    "format": "file-path",
+                    "description": "Path to optional tab-separated file containing additional sample profiles"
+                },
+                "db_clusters": {
+                    "type": "string",
+                    "pattern": "^\\S+\\.tsv(\\.gz)?$",
+                    "format": "file-path",
+                    "description": "Path to optional text file containing additional sample cluster addresses"
+                }
+            }
+        },
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
@@ -284,6 +305,9 @@
         },
         {
             "$ref": "#/definitions/input_output_options"
+        },
+        {
+            "$ref": "#/definitions/databases"
         },
         {
             "$ref": "#/definitions/institutional_config_options"

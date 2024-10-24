@@ -3,7 +3,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Development
+## [0.3.0] - 2024/10/..
+
+### `Added`
+
+- Enhanced the pipeline to integrate _optional_ user-provided reference profiles and cluster addresses for additional samples:
+  - Added support for `--db_profiles` via the `APPEND_PROFILES` process
+  - Added support for `--db_clusters` via the `APPEND_CLUSTERS` process
+- Added tests to verify the additional databases can be incorporated and that both databases are required together for their respective processes.
 
 ### Changed
 
