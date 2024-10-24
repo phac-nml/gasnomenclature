@@ -167,7 +167,7 @@ nextflow_pipeline {
 
         then {
             assert workflow.failed
-            assert (workflow.stdout =~ /Error \[1.0, 0.0\]  supplied thresholds do not equal the number of threshold columns in clusters.tsv/).find()
+            assert (workflow.stdout =~ /Genomic address too short for samples: \[\'sample1\', \'sample2\', \'sample3\'\] based on \{0: 1\.0, 1: 0\.0\}/).find()
         }
     }
 
