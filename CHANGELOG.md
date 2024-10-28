@@ -12,12 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added support for `--db_clusters` via the `APPEND_CLUSTERS` process
 - Added tests to verify the additional databases can be incorporated and that both databases are required together for their respective processes.
 
-### Changed
+### `Changed`
 
 - Added the ability to include a `sample_name` column in the input samplesheet.csv. Allows for compatibility with IRIDA-Next input configuration.
   - `sample_name` special characters will be replaced with `"_"`
   - If no `sample_name` is supplied in the column `sample` will be used
   - To avoid repeat values for `sample_name` all `sample_name` values will be suffixed with the unique `sample` value from the input file
+- Updated `gas/call` to version `0.1.2` and both `CLUSTER_FILE` and `APPEND_CLUSTERS` to comply with the latest formatting requirements.
 
 ## [0.2.3] - 2024/09/25
 
