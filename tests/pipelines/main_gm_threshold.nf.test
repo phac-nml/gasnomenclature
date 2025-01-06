@@ -149,7 +149,7 @@ nextflow_pipeline {
             def iridanext_metadata = iridanext_json.metadata.samples
 
             assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
-            assert iridanext_metadata.sampleQ."address" == "1"
+            assert iridanext_metadata.sampleQ."address" == "2"
         }
     }
 
@@ -205,7 +205,7 @@ nextflow_pipeline {
             def iridanext_metadata = iridanext_json.metadata.samples
 
             assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
-            assert iridanext_metadata.sampleQ."address" == "1.2"
+            assert iridanext_metadata.sampleQ."address" == "2.2"
         }
     }
 }
