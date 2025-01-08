@@ -24,9 +24,9 @@ process APPEND_CLUSTERS {
         fi
     }
 
-    # Check if two files hace consistent decimal splits in the address column
-    init_splits=\$(get_address "${initial_clusters}" | awk -F '.' '{print NF}')
-    add_splits=\$(get_address "${additional_clusters}" | awk -F '.' '{print NF}')
+    # Check if two files have consistent delimeter splits in the address column
+    init_splits=\$(get_address "${initial_clusters}" | awk -F '${params.gm_delimiter}' '{print NF}')
+    add_splits=\$(get_address "${additional_clusters}" | awk -F '${params.gm_delimiter}' '{print NF}')
 
     if [ "\$init_splits" != "\$add_splits" ]; then
         echo "Error: Address levels do not match between initial_clusters and --db_clusters."
