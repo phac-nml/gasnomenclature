@@ -1,26 +1,28 @@
 {
     "files": {
-        "global": [],
+        "global": [
+            
+        ],
         "samples": {
-            "sampleR": [
-                {
-                    "path": "input/sampleR_error_report.csv"
-                }
-            ],
             "sample2": [
                 {
                     "path": "input/sample2_error_report.csv"
+                }
+            ],
+            "sampleR": [
+                {
+                    "path": "input/sampleR_error_report.csv"
                 }
             ]
         }
     },
     "metadata": {
         "samples": {
-            "sampleQ": {
-                "address": "2.2.3"
-            },
             "sampleR": {
-                "address": "2.2.3"
+                "address": "2.2.4"
+            },
+            "sampleQ": {
+                "address": "1.1.3"
             }
         }
     }
