@@ -24,12 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Refined the format of `reference_cluster.tsv (rclusters)` used by `GAS CALL` to require only `id` and `address` columns. This change involved updates to both the `append_clusters` and `cluster_file` modules.
 
-### `Changed`
-
-- Genomic Service Address version [0.1.1](https://pypi.org/project/genomic-address-service/0.1.1/) -> [0.1.3](https://pypi.org/project/genomic-address-service/0.1.3/)
-
-- Refined the format of `reference_cluster.tsv (rclusters)` used by `GAS CALL` to require only `id` and `address` columns. This change involved updates to both the `append_clusters` and `cluster_file` modules.
-
 ## [0.2.3] - 2024/09/25
 
 ### `Changed`
