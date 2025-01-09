@@ -1,5 +1,8 @@
 id	address
 sample1	1.1.1
 sample2	1.1.1
+db_sample3	1.1.2
 sample3	1.1.2
+sampleA	1.1.1
+sampleB	1.1.2
 sampleQ	1.1.3

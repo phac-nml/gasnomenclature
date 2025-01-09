@@ -35,7 +35,7 @@ nextflow_pipeline {
             assert actual_distances.text == expected_distances.text
 
             // Verify cluster file
-            def actual_cluster = path("$launchDir/results/cluster/reference_clusters.txt")
+            def actual_cluster = path("$launchDir/results/cluster/clusters.tsv")
             def expected_cluster = path("$baseDir/tests/data/clusters/expected_clusters_missing.txt")
             assert actual_cluster.text == expected_cluster.text
 
@@ -52,7 +52,7 @@ nextflow_pipeline {
             def iridanext_metadata = iridanext_json.metadata.samples
 
             assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
-            assert iridanext_metadata.sampleQ."address" == "1"
+            assert iridanext_metadata.sampleQ."address" == "3"
         }
     }
 
@@ -91,7 +91,7 @@ nextflow_pipeline {
             def iridanext_metadata = iridanext_json.metadata.samples
 
             assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
-            assert iridanext_metadata.sampleQ."address" == "1"
+            assert iridanext_metadata.sampleQ."address" == "3"
         }
     }
 
@@ -131,7 +131,7 @@ nextflow_pipeline {
             def iridanext_metadata = iridanext_json.metadata.samples
 
             assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
-            assert iridanext_metadata.sampleQ."address" == "1"
+            assert iridanext_metadata.sampleQ."address" == "3"
         }
     }
 

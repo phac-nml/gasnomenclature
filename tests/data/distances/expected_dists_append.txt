@@ -1,0 +1,8 @@
+query_id	ref_id	dist
+sampleQ	sampleQ	0
+sampleQ	sample1	1
+sampleQ	sample2	1
+sampleQ	sampleA	1
+sampleQ	sample3	2
+sampleQ	sampleB	2
+sampleQ	sampleC	2

@@ -20,6 +20,16 @@ The structure of this file is defined in [assets/schema_input.json](assets/schem
 
 Details on the columns can be found in the [Full samplesheet](docs/usage.md#full-samplesheet) documentation.
 
+## IRIDA-Next Optional Input Configuration
+
+`gasnomenclature` accepts the [IRIDA-Next](https://github.com/phac-nml/irida-next) format for samplesheets which can contain an additional column: `sample_name`
+
+`sample_name`: An **optional** column, that overrides `sample` for outputs (filenames and sample names) and reference assembly identification.
+
+`sample_name`, allows more flexibility in naming output files or sample identification. Unlike `sample`, `sample_name` is not required to contain unique values. `Nextflow` requires unique sample names, and therefore in the instance of repeat `sample_names`, `sample` will be suffixed to any `sample_name`. Non-alphanumeric characters (excluding `_`,`-`,`.`) will be replaced with `"_"`.
+
+An [example samplesheet](tests/data/samplesheets/samplesheet-sample_name.csv) has been provided with the pipeline.
+
 # Parameters
 
 The main parameters are `--input` as defined above and `--output` for specifying the output results directory. You may wish to provide `-profile singularity` to specify the use of singularity containers and `-r [branch]` to specify which GitHub branch you would like to run.
@@ -71,7 +81,30 @@ The following can be used to adjust parameters for the [gas call][] tool.
 
 - `--gm_thresholds`: Thresholds delimited by `,`. Values should match units from `--pd_distm` (either _hamming_ or _scaled_). Please see the [Distance Method and Thresholds](#distance-method-and-thresholds) section for more information.
 - `--gm_method`: The linkage method to use for clustering. Value should be one of _single_, _average_, or _complete_.
-- `--gm_delimiter`: Delimiter desired for nomenclature code. Must be alphanumeric or one of `._-`.
+- `--gm_delimiter`: Delimiter desired for nomenclature code. Must be alphanumeric or one of `._-`. Must be the same delimeter as samplesheet and cluster address database.
+
+## Optional Profile and Cluster Address Databases (as used by IRIDA-Next)
+
+In addition to the reference samples included in the input samplesheet (which already contain pre-computed cluster addresses), users can incorporate additional pre-computed reference profiles and cluster addresses by providing them as parameterized databases.
+Note that any address levels present in the additional databases but absent from the input samplesheet addresses will be disregarded.
+
+- `--db_profiles`: Specifies the path to the database containing pre-merged MLST profiles in tab-separated format. To ensure compatibility, the database structure must adhere to the expected header format corresponding to the samples included in the input samplesheet:
+
+| sample_id | l1  | l2  | ... | ln  |
+| --------- | --- | --- | --- | --- |
+| sampleA   | 1   | 1   | ... | 1   |
+| sampleB   | 1   | 1   | ... | 2   |
+| sampleC   | 2   | 1   | ... | 1   |
+
+- `--db_clusters`: Specifies the path to the database containing cluster addresses for additional samples in tab-separated format. To ensure compatibility, the database structure must adhere to the expected header format corresponding to the samples included in the input samplesheet:
+
+| id      | address |
+| ------- | ------- |
+| sampleA | 1.1.1   |
+| sampleB | 1.1.2   |
+| sampleC | 2.1.1   |
+
+_Note: To add additional reference samples to the pipeline, both `--db_profiles` and `--db_clusters` must be provided together, and all `sample_id`'s in `--db_profiles` must match the `id`'s in `--db_clusters`_
 
 ## Other
 

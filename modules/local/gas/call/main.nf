@@ -5,9 +5,8 @@ process GAS_CALL{
     tag "Assigning Nomenclature"
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/genomic_address_service%3A0.1.1--pyh7cba7a3_1' :
-        'biocontainers/genomic_address_service:0.1.1--pyh7cba7a3_1' }"
-
+        'https://depot.galaxyproject.org/singularity/genomic_address_service%3A0.1.3--pyh7e72e81_0' :
+        'biocontainers/genomic_address_service:0.1.3--pyh7e72e81_0' }"
 
     input:
     path(reference_clusters)

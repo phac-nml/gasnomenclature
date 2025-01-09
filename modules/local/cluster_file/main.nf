@@ -6,7 +6,7 @@ process CLUSTER_FILE {
     val meta
 
     output:
-    path("reference_clusters.txt"), emit: text
+    path("clusters.tsv")
 
     exec:
     def outputLines = []
@@ -24,20 +24,19 @@ process CLUSTER_FILE {
     }
 
     // Generate the header for the expected_clusters.txt file
-    def header = ["id", "address"] + (1..maxLevels).collect { "level_$it" }
+    def header = ["id", "address"]
     outputLines << header.join("\t")
 
     // Iterate over each sample in the meta list and pull the relevant information for the text file
     meta.each { sample ->
         def id = sample.id
         def address = sample.address
-        def levels = address.split(delimiter)
-        def line = [id, address] + levels.collect { it.toString() }
+        def line = [id, address]
         outputLines << line.join("\t")
     }
 
     // Write the text file, iterating over each sample
-    task.workDir.resolve("reference_clusters.txt").withWriter { writer ->
+    task.workDir.resolve("clusters.tsv").withWriter { writer ->
         outputLines.each { line ->
             writer.writeLine(line)
         }

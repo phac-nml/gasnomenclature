@@ -1,5 +1,5 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
+    "$schema": "https://json-schema.org/draft-07/schema",
     "$id": "https://raw.githubusercontent.com/phac-nml/gasnomenclature/main/nextflow_schema.json",
     "title": "phac-nml/gasnomenclature pipeline parameters",
     "description": "Gas Nomenclature assignment pipeline",
@@ -84,8 +84,28 @@
                 },
                 "pd_count_missing": {
                     "type": "boolean",
-                    "description": "Count missing alleles as different",
-                    "default": false
+                    "description": "Count missing alleles as different"
+                }
+            }
+        },
+        "databases": {
+            "title": "Databases",
+            "type": "object",
+            "description": "The optional databases of profiles and cluster addresses that can be used.",
+            "fa_icon": "fas fa-terminal",
+            "default": "",
+            "properties": {
+                "db_profiles": {
+                    "type": "string",
+                    "pattern": "^\\S+\\.tsv(\\.gz)?$",
+                    "format": "file-path",
+                    "description": "Path to optional tab-separated file containing additional sample profiles"
+                },
+                "db_clusters": {
+                    "type": "string",
+                    "pattern": "^\\S+\\.tsv(\\.gz)?$",
+                    "format": "file-path",
+                    "description": "Path to optional text file containing additional sample cluster addresses"
                 }
             }
         },
@@ -285,6 +305,9 @@
         },
         {
             "$ref": "#/definitions/input_output_options"
+        },
+        {
+            "$ref": "#/definitions/databases"
         },
         {
             "$ref": "#/definitions/institutional_config_options"

@@ -3,6 +3,27 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2025/01/09
+
+### `Added`
+
+- Enhanced the pipeline to integrate _optional_ user-provided reference profiles and cluster addresses for additional samples [PR #29](https://github.com/phac-nml/gasnomenclature/pull/29):
+  - Added support for `--db_profiles` via the `APPEND_PROFILES` process
+  - Added support for `--db_clusters` via the `APPEND_CLUSTERS` process
+- Added tests to verify the additional databases can be incorporated and that both databases are required together for their respective processes.
+
+- Added the ability to include a `sample_name` column in the input samplesheet.csv. Allows for compatibility with IRIDA-Next input configuration [PR #30](https://github.com/phac-nml/gasnomenclature/pull/30):
+  - `sample_name` special characters will be replaced with `"_"`
+  - If no `sample_name` is supplied in the column `sample` will be used
+  - To avoid repeat values for `sample_name` all `sample_name` values will be suffixed with the unique `sample` value from the input file
+- Updated `gas/call` to version `0.1.2` and both `CLUSTER_FILE` and `APPEND_CLUSTERS` to comply with the latest formatting requirements.
+
+### `Changed`
+
+- Genomic Service Address version [0.1.1](https://pypi.org/project/genomic-address-service/0.1.1/) -> [0.1.3](https://pypi.org/project/genomic-address-service/0.1.3/)
+
+- Refined the format of `reference_cluster.tsv (rclusters)` used by `GAS CALL` to require only `id` and `address` columns. This change involved updates to both the `append_clusters` and `cluster_file` modules.
+
 ## [0.2.3] - 2024/09/25
 
 ### `Changed`
@@ -45,3 +66,4 @@ Initial release of the Genomic Address Nomenclature pipeline to be used to assig
 [0.2.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.2.1
 [0.2.2]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.2.2
 [0.2.3]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.2.3
+[0.3.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.3.0
