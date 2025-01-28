@@ -17,7 +17,6 @@ process INPUT_ASSURE {
     script:
 
     """
-    set -euo pipefail
     input_assure.py \\
         --input ${mlst} \\
         --sample_id ${meta.id} \\

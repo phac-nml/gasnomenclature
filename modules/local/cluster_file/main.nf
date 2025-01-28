@@ -1,6 +1,5 @@
 process CLUSTER_FILE {
     tag "Create cluster file for GAS call"
-    label 'process_single'
 
     input:
     val meta
