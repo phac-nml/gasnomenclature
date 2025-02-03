@@ -4,7 +4,7 @@ process APPEND_CLUSTERS {
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/csvtk:0.22.0--h9ee0642_1' :
-        'biocontainers/csvtk:0.22.0--0' }"
+        'biocontainers/csvtk:0.22.0--h9ee0642_1' }"
 
     input:
     path(initial_clusters)
@@ -25,10 +25,10 @@ process APPEND_CLUSTERS {
     }
 
     # Check if two files have consistent delimeter splits in the address column
-    get_address "${initial_clusters}" > tmp1.txt
-    get_address "${additional_clusters}" > tmp2.txt
-    init_splits=\$(head -n 1 tmp1.txt | awk -F '${params.gm_delimiter}' '{print NF}')
-    add_splits=\$( head -n 1 tmp2.txt | awk -F '${params.gm_delimiter}' '{print NF}')
+    get_address "${initial_clusters}" > initial-cluster-address.txt
+    get_address "${additional_clusters}" > additional-cluster-address.txt
+    init_splits=\$(head -n 1 initial-cluster-address.txt | awk -F '${params.gm_delimiter}' '{print NF}')
+    add_splits=\$( head -n 1 additional-cluster-address.txt | awk -F '${params.gm_delimiter}' '{print NF}')
 
     if [ "\$init_splits" != "\$add_splits" ]; then
         echo "Error: Address levels do not match between initial_clusters and --db_clusters."
