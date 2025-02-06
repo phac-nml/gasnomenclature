@@ -32,7 +32,7 @@ An [example samplesheet](tests/data/samplesheets/samplesheet-sample_name.csv) ha
 
 # Parameters
 
-The main parameters are `--input` as defined above and `--output` for specifying the output results directory. You may wish to provide `-profile singularity` to specify the use of singularity containers and `-r [branch]` to specify which GitHub branch you would like to run.
+The main parameters are `--input` as defined above and `--outdir` for specifying the output results directory. You may wish to provide `-profile singularity` to specify the use of singularity containers and `-r [branch]` to specify which GitHub branch you would like to run.
 
 ## Distance Method and Thresholds
 
