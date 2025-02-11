@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2025/02/11
+
+### `Fixed`
+
+- Addressed the pipefail Issue [#36](https://github.com/phac-nml/gasnomenclature/issues/36) when large sample sizes are passed to `APPEND_CLUSTERS()` in [PR #37](https://github.com/phac-nml/gasnomenclature/pull/37) by replacing a pipe with a temporary intermediate file.
+- Updated GAS to version [0.1.4](https://github.com/phac-nml/genomic_address_service/releases/tag/0.1.4) which resolves Issue [#38](https://github.com/phac-nml/gasnomenclature/issues/38) and [#33](https://github.com/phac-nml/gasnomenclature/issues/33) which now allows `linkage.method` parameters of `gasnomenclature` to be passed to `GAS call`.
+
 ## [0.3.0] - 2025/01/09
 
 ### `Added`
@@ -67,3 +74,4 @@ Initial release of the Genomic Address Nomenclature pipeline to be used to assig
 [0.2.2]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.2.2
 [0.2.3]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.2.3
 [0.3.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.3.0
+[0.3.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.3.1
