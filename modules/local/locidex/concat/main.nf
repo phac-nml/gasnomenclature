@@ -21,7 +21,11 @@ process LOCIDEX_CONCAT {
 
     """
     if ((${input_count} > 1)); then
-        csvtk concat -t ${input_values.join(' ')} -o ${combined_dir}/${combined_dir}.tsv
+        csvtk  \\
+            concat -t \\
+            --num-cpus $task.cpus \\
+            ${input_values.join(' ')} \\
+            -o ${combined_dir}/${combined_dir}.tsv
     else
         mkdir ${combined_dir} && mv "${input_values}" ${combined_dir}/${combined_dir}.tsv
 
