@@ -1,0 +1,51 @@
+nextflow_process {
+    name "Test Process LOCIDEX_CONCAT"
+    script "modules/local/locidex/concat/main.nf"
+    process "LOCIDEX_CONCAT"
+
+    test("Test when LOCIDEX_CONCAT runs on multiple files") {
+        tag "LOCIDEX_CONCAT_multiple_files"
+        when {
+            process {
+                """
+                input[0] = Channel.of(
+                    ["$baseDir/tests/data/profiles/merged_profiles_1_of_2.tsv", "$baseDir/tests/data/profiles/merged_profiles_2_of_2.tsv"]
+                    )
+                input[1] = Channel.of("ref")
+                input[2] = input[0].flatten().count()
+                """
+            }
+
+            params {
+                outdir = "cluster_results"
+            }
+        }
+
+        then {
+            assert process.success
+        }
+    }
+
+    test("Test when LOCIDEX_CONCAT runs on single file") {
+        tag "LOCIDEX_CONCAT_single_file"
+        when {
+            process {
+                """
+                input[0] = Channel.of(
+                    ["$baseDir/tests/data/profiles/merged_profiles_1_of_2.tsv"]
+                    )
+                input[1] = Channel.of("ref")
+                input[2] = input[0].flatten().count()
+                """
+            }
+
+            params {
+                outdir = "cluster_results"
+            }
+        }
+
+        then {
+            assert process.success
+        }
+    }
+}

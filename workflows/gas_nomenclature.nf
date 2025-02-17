@@ -121,7 +121,7 @@ workflow GAS_NOMENCLATURE {
 
     // Divide up inputs into groups for LOCIDEX
     grouped_ref_files = reference_values.flatten() //
-        .buffer( size: params.batch_size, remainder: true )
+        .buffer( size: params.batch_size, remainder: true ).view()
     grouped_query_files = query_values.flatten() //
         .buffer( size: params.batch_size, remainder: true )
 
