@@ -1,7 +1,6 @@
 process INPUT_ASSURE {
     tag "Assures Inputs are Consistent"
     label 'process_single'
-    errorStrategy 'retry'
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/python:3.8.3' :
