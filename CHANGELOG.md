@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added a pre-processing step to the input of `LOCIDEX_MERGE` that splits-up samples, into batches (default batch size: `100`), to allow for `LOCIDEX_MERGE` to be run in parallel. To modify the size of batches use the parameter `--batch_size n`
 
+### `Updated`
+
+- The container for docker/singularity for `Profile_Dist` was changed to quay.io/biocontainer build 1.0.3 (this profile_dists version was just to fix the PYPI build recipe which caused the container to not be built) which has no changes from 1.0.2
+
 ## [0.3.1] - 2025/02/11
 
 ### `Fixed`
@@ -83,4 +87,4 @@ Initial release of the Genomic Address Nomenclature pipeline to be used to assig
 [0.2.3]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.2.3
 [0.3.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.3.0
 [0.3.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.3.1
-[0.3.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.3.1
+[0.3.2]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.3.2
