@@ -3,6 +3,7 @@
 process LOCIDEX_MERGE {
     tag 'Merge Profiles'
     label 'process_medium'
+    fair true
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
     "docker.io/mwells14/locidex:0.2.3" :
