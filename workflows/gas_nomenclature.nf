@@ -25,6 +25,8 @@ include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet  } from 'plugin/nf
 include { INPUT_ASSURE                          } from "../modules/local/input_assure/main"
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_REF    } from "../modules/local/locidex/merge/main"
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_QUERY  } from "../modules/local/locidex/merge/main"
+include { LOCIDEX_CONCAT as LOCIDEX_CONCAT_QUERY } from "../modules/local/locidex/concat/main"
+include { LOCIDEX_CONCAT as LOCIDEX_CONCAT_REF   } from "../modules/local/locidex/concat/main"
 include { APPEND_PROFILES                       } from "../modules/local/append_profiles/main"
 include { PROFILE_DISTS                         } from "../modules/local/profile_dists/main"
 include { CLUSTER_FILE                          } from "../modules/local/cluster_file/main"
@@ -117,11 +119,22 @@ workflow GAS_NOMENCLATURE {
     ref_tag = Channel.value("ref")
     query_tag = Channel.value("value")
 
-    references = LOCIDEX_MERGE_REF(reference_values, ref_tag)
+    // Divide up inputs into groups for LOCIDEX
+    grouped_ref_files = reference_values.flatten() //
+        .buffer( size: params.batch_size, remainder: true ).view()
+    grouped_query_files = query_values.flatten() //
+        .buffer( size: params.batch_size, remainder: true )
+
+    // Run LOCIDEX on grouped query and reference samples
+    references = LOCIDEX_MERGE_REF(grouped_ref_files, ref_tag)
     ch_versions = ch_versions.mix(references.versions)
 
     queries = LOCIDEX_MERGE_QUERY(query_values, query_tag)
     ch_versions = ch_versions.mix(queries.versions)
+
+    // Combine the LOCIDEX outputs together into single file
+    combined_references = LOCIDEX_CONCAT_REF(references.combined_profiles.collect(), ref_tag, references.combined_profiles.collect().flatten().count())
+    combined_queries = LOCIDEX_CONCAT_QUERY(queries.combined_profiles.collect(), query_tag, queries.combined_profiles.collect().flatten().count())
 
     // Run APPEND_PROFILES if db_profiles parameter provided; update merged_profiles and merged_queries
     if(params.db_profiles) {
@@ -130,9 +143,9 @@ workflow GAS_NOMENCLATURE {
         exit 1, "${params.db_profiles}: Does not exist but was passed to the pipeline. Exiting now."
         }
 
-        merged_references = APPEND_PROFILES(references.combined_profiles, additional_profiles)
+        merged_references = APPEND_PROFILES(combined_references.combined_profiles, additional_profiles)
     } else {
-        merged_references = references.combined_profiles
+        merged_references = combined_references.combined_profiles
     }
 
     merged_queries = queries.combined_profiles
