@@ -106,6 +106,10 @@ Note that any address levels present in the additional databases but absent from
 
 _Note: To add additional reference samples to the pipeline, both `--db_profiles` and `--db_clusters` must be provided together, and all `sample_id`'s in `--db_profiles` must match the `id`'s in `--db_clusters`_
 
+## LOCIDEX
+
+When large samplesheets are provided to LOCIDEX, they are split-up, into batches (default batch size: 100), to allow for `LOCIDEX_MERGE` to be run in parallel. To modify the size of batches use the parameter `--batch_size n`
+
 ## Other
 
 Other parameters (defaults from nf-core) are defined in [nextflow_schema.json](nextflow_schmea.json).
