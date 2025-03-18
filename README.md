@@ -133,26 +133,29 @@ An example of the what the contents of the IRIDA Next JSON file looks like for t
 ```
 {
     "files": {
-        "global": [],
+        "global": [
+            {
+                "path": "locidex/concat/reference/concat_ref/MLST_error_report_concat_ref.csv"
+            },
+            {
+                "path": "locidex/concat/query/concat_query/MLST_error_report_concat_query.csv"
+            }
+        ],
         "samples": {
-            "sampleF": [
-                {
-                    "path": "input/sampleF_error_report.csv"
-                }
-            ],
+
         }
     },
     "metadata": {
         "samples": {
             "sampleQ": {
-                "address": "1.1.3",
+                "address": "1.1.3"
             }
         }
     }
 }
 ```
 
-Within the `files` section of this JSON file, all of the output paths are relative to the `outdir`. Therefore, `"path": "input/sampleF_error_report.csv"` refers to a file located within `outdir/input/sampleF_error_report.csv`. This file is generated only if a sample fails the input check during samplesheet assessment.
+Within the `files` section of this JSON file, all of the output paths are relative to the `outdir`. Therefore, `"path": "locidex/concat/query/concat_query/MLST_error_report_concat_query.csv"` refers to a file located within `outdir/locidex/concat/query/concat_query/MLST_error_report_concat_query.csv`. This file contains all samples that fail the input check during samplesheet assessment by `locidex merge`.
 
 ## Test profile
 

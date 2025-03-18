@@ -3,6 +3,20 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2025/03/dd
+
+### `Updated`
+
+- Update the `locidex` version to [0.3.0](https://pypi.org/project/locidex/0.3.0/). `locidex merge` has integrated the functionality of module `input_assure`. [PR 45](https://github.com/phac-nml/gasnomenclature/pull/45)
+
+### `Enhancement`
+
+- `locidex merge` in `0.3.0` now performs the functionality of `input_assure` (checking sample name against MLST profiles). This allows `gasnomenclature` to remove `input_assure` so that the MLST JSON file is read only once, and no longer needs to re-write with correction. [PR 45](https://github.com/phac-nml/gasnomenclature/pull/45)
+
+### `Changes`
+
+- The output from `locidex merge` now includes a `MLST_error_report.csv` similar to that of `input_assure` (this file is also passed to `concat`)
+
 ## [0.4.0] - 2025/03/03
 
 ### `Enhancement`
