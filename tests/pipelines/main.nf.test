@@ -18,12 +18,12 @@ nextflow_pipeline {
             assert path("$launchDir/results").exists()
 
             // Check merged profiles
-            def actual_profile_ref = path("$launchDir/results/locidex/merged_ref/merged_ref.tsv")
+            def actual_profile_ref = path("$launchDir/results/locidex/merge/reference/merged_ref/profile.tsv")
             def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected-profile1.tsv")
             assert actual_profile_ref.text == expected_profile_tsv.text
 
             // Check query profiles
-            def actual_profile_query = path("$launchDir/results/locidex/merge/query/merged_value/merged_profiles_value.tsv")
+            def actual_profile_query = path("$launchDir/results/locidex/merge/query/merged_query/profile.tsv")
             def expected_profile_query_tsv = path("$baseDir/tests/data/profiles/expected-profile2.tsv")
             assert actual_profile_query.text == expected_profile_query_tsv.text
 
@@ -72,12 +72,12 @@ nextflow_pipeline {
             assert path("$launchDir/results").exists()
 
             // Check merged profiles
-            def actual_profile_ref = path("$launchDir/results/locidex/merged_ref/merged_ref.tsv")
+            def actual_profile_ref = path("$launchDir/results/locidex/merge/reference/merged_ref/profile.tsv")
             def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected-profile_scaled1.tsv")
             assert actual_profile_ref.text == expected_profile_tsv.text
 
             // Check query profiles
-            def actual_profile_query = path("$launchDir/results/locidex/merge/query/merged_value/merged_profiles_value.tsv")
+            def actual_profile_query = path("$launchDir/results/locidex/merge/query/merged_query/profile.tsv")
             def expected_profile_query_tsv = path("$baseDir/tests/data/profiles/expected-profile_scaled2.tsv")
             assert actual_profile_query.text == expected_profile_query_tsv.text
 
@@ -119,12 +119,12 @@ nextflow_pipeline {
             assert path("$launchDir/results").exists()
 
             // Check merged profiles
-            def actual_profile_ref = path("$launchDir/results/locidex/merged_ref/merged_ref.tsv")
+            def actual_profile_ref = path("$launchDir/results/locidex/merge/reference/merged_ref/profile.tsv")
             def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected-profile_queries1.tsv")
             assert actual_profile_ref.text == expected_profile_tsv.text
 
             // Check query profiles
-            def actual_profile_query = path("$launchDir/results/locidex/merge/query/merged_value/merged_profiles_value.tsv")
+            def actual_profile_query = path("$launchDir/results/locidex/merge/query/merged_query/profile.tsv")
             def expected_profile_query_tsv = path("$baseDir/tests/data/profiles/expected-profile_queries2.tsv")
             assert actual_profile_query.text == expected_profile_query_tsv.text
 
@@ -173,9 +173,6 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/results").exists()
 
-            // Check that sample1.mlst.json.gz has been open, read, and that a new gzipped file has been generated
-            assert path("$launchDir/results/input/sample1.mlst.json.gz").exists()
-
             // Check called clusters
             def actual_calls = path("$launchDir/results/call/Called/results.text")
             def expected_calls = path("$baseDir/tests/data/called/expected_results.txt")
@@ -213,12 +210,11 @@ nextflow_pipeline {
             // Check outputs
             def lines = []
 
-            // Ensure that the error_reports are generated for query and reference samples
-            lines = path("$launchDir/results/input/sample2_error_report.csv").readLines()
-            assert lines.contains("sample2,[\'sample7\'],Reference sample2 ID and JSON key in sample7.mlst.json DO NOT MATCH. The 'sample7' key in sample7.mlst.json has been forcefully changed to 'sample2': User should manually check input files to ensure correctness.")
-
-            lines = path("$launchDir/results/input/sampleR_error_report.csv").readLines()
-            assert lines.contains("sampleR,[\'sampleF\'],Query sampleR ID and JSON key in sampleF.mlst.json DO NOT MATCH. The 'sampleF' key in sampleF.mlst.json has been forcefully changed to 'sampleR': User should manually check input files to ensure correctness.")
+            // Ensure that the error_reports are generated for reference samples
+            lines = path("$launchDir/results/locidex/concat/reference/concat_ref/MLST_error_report_concat_ref.csv").readLines()
+            assert lines.contains("sample2,[\'sample7\'],sample2 ID and JSON key in sample7.mlst.json DO NOT MATCH. The 'sample7' key in sample7.mlst.json has been forcefully changed to 'sample2': User should manually check input files to ensure correctness.")
+            lines = path("$launchDir/results/locidex/concat/reference/concat_ref/MLST_error_report_concat_ref.csv").readLines()
+            assert lines.contains("sampleR,[\'sampleF\'],sampleR ID and JSON key in sampleF.mlst.json DO NOT MATCH. The 'sampleF' key in sampleF.mlst.json has been forcefully changed to 'sampleR': User should manually check input files to ensure correctness.")
 
             // Check filter_query csv file
             lines = path("$launchDir/results/filter/new_addresses.tsv").readLines()
@@ -267,7 +263,7 @@ nextflow_pipeline {
             def lines = []
 
             // Ensure that the error_reports are generated for query and reference samples
-            lines = path("$launchDir/results/input/sample3_error_report.csv").readLines()
+            lines = path("$launchDir/results/locidex/concat/reference/concat_ref/MLST_error_report_concat_ref.csv").readLines()
             assert lines.contains('sample3,"[\'extra_key\', \'sample3\']","MLST JSON file (sample3_multiplekeys.mlst.json) contains multiple keys: [\'extra_key\', \'sample3\']. The MLST JSON file has been modified to retain only the \'sample3\' entry"')
 
             // Check filtered query csv results
@@ -278,11 +274,11 @@ nextflow_pipeline {
             assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/multiplekeys_iridanext.output.json").json
 
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
-            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_samples = iridanext_json.files.global
             def iridanext_metadata = iridanext_json.metadata.samples
 
-            assert iridanext_samples.sample3.size() == 1
-            assert iridanext_samples.sample3[0].path == 'input/sample3_error_report.csv'
+            assert iridanext_samples.size() == 1
+            assert iridanext_samples.path == ['locidex/concat/reference/concat_ref/MLST_error_report_concat_ref.csv']
 
             assert iridanext_metadata.size() == 1
             assert iridanext_metadata.containsKey("sampleQ")
@@ -316,7 +312,7 @@ nextflow_pipeline {
             def lines = []
 
             // Ensure that the error_reports are generated for query and reference samples
-            lines = path("$launchDir/results/input/sample3_error_report.csv").readLines()
+            lines = path("$launchDir/results/locidex/merge/reference/merged_ref/MLST_error_report.csv").readLines()
             assert lines.contains('sample3,"[\'extra_key\', \'sample4\']",No key in the MLST JSON file (sample3_multiplekeys_nomatch.mlst.json) matches the specified sample ID \'sample3\'. The first key \'extra_key\' has been forcefully changed to \'sample3\' and all other keys have been removed.')
 
             // Check filtered query csv results
@@ -327,11 +323,11 @@ nextflow_pipeline {
             assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/multiplekeys_iridanext.output.json").json
 
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
-            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_samples = iridanext_json.files.global
             def iridanext_metadata = iridanext_json.metadata.samples
 
-            assert iridanext_samples.sample3.size() == 1
-            assert iridanext_samples.sample3[0].path == 'input/sample3_error_report.csv'
+            assert iridanext_samples.size() == 1
+            assert iridanext_samples.path == ["locidex/concat/reference/concat_ref/MLST_error_report_concat_ref.csv"]
 
             assert iridanext_metadata.size() == 1
             assert iridanext_metadata.containsKey("sampleQ")
@@ -375,14 +371,14 @@ nextflow_pipeline {
             def lines = []
 
             // Ensure that the error_reports are generated for query and reference samples based on sample_name swap with sample
-            lines = path("$launchDir/results/input/sample_1_error_report.csv").readLines()
-            assert lines.contains("sample_1,[\'sampleQ\'],Query sample_1 ID and JSON key in sampleQ.mlst.json DO NOT MATCH. The 'sampleQ' key in sampleQ.mlst.json has been forcefully changed to 'sample_1': User should manually check input files to ensure correctness.")
+            lines = path("$launchDir/results/locidex/concat/reference/concat_ref/MLST_error_report_concat_ref.csv").readLines()
+            assert lines.contains("sample_1,[\'sampleQ\'],sample_1 ID and JSON key in sampleQ.mlst.json DO NOT MATCH. The 'sampleQ' key in sampleQ.mlst.json has been forcefully changed to 'sample_1': User should manually check input files to ensure correctness.")
 
-            lines = path("$launchDir/results/input/sample_2_error_report.csv").readLines()
-            assert lines.contains("sample_2,[\'sample1\'],Reference sample_2 ID and JSON key in sample1.mlst.json DO NOT MATCH. The 'sample1' key in sample1.mlst.json has been forcefully changed to 'sample_2': User should manually check input files to ensure correctness.")
+            lines = path("$launchDir/results/locidex/concat/reference/concat_ref/MLST_error_report_concat_ref.csv").readLines()
+            assert lines.contains("sample_2,[\'sample1\'],sample_2 ID and JSON key in sample1.mlst.json DO NOT MATCH. The 'sample1' key in sample1.mlst.json has been forcefully changed to 'sample_2': User should manually check input files to ensure correctness.")
 
-            lines = path("$launchDir/results/input/sample_2_sample2_error_report.csv").readLines()
-            assert lines.contains("sample_2_sample2,[\'sample2\'],Reference sample_2_sample2 ID and JSON key in sample2.mlst.json DO NOT MATCH. The 'sample2' key in sample2.mlst.json has been forcefully changed to 'sample_2_sample2': User should manually check input files to ensure correctness.")
+            lines = path("$launchDir/results/locidex/concat/reference/concat_ref/MLST_error_report_concat_ref.csv").readLines()
+            assert lines.contains("sample_2_sample2,[\'sample2\'],sample_2_sample2 ID and JSON key in sample2.mlst.json DO NOT MATCH. The 'sample2' key in sample2.mlst.json has been forcefully changed to 'sample_2_sample2': User should manually check input files to ensure correctness.")
 
             // Check filter_query csv file
             lines = path("$launchDir/results/filter/new_addresses.tsv").readLines()

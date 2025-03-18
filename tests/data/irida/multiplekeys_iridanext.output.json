@@ -1,12 +1,12 @@
 {
     "files": {
-        "global": [],
+        "global": [
+            {
+                "path": "locidex/concat/reference/concat_ref/MLST_error_report_concat_ref.csv"
+            }
+        ],
         "samples": {
-            "sample3": [
-                {
-                    "path": "input/sample3_error_report.csv"
-                }
-            ]
+
         }
     },
     "metadata": {

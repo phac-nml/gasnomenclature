@@ -9,10 +9,11 @@ nextflow_process {
             process {
                 """
                 input[0] = Channel.of(
-                    ["$baseDir/tests/data/profiles/expected_merge_profile_1_of_2.tsv", "$baseDir/tests/data/profiles/expected_merge_profile_2_of_2.tsv"]
-                    )
-                input[1] = Channel.of("ref")
-                input[2] = input[0].flatten().count()
+                    ["$baseDir/tests/data/profiles/expected_merge_profile_1_of_2.tsv", "$baseDir/tests/data/profiles/expected_merge_profile_2_of_2.tsv"])
+                input[1] = Channel.of(
+                    ["$baseDir/tests/data/error_reports/MLST_error_report_1_of_2.tsv", "$baseDir/tests/data/error_reports/MLST_error_report_2_of_2.tsv"])
+                input[2] = Channel.of("ref")
+                input[3] = input[0].flatten().count()
                 """
             }
 
@@ -32,10 +33,11 @@ nextflow_process {
             process {
                 """
                 input[0] = Channel.of(
-                    ["$baseDir/tests/data/profiles/expected_merge_profile_1_of_2.tsv"]
-                    )
-                input[1] = Channel.of("ref")
-                input[2] = input[0].flatten().count()
+                    ["$baseDir/tests/data/profiles/expected_merge_profile_1_of_2.tsv"])
+                input[1] = Channel.of(
+                    ["$baseDir/tests/data/error_reports/MLST_error_report_1_of_2.tsv"])
+                input[2] = Channel.of("ref")
+                input[3] = input[0].flatten().count()
                 """
             }
 

@@ -1,29 +1,15 @@
 {
     "files": {
         "global": [
-            
+            {
+                "path": "locidex/concat/reference/concat_ref/MLST_error_report_concat_ref.csv"
+            },
+            {
+                "path": "locidex/concat/query/concat_query/MLST_error_report_concat_query.csv"
+            }
         ],
         "samples": {
-            "sample1": [
-                {
-                    "path": "input/sample_2_error_report.csv"
-                }
-            ],
-            "sampleR": [
-                {
-                    "path": "input/sample4_error_report.csv"
-                }
-            ],
-            "sampleQ": [
-                {
-                    "path": "input/sample_1_error_report.csv"
-                }
-            ],
-            "sample2": [
-                {
-                    "path": "input/sample_2_sample2_error_report.csv"
-                }
-            ]
+
         }
     },
     "metadata": {
