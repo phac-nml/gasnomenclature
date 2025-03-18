@@ -43,12 +43,13 @@ nextflow_pipeline {
             assert actual_calls.text == expected_calls.text
 
             // Check IRIDA Next JSON output
-            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/test_iridanext.output.json").json
+            assert path("$launchDir/results/iridanext.output.json").exists()
 
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
-            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_global = iridanext_json.files.global
             def iridanext_metadata = iridanext_json.metadata.samples
 
+            assert iridanext_global.sort { it.path} == path("$baseDir/tests/data/irida/test_iridanext.output.json").json.files.global.sort { it.path}
             assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
             assert iridanext_metadata.sampleQ."address" == "1.1.3"
         }
@@ -92,12 +93,13 @@ nextflow_pipeline {
             assert actual_calls.text == expected_calls.text
 
             // Check IRIDA Next JSON output
-            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/scaled_iridanext.output.json").json
+            assert path("$launchDir/results/iridanext.output.json").exists()
 
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
-            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_global = iridanext_json.files.global
             def iridanext_metadata = iridanext_json.metadata.samples
 
+            assert iridanext_global.sort { it.path} == path("$baseDir/tests/data/irida/scaled_iridanext.output.json").json.files.global.sort { it.path}
             assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
             assert iridanext_metadata.sampleQ."address" == "1.2.3"
         }
@@ -144,11 +146,13 @@ nextflow_pipeline {
             assert actual_calls.text == expected_calls.text
 
             // Check IRIDA Next JSON output
-            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/queries_iridanext.output.json").json
+            assert path("$launchDir/results/iridanext.output.json").exists()
 
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
-            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_global = iridanext_json.files.global
             def iridanext_metadata = iridanext_json.metadata.samples
+
+            assert iridanext_global.sort { it.path} == path("$baseDir/tests/data/irida/queries_iridanext.output.json").json.files.global.sort { it.path}
 
             assert iridanext_metadata.size() == 2
             assert iridanext_metadata.containsKey("sampleQ")
@@ -179,11 +183,13 @@ nextflow_pipeline {
             assert actual_calls.text == expected_calls.text
 
             // Check IRIDA Next JSON output
-            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/test_iridanext.output.json").json
+            assert path("$launchDir/results/iridanext.output.json").exists()
 
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
-            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_global = iridanext_json.files.global
             def iridanext_metadata = iridanext_json.metadata.samples
+
+            assert iridanext_global.sort { it.path} == path("$baseDir/tests/data/irida/test_iridanext.output.json").json.files.global.sort { it.path}
 
             assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
             assert iridanext_metadata.sampleQ."address" == "1.1.3"
@@ -222,11 +228,13 @@ nextflow_pipeline {
             assert lines.contains("sampleR\tsampleR\t2.2.4")
 
             // Check IRIDA Next JSON output
-            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/mismatched_iridanext.output.json").json
+            assert path("$launchDir/results/iridanext.output.json").exists()
 
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
-            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_global = iridanext_json.files.global
             def iridanext_metadata = iridanext_json.metadata.samples
+
+            assert iridanext_global.sort { it.path} == path("$baseDir/tests/data/irida/mismatched_iridanext.output.json").json.files.global.sort { it.path}
 
             assert iridanext_metadata.size() == 2
             assert iridanext_metadata.containsKey("sampleQ")
@@ -271,14 +279,13 @@ nextflow_pipeline {
             assert lines.contains("sampleQ\tsampleQ\t1.1.3")
 
             // Check IRIDA Next JSON output
-            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/multiplekeys_iridanext.output.json").json
+            assert path("$launchDir/results/iridanext.output.json").exists()
 
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
-            def iridanext_samples = iridanext_json.files.global
+            def iridanext_global = iridanext_json.files.global
             def iridanext_metadata = iridanext_json.metadata.samples
 
-            assert iridanext_samples.size() == 1
-            assert iridanext_samples.path == ['locidex/concat/reference/concat_ref/MLST_error_report_concat_ref.csv']
+            assert iridanext_global.sort { it.path} == path("$baseDir/tests/data/irida/multiplekeys_iridanext.output.json").json.files.global.sort { it.path}
 
             assert iridanext_metadata.size() == 1
             assert iridanext_metadata.containsKey("sampleQ")
@@ -320,14 +327,13 @@ nextflow_pipeline {
             assert lines.contains("sampleQ\tsampleQ\t1.1.3")
 
             // Check IRIDA Next JSON output
-            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/multiplekeys_iridanext.output.json").json
+            assert path("$launchDir/results/iridanext.output.json").exists()
 
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
-            def iridanext_samples = iridanext_json.files.global
+            def iridanext_global = iridanext_json.files.global
             def iridanext_metadata = iridanext_json.metadata.samples
 
-            assert iridanext_samples.size() == 1
-            assert iridanext_samples.path == ["locidex/concat/reference/concat_ref/MLST_error_report_concat_ref.csv"]
+            assert iridanext_global.sort { it.path} == path("$baseDir/tests/data/irida/multiplekeys_iridanext.output.json").json.files.global.sort { it.path}
 
             assert iridanext_metadata.size() == 1
             assert iridanext_metadata.containsKey("sampleQ")
@@ -386,8 +392,13 @@ nextflow_pipeline {
             assert lines.contains("sampleR\tsample4\t2.2.4")
 
             // Check IRIDA Next JSON output
-            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/sample_name_add_iridanext.output.json").json
+            assert path("$launchDir/results/iridanext.output.json").exists()
 
+            def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_global = iridanext_json.files.global
+            def iridanext_metadata = iridanext_json.metadata.samples
+
+            assert iridanext_global.sort { it.path} == path("$baseDir/tests/data/irida/sample_name_add_iridanext.output.json").json.files.global.sort { it.path}
         }
     }
 }

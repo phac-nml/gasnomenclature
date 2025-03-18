@@ -37,10 +37,7 @@ process LOCIDEX_CONCAT {
             -o ${combined_dir}/MLST_error_report_${combined_dir}.csv
     else
         mkdir ${combined_dir} && mv "${input_profile}" ${combined_dir}/profile_${combined_dir}.tsv
-        if ((\$(wc -l ${input_error} | cut -f1 -d" ") > 1)); then
-            mv "${input_error}" ${combined_dir}/MLST_error_report_${combined_dir}.csv
-        fi
-
+        mv "${input_error}" ${combined_dir}/MLST_error_report_${combined_dir}.csv
     fi
 
     cat <<-END_VERSIONS > versions.yml
