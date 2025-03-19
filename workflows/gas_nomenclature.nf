@@ -94,7 +94,6 @@ workflow GAS_NOMENCLATURE {
             }
             // Add the ID to the set of processed IDs
             processedIDs << meta.id
-            //createOverrideFile.append("\n$meta.id,$mlst_file")
             tuple(meta, mlst_file)}.loadIridaSampleIds()
 
 
