@@ -155,15 +155,15 @@ workflow GAS_NOMENCLATURE {
 
     // LOCIDEX Concatenate References
     combined_references = LOCIDEX_CONCAT_REF(references.combined_profiles.collect(),
-    references.combined_error_report.collect(),
-    ref_tag,
-    references.combined_profiles.collect().flatten().count())
+        references.combined_error_report.collect(),
+        ref_tag,
+        references.combined_profiles.collect().flatten().count())
 
     // LOCIDEX Concatenate References
     combined_queries = LOCIDEX_CONCAT_QUERY(queries.combined_profiles.collect(),
-    queries.combined_error_report.collect(),
-    query_tag,
-    queries.combined_profiles.collect().flatten().count())
+        queries.combined_error_report.collect(),
+        query_tag,
+        queries.combined_profiles.collect().flatten().count())
 
     // Run APPEND_PROFILES if db_profiles parameter provided; update merged_profiles and merged_queries
     if(params.db_profiles) {
