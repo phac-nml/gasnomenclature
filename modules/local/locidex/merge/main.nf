@@ -16,14 +16,13 @@ process LOCIDEX_MERGE {
     val  merge_tsv
 
     output:
-    path("${combined_dir}/*.tsv"), emit: combined_profiles
-    path("${combined_dir}/*.csv"), emit: combined_error_report
-    path "versions.yml", emit: versions
+    path("${input_tag}/profile.tsv"),           emit: combined_profiles
+    path("${input_tag}/MLST_error_report.csv"), emit: combined_error_report
+    path "versions.yml",           emit: versions
 
     script:
-    combined_dir = "merged_${input_tag}"
     """
-    locidex merge -i ${input_values.join(' ')} -o ${combined_dir} -p ${merge_tsv}
+    locidex merge -i ${input_values.join(' ')} -o ${input_tag} -p ${merge_tsv}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

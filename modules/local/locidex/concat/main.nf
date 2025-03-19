@@ -14,9 +14,9 @@ process LOCIDEX_CONCAT {
     val input_count
 
     output:
-    path("${combined_dir}/*.tsv"), emit: combined_profiles
-    path("${combined_dir}/*.csv"), emit: combined_error_report, optional: true
-    path "versions.yml"          , emit: versions
+    path("*.tsv"),       emit: combined_profiles
+    path("*.csv"),       emit: combined_error_report
+    path "versions.yml", emit: versions
 
     script:
     combined_dir = "concat_${input_tag}"
@@ -28,16 +28,16 @@ process LOCIDEX_CONCAT {
             concat -t \\
             --num-cpus $task.cpus \\
             ${input_profile.join(' ')} \\
-            -o ${combined_dir}/profile_${combined_dir}.tsv
+            -o profile_${combined_dir}.tsv
         #
         csvtk  \\
         concat \\
             --num-cpus $task.cpus \\
             ${input_error.join(' ')} \\
-            -o ${combined_dir}/MLST_error_report_${combined_dir}.csv
+            -o MLST_error_report_${combined_dir}.csv
     else
-        mkdir ${combined_dir} && mv "${input_profile}" ${combined_dir}/profile_${combined_dir}.tsv
-        mv "${input_error}" ${combined_dir}/MLST_error_report_${combined_dir}.csv
+        mv "${input_profile}" profile_${combined_dir}.tsv
+        mv "${input_error}" MLST_error_report_${combined_dir}.csv
     fi
 
     cat <<-END_VERSIONS > versions.yml
