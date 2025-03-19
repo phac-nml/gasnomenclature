@@ -10,7 +10,7 @@ process LOCIDEX_CONCAT {
     input:
     path(input_profile, stageAs: "?/*") // [profiles1.tsv, profiles2.tsv, ..., profilesn.tsv]
     path(input_error,   stageAs: "?/*") // [error_report1.csv, error_report2.csv, ... , error_reportn.csv]
-    val input_tag                       // makes output unique and denotes the item as the reference or query to preven name collision
+    val input_tag                       // makes output unique and denotes the item as the reference or query to prevent name collision
     val input_count
 
     output:

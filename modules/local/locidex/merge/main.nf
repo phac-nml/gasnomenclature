@@ -12,7 +12,7 @@ process LOCIDEX_MERGE {
 
     input:
     path input_values // [file(sample1), file(sample2), file(sample3), etc...]
-    val  input_tag    // makes output unique and denotes the item as the reference or query to preven name collision
+    val  input_tag    // makes output unique and denotes the item as the reference or query to prevent name collision
     val  merge_tsv
 
     output:
