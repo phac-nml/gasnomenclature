@@ -1,19 +1,15 @@
 {
     "files": {
         "global": [
-            
+            {
+                "path": "locidex/concat/reference/MLST_error_report_concat_ref.csv"
+            },
+            {
+                "path": "locidex/concat/query/MLST_error_report_concat_query.csv"
+            }
         ],
         "samples": {
-            "sample2": [
-                {
-                    "path": "input/sample2_error_report.csv"
-                }
-            ],
-            "sampleR": [
-                {
-                    "path": "input/sampleR_error_report.csv"
-                }
-            ]
+
         }
     },
     "metadata": {

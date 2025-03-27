@@ -11,9 +11,9 @@ The directories listed below will be created in the results directory after the 
 - cluster: The cluster file required by GAS_call.
 - distances: Distances between genomes from [profile_dists](https://github.com/phac-nml/profile_dists).
 - filter: The cluster addresses from only the query samples.
-- input: An error report that is only generated when sample IDs and MLST JSON files do not match.
-- locidex: The merged MLST JSON files for reference and query samples.
+- locidex: The merged MLST JSON files for reference and query samples, and their error reports for MLST profiles changed.
 - pipeline_info: Information about the pipeline's execution
+- write: A CSV of the sample names to be used for each MLST (profiles) for locidex
 
 The IRIDA Next-compliant JSON output file will be named `iridanext.output.json.gz` and will be written to the top-level of the results directory. This file is compressed using GZIP and conforms to the [IRIDA Next JSON output specifications](https://github.com/phac-nml/pipeline-standards#42-irida-next-json).
 
@@ -21,8 +21,7 @@ The IRIDA Next-compliant JSON output file will be named `iridanext.output.json.g
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
-- [Input assure](#input-assure) - Performs a validation check on the samplesheet inputs to ensure that the sampleID precisely matches the MLST JSON key and enforces necessary changes where discrepancies are found.
-- [Locidex merge](#locidex-merge) - Merges MLST profile JSON files into a single profiles file for reference and query samples.
+- [Locidex merge](#locidex-merge) - Merges MLST profile JSON files into a single profiles file for reference and query samples. Performs a validation check on the samplesheet inputs to ensure that the sampleID precisely matches the MLST JSON key and enforces necessary changes where discrepancies are found. When split into multiple processes a concatation occurs after.
 - [Append profiles](#append-profiles) - Appends additional MLST profile information to reference samples if provided by user.
 - [Profile dists](#profile-dists) - Computes pairwise distances between genomes using MLST allele differences.
 - [Cluster file](#cluster-file) - Generates the expected_clusters.txt file from reference sample addresses for use in GAS_call.
@@ -31,17 +30,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Filter query](#filter-query) - Filters and generates a csv file containing only the cluster addresses for query samples.
 - [IRIDA Next Output](#irida-next-output) - Generates a JSON output file that is compliant with IRIDA Next
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
-
-### Input Assure
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `input/`
-  - `sampleID_error_report.csv`
-  - `sampleID.mlst.json.gz`
-
-</details>
+- [Write](#write) - Takes the input samplesheet and converts to CSV to be passed to locidex merge.
 
 ### Locidex merge
 
@@ -49,8 +38,19 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 <summary>Output files</summary>
 
 - `locidex/merge/`
-  - reference samples: `reference/merged_ref/merged_profiles_ref.tsv`
-  - query samples: `query/merged_value/merged_profile_value.tsv`
+  - reference samples:
+    - `reference/merged_ref/profile.tsv`
+    - `reference/merged_ref/MLST_error_report.csv`
+  - query samples:
+    - `reference/merged_query/profile.tsv`
+    - `reference/merged_query/MLST_error_report.csv`
+- `locidex/concat/`
+  - reference samples:
+    - `reference/merged_ref/profile_concat_ref.tsv`
+    - `reference/merged_ref/MLST_error_report_concat_ref.csv`
+  - query samples:
+    - `reference/merged_query/profile_concat_query.tsv`
+    - `reference/merged_query/MLST_error_report_concat_query.csv`
 
 </details>
 
@@ -134,3 +134,11 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 </details>
 
 [Nextflow](https://www.nextflow.io/docs/latest/tracing.html) provides excellent functionality for generating various reports relevant to the running and execution of the pipeline. This will allow you to troubleshoot errors with the running of the pipeline, and also provide you with other information such as launch commands, run times and resource usage.
+
+### Write
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `write/`
+  - `results.csv`

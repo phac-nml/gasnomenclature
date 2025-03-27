@@ -6,24 +6,23 @@ process LOCIDEX_MERGE {
     fair true
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-    "docker.io/mwells14/locidex:0.2.3" :
-    task.ext.override_configured_container_registry != false ? 'docker.io/mwells14/locidex:0.2.3' :
-    'mwells14/locidex:0.2.3' }"
+        'https://depot.galaxyproject.org/singularity/locidex%3A0.3.0--pyhdfd78af_0' :
+        'biocontainers/locidex:0.3.0--pyhdfd78af_0' }"
+
 
     input:
     path input_values // [file(sample1), file(sample2), file(sample3), etc...]
-    val input_tag // makes output unique and denotes the item as the reference or query to preven name collision
+    val  input_tag    // makes output unique and denotes the item as the reference or query to prevent name collision
+    val  merge_tsv
 
     output:
-    path("${combined_dir}/*.tsv"), emit: combined_profiles
-    path "versions.yml", emit: versions
+    path("${input_tag}/profile.tsv"),           emit: combined_profiles
+    path("${input_tag}/MLST_error_report.csv"), emit: combined_error_report
+    path "versions.yml",           emit: versions
 
     script:
-    combined_dir = "merged_${input_tag}"
     """
-    locidex merge -i ${input_values.join(' ')} -o ${combined_dir}
-
-    mv ${combined_dir}/*.tsv ${combined_dir}/merged_profiles_${input_tag}.tsv
+    locidex merge -i ${input_values.join(' ')} -o ${input_tag} -p ${merge_tsv}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
