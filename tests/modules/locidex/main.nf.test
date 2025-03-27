@@ -26,13 +26,13 @@ nextflow_process {
             assert process.success
 
             // Check the merged profiles files
-            def actual_profile = path("$baseDir/tests/data/profiles/expected-profile1.tsv")
-            def expected_profile = path("$launchDir/cluster_results/locidex/profile_concat_ref.tsv")
+            def expected_profile = path("$baseDir/tests/data/profiles/expected-profile1.tsv")
+            def actual_profile = path("$launchDir/cluster_results/locidex/profile_concat_ref.tsv")
             assert actual_profile.text == expected_profile.text
 
             // Check the merged profiles files
-            def actual_error_report = path("$baseDir/tests/data/error_reports/MLST_error_report_merged.tsv")
-            def expected_error_report = path("$launchDir/cluster_results/locidex/MLST_error_report_concat_ref.csv")
+            def expected_error_report = path("$baseDir/tests/data/error_reports/MLST_error_report_merged.tsv")
+            def actual_error_report = path("$launchDir/cluster_results/locidex/MLST_error_report_concat_ref.csv")
             assert actual_error_report.text == expected_error_report.text
         }
     }
@@ -60,13 +60,13 @@ nextflow_process {
             assert process.success
 
             // Check the merged profiles files
-            def actual_profile = path("$baseDir/tests/data/profiles/expected_merge_profile_1_of_2.tsv")
-            def expected_profile = path("$launchDir/cluster_results/locidex/profile_concat_ref.tsv")
+            def expected_profile = path("$baseDir/tests/data/profiles/expected_merge_profile_1_of_2.tsv")
+            def actual_profile = path("$launchDir/cluster_results/locidex/profile_concat_ref.tsv")
             assert actual_profile.text == expected_profile.text
 
             // Check the merged profiles files
-            def actual_error_report = path("$baseDir/tests/data/error_reports/MLST_error_report_1_of_2.tsv")
-            def expected_error_report = path("$launchDir/cluster_results/locidex/MLST_error_report_concat_ref.csv")
+            def expected_error_report = path("$baseDir/tests/data/error_reports/MLST_error_report_1_of_2.tsv")
+            def actual_error_report = path("$launchDir/cluster_results/locidex/MLST_error_report_concat_ref.csv")
             assert actual_error_report.text == expected_error_report.text
         }
     }
