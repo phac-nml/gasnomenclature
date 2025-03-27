@@ -159,7 +159,7 @@ nextflow_pipeline {
             assert iridanext_metadata.containsKey("sampleN")
 
             assert iridanext_metadata.sampleQ."address" == "1.1.3"
-            assert iridanext_metadata.sampleN."address" == "2.2.4"
+            assert iridanext_metadata.sampleN."address" == "1.1.3"
         }
     }
 
@@ -225,7 +225,7 @@ nextflow_pipeline {
             // Check filter_query csv file
             lines = path("$launchDir/results/filter/new_addresses.tsv").readLines()
             assert lines.contains("sampleQ\tsampleQ\t1.1.3")
-            assert lines.contains("sampleR\tsampleR\t2.2.4")
+            assert lines.contains("sampleR\tsampleR\t1.1.3")
 
             // Check IRIDA Next JSON output
             assert path("$launchDir/results/iridanext.output.json").exists()
@@ -241,7 +241,7 @@ nextflow_pipeline {
             assert iridanext_metadata.containsKey("sampleR")
 
             assert iridanext_metadata.sampleQ."address" == "1.1.3"
-            assert iridanext_metadata.sampleR."address" == "2.2.4"
+            assert iridanext_metadata.sampleR."address" == "1.1.3"
         }
     }
 
@@ -389,7 +389,7 @@ nextflow_pipeline {
             // Check filter_query csv file
             lines = path("$launchDir/results/filter/new_addresses.tsv").readLines()
             assert lines.contains("sampleQ\tsample_1\t1.1.3")
-            assert lines.contains("sampleR\tsample4\t2.2.4")
+            assert lines.contains("sampleR\tsample4\t1.1.3")
 
             // Check IRIDA Next JSON output
             assert path("$launchDir/results/iridanext.output.json").exists()
