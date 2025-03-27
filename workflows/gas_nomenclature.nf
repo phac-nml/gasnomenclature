@@ -23,7 +23,7 @@ include { loadIridaSampleIds                                   } from 'plugin/nf
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 
-include { WRITE_METADATA                         } from '../modules/local/write/main'
+include { WRITE_METADATA                         } from "../modules/local/write/main"
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_REF     } from "../modules/local/locidex/merge/main"
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_QUERY   } from "../modules/local/locidex/merge/main"
 include { LOCIDEX_CONCAT as LOCIDEX_CONCAT_QUERY } from "../modules/local/locidex/concat/main"
@@ -97,11 +97,11 @@ workflow GAS_NOMENCLATURE {
             tuple(meta, mlst_file)}.loadIridaSampleIds()
 
 
+
     // Collect samples without address
     profiles = input.branch {
         query: !it[0].address
     }
-
     // Prepare reference and query TSV files for LOCIDEX_MERGE
     reference_values = input.collect{ meta, mlst -> mlst}
     query_values = profiles.query.collect{ meta, mlst -> mlst }
