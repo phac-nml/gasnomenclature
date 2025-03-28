@@ -158,13 +158,8 @@ nextflow_pipeline {
             assert iridanext_metadata.containsKey("sampleQ")
             assert iridanext_metadata.containsKey("sampleN")
 
-<<<<<<< HEAD
             assert iridanext_metadata.sampleQ."genomic_address_name" == "1.1.3"
-            assert iridanext_metadata.sampleN."genomic_address_name" == "2.2.4"
-=======
-            assert iridanext_metadata.sampleQ."address" == "1.1.3"
-            assert iridanext_metadata.sampleN."address" == "1.1.3"
->>>>>>> dev
+            assert iridanext_metadata.sampleN."genomic_address_name" == "1.1.3"
         }
     }
 
@@ -245,13 +240,9 @@ nextflow_pipeline {
             assert iridanext_metadata.containsKey("sampleQ")
             assert iridanext_metadata.containsKey("sampleR")
 
-<<<<<<< HEAD
             assert iridanext_metadata.sampleQ."genomic_address_name" == "1.1.3"
-            assert iridanext_metadata.sampleR."genomic_address_name" == "2.2.4"
-=======
-            assert iridanext_metadata.sampleQ."address" == "1.1.3"
-            assert iridanext_metadata.sampleR."address" == "1.1.3"
->>>>>>> dev
+            assert iridanext_metadata.sampleR."genomic_address_name" == "1.1.3"
+
         }
     }
 
