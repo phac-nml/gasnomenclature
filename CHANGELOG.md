@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Changes`
 
 - The output from `locidex merge` now includes a `MLST_error_report.csv` similar to that of `input_assure` (this file is also passed to `concat`)
+- The input/output for `gasnomenclature` "address" has been changed to "genomic_address_name"
 
 ## [0.4.0] - 2025/03/03
 
