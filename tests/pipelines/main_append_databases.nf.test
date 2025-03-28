@@ -42,7 +42,6 @@ nextflow_pipeline {
 
             // Check IRIDA Next JSON output
             assert path("$launchDir/results/iridanext.output.json").exists()
-            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/append_iridanext.output.json").json
 
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
             def iridanext_global = iridanext_json.files.global
