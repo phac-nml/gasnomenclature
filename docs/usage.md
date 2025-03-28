@@ -14,44 +14,44 @@ You will need to create a samplesheet with information about the samples you wou
 
 ### Full Standard Samplesheet
 
-The input samplesheet must contain three columns: `sample`, `mlst_alleles`, `address`. The sample names within a samplesheet should be unique. All other columns will be ignored.
+The input samplesheet must contain three columns: `sample`, `mlst_alleles`, `genomic_address_name`. The sample names within a samplesheet should be unique. All other columns will be ignored.
 
-A final samplesheet file consisting of mlst_alleles and addresses may look something like the one below:
+A final samplesheet file consisting of mlst_alleles and genomic address names may look something like the one below:
 
 ```csv title="samplesheet.csv"
-sample,mlst_alleles,address
+sample,mlst_alleles,genomic_address_name
 sampleA,sampleA.mlst.json.gz,1.1.1
 sampleQ,sampleQ.mlst.json.gz,2.2.2
 sampleF,sampleF.mlst.json,
 ```
 
-| Column         | Description                                                                                                                                                                                                                                                                                                                      |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`       | Custom sample name. Samples should be unique within a samplesheet.                                                                                                                                                                                                                                                               |
-| `mlst_alleles` | Full path to an MLST JSON file describing the loci/alleles for the sample against some MLST scheme. A way to generate this file is via [locidex](https://github.com/phac-nml/locidex). File can optionally be gzipped and must have the extension ".mlst.json", ".mlst.subtyping.json" (or with an additional ".gz" if gzipped). |
-| `address`      | Hierarchal clustering address. If left empty for a sample, the pipeline will assign a cluster address.                                                                                                                                                                                                                           |
+| Column                 | Description                                                                                                                                                                                                                                                                                                                      |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sample`               | Custom sample name. Samples should be unique within a samplesheet.                                                                                                                                                                                                                                                               |
+| `mlst_alleles`         | Full path to an MLST JSON file describing the loci/alleles for the sample against some MLST scheme. A way to generate this file is via [locidex](https://github.com/phac-nml/locidex). File can optionally be gzipped and must have the extension ".mlst.json", ".mlst.subtyping.json" (or with an additional ".gz" if gzipped). |
+| `genomic_address_name` | Hierarchal clustering address. If left empty for a sample, the pipeline will assign a cluster genomic address.                                                                                                                                                                                                                   |
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 
 ### IRIDA-Next Optional Samplesheet Configuration
 
-`gasnomenclature` accepts the [IRIDA-Next](https://github.com/phac-nml/irida-next) format for samplesheets which contain the following columns: `sample`, `sample_name`, `mlst_alleles`, `address`. The sample IDs within a samplesheet should be unique.
+`gasnomenclature` accepts the [IRIDA-Next](https://github.com/phac-nml/irida-next) format for samplesheets which contain the following columns: `sample`, `sample_name`, `mlst_alleles`, `genomic_address_name`. The sample IDs within a samplesheet should be unique.
 
-A final samplesheet file consisting of mlst_alleles and addresses may look something like the one below:
+A final samplesheet file consisting of mlst_alleles and genomic address names may look something like the one below:
 
 ```csv title="samplesheet.csv"
-sample,sample_name,mlst_alleles,address
+sample,sample_name,mlst_alleles,genomic_address_name
 sampleA,S1,sampleA.mlst.json.gz,1.1.1
 sampleQ,S2,sampleQ.mlst.json.gz,2.2.2
 sampleF,,sampleF.mlst.json,
 ```
 
-| Column         | Description                                                                                                                                                                                                                                                                                 |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`       | Custom sample name. Samples should be unique within a samplesheet.                                                                                                                                                                                                                          |
-| `sample_name`  | Sample name used in outputs (filenames and sample names)                                                                                                                                                                                                                                    |
-| `mlst_alleles` | Full path to an MLST JSON file describing the loci/alleles for the sample against some MLST scheme. A way to generate this file is via [locidex]. File can optionally be gzipped and must have the extension ".mlst.json", ".mlst.subtyping.json" (or with an additional ".gz" if gzipped). |
-| `address`      | Hierarchal clustering address. If left empty for a sample, the pipeline will assign a cluster address.                                                                                                                                                                                      |
+| Column                 | Description                                                                                                                                                                                                                                                                                 |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sample`               | Custom sample name. Samples should be unique within a samplesheet.                                                                                                                                                                                                                          |
+| `sample_name`          | Sample name used in outputs (filenames and sample names)                                                                                                                                                                                                                                    |
+| `mlst_alleles`         | Full path to an MLST JSON file describing the loci/alleles for the sample against some MLST scheme. A way to generate this file is via [locidex]. File can optionally be gzipped and must have the extension ".mlst.json", ".mlst.subtyping.json" (or with an additional ".gz" if gzipped). |
+| `genomic_address_name` | Hierarchal clustering address. If left empty for a sample, the pipeline will assign a cluster genomic address.                                                                                                                                                                              |
 
 An [example samplesheet](tests/data/samplesheets/samplesheet-sample_name.csv) has been provided with the pipeline.
 

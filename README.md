@@ -10,11 +10,11 @@ A brief overview of the usage of this pipeline is given below. Detailed document
 
 The input to the pipeline is a standard sample sheet (passed as `--input samplesheet.csv`) that looks like:
 
-| sample  | mlst_alleles      | address |
-| ------- | ----------------- | ------- |
-| sampleA | sampleA.mlst.json | 1.1.1   |
-| sampleQ | sampleQ.mlst.json |         |
-| sampleF | sampleF.mlst.json |         |
+| sample  | mlst_alleles      | genomic_address_name |
+| ------- | ----------------- | -------------------- |
+| sampleA | sampleA.mlst.json | 1.1.1                |
+| sampleQ | sampleQ.mlst.json |                      |
+| sampleF | sampleF.mlst.json |                      |
 
 The structure of this file is defined in [assets/schema_input.json](assets/schema_input.json). Validation of the sample sheet is performed by [nf-validation](https://nextflow-io.github.io/nf-validation/).
 
@@ -148,7 +148,7 @@ An example of the what the contents of the IRIDA Next JSON file looks like for t
     "metadata": {
         "samples": {
             "sampleQ": {
-                "address": "1.1.3"
+                "genomic_address_name": "1.1.3"
             }
         }
     }
