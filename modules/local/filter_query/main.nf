@@ -1,5 +1,5 @@
 process FILTER_QUERY {
-    tag "Filter New Query Addresses"
+    tag "Filter New Query Genomic Address Services"
     label 'process_single'
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -23,7 +23,7 @@ process FILTER_QUERY {
     def out_extension = out_format == "tsv" ? 'tsv' : 'csv'
 
     """
-    # Filter the query samples only; keep only the 'id' and 'address' columns
+    # Filter the query samples only; keep only the 'id' and 'genomic_address_name' columns
     csvtk cut -t -f 2 ${query_ids} > query_list.txt # Need to use the second column to pull meta.id because there is no header
     csvtk add-header ${query_ids} -t -n irida_id,id > id.txt
     csvtk grep \\
@@ -32,7 +32,7 @@ process FILTER_QUERY {
         -P query_list.txt \\
         --delimiter "${delimiter}" \\
         --out-delimiter "${out_delimiter}" | \\
-    csvtk cut -t -f id,address > tmp.tsv
+    csvtk cut -t -f id,address | csvtk rename -t -T -f address -n genomic_address_name > tmp.tsv
     csvtk join -t -f id id.txt tmp.tsv > ${outputFile}.${out_extension}
 
     cat <<-END_VERSIONS > versions.yml

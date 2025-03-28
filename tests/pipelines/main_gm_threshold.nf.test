@@ -152,7 +152,7 @@ nextflow_pipeline {
             assert iridanext_global.sort { it.path} == path("$baseDir/tests/data/irida/thresh1_iridanext.output.json").json.files.global.sort { it.path}
 
             assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
-            assert iridanext_metadata.sampleQ."address" == "2"
+            assert iridanext_metadata.sampleQ."genomic_address_name" == "2"
         }
     }
 
@@ -210,7 +210,7 @@ nextflow_pipeline {
             assert iridanext_global.sort { it.path} == path("$baseDir/tests/data/irida/thresh1.0_iridanext.output.json").json.files.global.sort { it.path}
 
             assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
-            assert iridanext_metadata.sampleQ."address" == "2.2"
+            assert iridanext_metadata.sampleQ."genomic_address_name" == "2.2"
         }
     }
 }

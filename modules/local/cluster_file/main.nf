@@ -13,11 +13,11 @@ process CLUSTER_FILE {
     def delimiter = java.util.regex.Pattern.quote(params.gm_delimiter)
 
     // Determine the maximum number of levels to set the header requirements for each pipeline run
-    int maxLevels = meta.collect { sample -> sample.address.split(delimiter).size() }.max() ?: 0
+    int maxLevels = meta.collect { sample -> sample.genomic_address_name.split(delimiter).size() }.max() ?: 0
 
     // Verify each sample is consistent with $maxLevels
     meta.each { sample ->
-        int level = sample.address.split(delimiter).size()
+        int level = sample.genomic_address_name.split(delimiter).size()
         if (level != maxLevels) {
             error ("Inconsistent levels found: expected $maxLevels levels but found $level levels in ${sample.id}")
         }
@@ -30,8 +30,8 @@ process CLUSTER_FILE {
     // Iterate over each sample in the meta list and pull the relevant information for the text file
     meta.each { sample ->
         def id = sample.id
-        def address = sample.address
-        def line = [id, address]
+        def genomic_address_name = sample.genomic_address_name
+        def line = [id, genomic_address_name]
         outputLines << line.join("\t")
     }
 
