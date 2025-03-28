@@ -29,8 +29,8 @@
                 "type": "string",
                 "pattern": "^\\d+(\\.\\d+)*$",
                 "meta": ["genomic_address_name"],
-                "description": "The loci-based typing identifier (genomic address service) of the sample",
-                "error_message": "Invalid loci-based typing identifier. Please ensure that the genomic address service follows the correct format, consisting of one or more digits separated by periods. Example of a valid identifier: '1.1.1'. Please review and correct the entry"
+                "description": "The loci-based typing identifier (genomic address name) of the sample",
+                "error_message": "Invalid loci-based typing identifier. Please ensure that the genomic address name follows the correct format, consisting of one or more digits separated by periods. Example of a valid identifier: '1.1.1'. Please review and correct the entry"
             }
         },
         "required": ["sample", "mlst_alleles"]
