@@ -9,9 +9,9 @@ nextflow_process {
             process {
                 """
                 input[0] = Channel.of(
-                    [['id':'sample1', 'address':'1.1.1'],
-                    ['id':'sample2', 'address':'1.1.1'],
-                    ['id':'sample3', 'address':'1.1.2']]
+                    [['id':'sample1', 'genomic_address_name':'1.1.1'],
+                    ['id':'sample2', 'genomic_address_name':'1.1.1'],
+                    ['id':'sample3', 'genomic_address_name':'1.1.2']]
                     )
                 """
             }
@@ -38,9 +38,9 @@ nextflow_process {
             process {
                 """
                 input[0] = Channel.of(
-                    [['id':'sample1', 'address':'1.1.1'],
-                    ['id':'sample2', 'address':'1.1.1'],
-                    ['id':'sample3', 'address':'1.2']]
+                    [['id':'sample1', 'genomic_address_name':'1.1.1'],
+                    ['id':'sample2', 'genomic_address_name':'1.1.1'],
+                    ['id':'sample3', 'genomic_address_name':'1.2']]
                     )
                 """
             }

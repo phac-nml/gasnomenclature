@@ -25,12 +25,12 @@
                 "pattern": "^\\S+\\.mlst(\\.subtyping)?\\.json(\\.gz)?$",
                 "errorMessage": "MLST JSON file from locidex report, cannot contain spaces and must have the extension: '.mlst.json', '.mlst.json.gz', '.mlst.subtyping.json', or 'mlst.subtyping.json.gz'"
             },
-            "address": {
+            "genomic_address_name": {
                 "type": "string",
                 "pattern": "^\\d+(\\.\\d+)*$",
-                "meta": ["address"],
-                "description": "The loci-based typing identifier (address) of the sample",
-                "error_message": "Invalid loci-based typing identifier. Please ensure that the address follows the correct format, consisting of one or more digits separated by periods. Example of a valid identifier: '1.1.1'. Please review and correct the entry"
+                "meta": ["genomic_address_name"],
+                "description": "The loci-based typing identifier (genomic address name) of the sample",
+                "error_message": "Invalid loci-based typing identifier. Please ensure that the genomic address name follows the correct format, consisting of one or more digits separated by periods. Example of a valid identifier: '1.1.1'. Please review and correct the entry"
             }
         },
         "required": ["sample", "mlst_alleles"]

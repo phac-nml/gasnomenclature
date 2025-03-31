@@ -98,9 +98,9 @@ workflow GAS_NOMENCLATURE {
 
 
 
-    // Collect samples without address
+    // Collect samples without genomic_address_name
     profiles = input.branch {
-        query: !it[0].address
+        query: !it[0].genomic_address_name
     }
     // Prepare reference and query TSV files for LOCIDEX_MERGE
     reference_values = input.collect{ meta, mlst -> mlst}
@@ -199,10 +199,9 @@ workflow GAS_NOMENCLATURE {
 
     // Generate the expected_clusters.txt file from the addresses of the provided reference samples
     clusters = input.filter { meta, file ->
-        meta.address != null
+        meta.genomic_address_name != null
     }.collect { meta, file ->
         meta }
-
     initial_clusters = CLUSTER_FILE(clusters)
 
     // Run APPEND_CLUSTERS if db_clusters parameter provided

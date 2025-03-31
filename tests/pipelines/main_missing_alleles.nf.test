@@ -54,7 +54,7 @@ nextflow_pipeline {
             assert iridanext_global.sort { it.path} == path("$baseDir/tests/data/irida/missing_iridanext.output.json").json.files.global.sort { it.path}
 
             assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
-            assert iridanext_metadata.sampleQ."address" == "1"
+            assert iridanext_metadata.sampleQ."genomic_address_name" == "1"
         }
     }
 
@@ -95,7 +95,7 @@ nextflow_pipeline {
             assert iridanext_global.sort { it.path} == path("$baseDir/tests/data/irida/count-missing_iridanext.output.json").json.files.global.sort { it.path}
 
             assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
-            assert iridanext_metadata.sampleQ."address" == "3"
+            assert iridanext_metadata.sampleQ."genomic_address_name" == "3"
         }
     }
 
@@ -137,7 +137,7 @@ nextflow_pipeline {
             assert iridanext_global.sort { it.path} == path("$baseDir/tests/data/irida/loci-missing_iridanext.output.json").json.files.global.sort { it.path}
 
             assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
-            assert iridanext_metadata.sampleQ."address" == "3"
+            assert iridanext_metadata.sampleQ."genomic_address_name" == "3"
         }
     }
 

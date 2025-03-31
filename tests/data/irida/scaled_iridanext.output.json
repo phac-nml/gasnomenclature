@@ -15,7 +15,7 @@
     "metadata": {
         "samples": {
             "sampleQ": {
-                "address": "1.2.3"
+                "genomic_address_name": "1.2.3"
             }
         }
     }
