@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Update the `locidex` version to [0.3.0](https://pypi.org/project/locidex/0.3.0/). `locidex merge` has integrated the functionality of module `input_assure`. [PR 45](https://github.com/phac-nml/gasnomenclature/pull/45)
 - Update the `genomic address service` version to [0.1.5](https://github.com/phac-nml/genomic_address_service/releases/tag/0.1.5). Changes how multiple samples without address are assigned addresses when belonging to the same cluster. [PR 47](https://github.com/phac-nml/gasnomenclature/pull/47) [PR 48](https://github.com/phac-nml/gasnomenclature/pull/47)
-- Update the `profile_dist` version to [1.0.4](https://github.com/phac-nml/profile_dists/releases/tag/1.0.4).
+- Update the `profile_dist` version to [1.0.4](https://github.com/phac-nml/profile_dists/releases/tag/1.0.4). [PR 50](https://github.com/phac-nml/gasnomenclature/pull/50)
 
 ### `Enhancement`
 
