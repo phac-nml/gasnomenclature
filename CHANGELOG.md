@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.5.0] - 2025/03/dd
+## [0.5.0] - 2025/04/02
 
 ### `Updated`
 
@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The output from `locidex merge` now includes a `MLST_error_report.csv` similar to that of `input_assure` (this file is also passed to `concat`). [PR 45](https://github.com/phac-nml/gasnomenclature/pull/45)
 - The input/output for `gasnomenclature` "address" has been changed to "genomic_address_name". [PR 48](https://github.com/phac-nml/gasnomenclature/pull/48)
+- Modified the UI for running the pipeline in IRIDA-Next web interface. [PR 50](https://github.com/phac-nml/gasnomenclature/pull/50)
 
 ## [0.4.0] - 2025/03/03
 
