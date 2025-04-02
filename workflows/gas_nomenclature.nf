@@ -5,6 +5,7 @@
 */
 
 include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet  } from 'plugin/nf-validation'
+include { loadIridaSampleIds                                   } from 'plugin/nf-iridanext'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -22,17 +23,17 @@ include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet  } from 'plugin/nf
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 
-include { INPUT_ASSURE                          } from "../modules/local/input_assure/main"
-include { LOCIDEX_MERGE as LOCIDEX_MERGE_REF    } from "../modules/local/locidex/merge/main"
-include { LOCIDEX_MERGE as LOCIDEX_MERGE_QUERY  } from "../modules/local/locidex/merge/main"
+include { WRITE_METADATA                         } from "../modules/local/write/main"
+include { LOCIDEX_MERGE as LOCIDEX_MERGE_REF     } from "../modules/local/locidex/merge/main"
+include { LOCIDEX_MERGE as LOCIDEX_MERGE_QUERY   } from "../modules/local/locidex/merge/main"
 include { LOCIDEX_CONCAT as LOCIDEX_CONCAT_QUERY } from "../modules/local/locidex/concat/main"
 include { LOCIDEX_CONCAT as LOCIDEX_CONCAT_REF   } from "../modules/local/locidex/concat/main"
-include { APPEND_PROFILES                       } from "../modules/local/append_profiles/main"
-include { PROFILE_DISTS                         } from "../modules/local/profile_dists/main"
-include { CLUSTER_FILE                          } from "../modules/local/cluster_file/main"
-include { APPEND_CLUSTERS                       } from "../modules/local/append_clusters/main"
-include { GAS_CALL                              } from "../modules/local/gas/call/main"
-include { FILTER_QUERY                          } from "../modules/local/filter_query/main"
+include { APPEND_PROFILES                        } from "../modules/local/append_profiles/main"
+include { PROFILE_DISTS                          } from "../modules/local/profile_dists/main"
+include { CLUSTER_FILE                           } from "../modules/local/cluster_file/main"
+include { APPEND_CLUSTERS                        } from "../modules/local/append_clusters/main"
+include { GAS_CALL                               } from "../modules/local/gas/call/main"
+include { FILTER_QUERY                           } from "../modules/local/filter_query/main"
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -68,6 +69,7 @@ def prepareFilePath(String filep, GString debug_msg){
     return return_path // empty value if file argument is null
 }
 
+
 workflow GAS_NOMENCLATURE {
 
     ch_versions = Channel.empty()
@@ -92,22 +94,16 @@ workflow GAS_NOMENCLATURE {
             }
             // Add the ID to the set of processed IDs
             processedIDs << meta.id
-
-            tuple(meta, mlst_file)}
-
+            tuple(meta, mlst_file)}.loadIridaSampleIds()
 
 
-    // Ensure meta.id and mlst_file keys match; generate error report for samples where id ≠ key
-    input_assure = INPUT_ASSURE(input)
-    ch_versions = ch_versions.mix(input_assure.versions)
 
-    // Collect samples without address
-    profiles = input_assure.result.branch {
-        query: !it[0].address
+    // Collect samples without genomic_address_name
+    profiles = input.branch {
+        query: !it[0].genomic_address_name
     }
-
     // Prepare reference and query TSV files for LOCIDEX_MERGE
-    reference_values = input_assure.result.collect{ meta, mlst -> mlst}
+    reference_values = input.collect{ meta, mlst -> mlst}
     query_values = profiles.query.collect{ meta, mlst -> mlst }
 
     // Query Map: Use to return meta.irida_id to output for mapping to IRIDA-Next JSON
@@ -115,26 +111,59 @@ workflow GAS_NOMENCLATURE {
         tuple(meta.id, meta.irida_id)
     }.collect()
 
-    // LOCIDEX modules
-    ref_tag = Channel.value("ref")
-    query_tag = Channel.value("value")
+    // LOCIDEX BLOCK
+    // Two Steps: 1) Merge and 2) Concatenate
 
-    // Divide up inputs into groups for LOCIDEX
+    // LOCIDEX value channels
+    ref_tag   = Channel.value("ref")                                             // Seperate the reference samples
+    query_tag = Channel.value("query")                                           // Seperate the query samples
+
+    // Create channels to be used to create a MLST override file (below)
+    SAMPLE_HEADER = "sample"
+    MLST_HEADER   = "mlst_alleles"
+    metadata_headers = Channel.of(
+        tuple(
+            SAMPLE_HEADER, MLST_HEADER)
+        )
+
+    metadata_rows = input.map{
+        def meta = it[0]
+        def mlst = it[1]
+        tuple(meta.id,mlst)
+    }.toList()
+
+    merge_tsv = WRITE_METADATA (metadata_headers, metadata_rows).results.first() // MLST override file value channel
+
+    // LOCIDEX Step 1:
+    // Merge MLST files into TSV
+
+    // 1A) Divide up inputs into groups for LOCIDEX
     grouped_ref_files = reference_values.flatten() //
-        .buffer( size: params.batch_size, remainder: true ).view()
+        .buffer( size: params.batch_size, remainder: true )
     grouped_query_files = query_values.flatten() //
         .buffer( size: params.batch_size, remainder: true )
 
-    // Run LOCIDEX on grouped query and reference samples
-    references = LOCIDEX_MERGE_REF(grouped_ref_files, ref_tag)
+    // 1B) Run LOCIDEX on grouped query and reference samples
+    references = LOCIDEX_MERGE_REF(grouped_ref_files, ref_tag, merge_tsv)
     ch_versions = ch_versions.mix(references.versions)
 
-    queries = LOCIDEX_MERGE_QUERY(query_values, query_tag)
+    queries = LOCIDEX_MERGE_QUERY(query_values, query_tag, merge_tsv)
     ch_versions = ch_versions.mix(queries.versions)
 
-    // Combine the LOCIDEX outputs together into single file
-    combined_references = LOCIDEX_CONCAT_REF(references.combined_profiles.collect(), ref_tag, references.combined_profiles.collect().flatten().count())
-    combined_queries = LOCIDEX_CONCAT_QUERY(queries.combined_profiles.collect(), query_tag, queries.combined_profiles.collect().flatten().count())
+    // LOCIDEX Step 2:
+    // Combine outputs
+
+    // LOCIDEX Concatenate References
+    combined_references = LOCIDEX_CONCAT_REF(references.combined_profiles.collect(),
+        references.combined_error_report.collect(),
+        ref_tag,
+        references.combined_profiles.collect().flatten().count())
+
+    // LOCIDEX Concatenate References
+    combined_queries = LOCIDEX_CONCAT_QUERY(queries.combined_profiles.collect(),
+        queries.combined_error_report.collect(),
+        query_tag,
+        queries.combined_profiles.collect().flatten().count())
 
     // Run APPEND_PROFILES if db_profiles parameter provided; update merged_profiles and merged_queries
     if(params.db_profiles) {
@@ -170,10 +199,9 @@ workflow GAS_NOMENCLATURE {
 
     // Generate the expected_clusters.txt file from the addresses of the provided reference samples
     clusters = input.filter { meta, file ->
-        meta.address != null
+        meta.genomic_address_name != null
     }.collect { meta, file ->
         meta }
-
     initial_clusters = CLUSTER_FILE(clusters)
 
     // Run APPEND_CLUSTERS if db_clusters parameter provided

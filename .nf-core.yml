@@ -1,6 +1,6 @@
 repository_type: pipeline
 
-nf_core_version: "3.0.1"
+nf_core_version: "3.2.0"
 lint:
   files_exist:
     - assets/nf-core-gasnomenclature_logo_light.png
@@ -8,6 +8,8 @@ lint:
     - docs/images/nf-core-gasnomenclature_logo_light.png
     - .github/workflows/awstest.yml
     - .github/workflows/awsfulltest.yml
+    - conf/igenomes_ignored.config
+    - ro-crate-metadata.json
   files_unchanged:
     - assets/sendmail_template.txt
     - assets/email_template.html
@@ -30,6 +32,7 @@ lint:
     - params.max_cpus
     - params.max_memory
     - params.max_time
+    - nf-schema
   readme:
     - nextflow_badge
 

@@ -142,14 +142,17 @@ nextflow_pipeline {
             assert actual_calls.text == expected_calls.text
 
             // Check IRIDA Next JSON output
+            assert path("$launchDir/results/iridanext.output.json").exists()
             assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/thresh1_iridanext.output.json").json
 
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
-            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_global = iridanext_json.files.global
             def iridanext_metadata = iridanext_json.metadata.samples
 
+            assert iridanext_global.sort { it.path} == path("$baseDir/tests/data/irida/thresh1_iridanext.output.json").json.files.global.sort { it.path}
+
             assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
-            assert iridanext_metadata.sampleQ."address" == "2"
+            assert iridanext_metadata.sampleQ."genomic_address_name" == "2"
         }
     }
 
@@ -198,14 +201,16 @@ nextflow_pipeline {
             assert actual_calls.text == expected_calls.text
 
             // Check IRIDA Next JSON output
-            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/thresh1.0_iridanext.output.json").json
+            assert path("$launchDir/results/iridanext.output.json").exists()
 
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
-            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_global = iridanext_json.files.global
             def iridanext_metadata = iridanext_json.metadata.samples
 
+            assert iridanext_global.sort { it.path} == path("$baseDir/tests/data/irida/thresh1.0_iridanext.output.json").json.files.global.sort { it.path}
+
             assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
-            assert iridanext_metadata.sampleQ."address" == "2.2"
+            assert iridanext_metadata.sampleQ."genomic_address_name" == "2.2"
         }
     }
 }

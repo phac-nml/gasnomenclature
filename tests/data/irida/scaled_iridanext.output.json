@@ -1,12 +1,21 @@
 {
     "files": {
-        "global": [],
-        "samples": {}
+        "global": [
+            {
+                "path": "locidex/concat/reference/MLST_error_report_concat_ref.csv"
+            },
+            {
+                "path": "locidex/concat/query/MLST_error_report_concat_query.csv"
+            }
+        ],
+        "samples": {
+
+        }
     },
     "metadata": {
         "samples": {
             "sampleQ": {
-                "address": "1.2.3"
+                "genomic_address_name": "1.2.3"
             }
         }
     }
