@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## dev
+
+### `Fix`
+
+- Query samples now put into batches for `LOCIDEX_MERGE` fixing the issue [#52](https://github.com/phac-nml/gasnomenclature/issues/52). [PR #53](https://github.com/phac-nml/gasnomenclature/pull/53)
+
 ## [0.5.0] - 2025/04/02
 
 ### `Updated`
