@@ -27,10 +27,10 @@ process APPEND_PROFILES {
     disk_usage() {
         echo "Disk usage"
         df -h
-        echo "Usage in $PWD"
-        du -sh $PWD
+        echo "Usage in \$PWD"
+        du -sh \$PWD
         echo "End disk usage"
-        echo "TMPDIR=${TMPDIR:=empty}, TEMPDIR=${TEMPDIR:=empty}, TMP=${TMP:=empty}"
+        echo "TMPDIR=\${TMPDIR:=empty}, TEMPDIR=\${TEMPDIR:=empty}, TMP=\${TMP:=empty}"
     }
 
     # Compare headers and exit if they do not match
