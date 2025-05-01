@@ -3,6 +3,16 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1] - 2025/05/01
+
+### `Updated`
+
+- Increased resources from `process_single` to `process_high` for `APPEND_PROFILES` step in order to handle very large collections of background profiles. [PR #55](https://github.com/phac-nml/gasnomenclature/pull/55).
+
+### `Fix`
+
+- Query samples now put into batches for `LOCIDEX_MERGE` fixing the issue [#52](https://github.com/phac-nml/gasnomenclature/issues/52). [PR #53](https://github.com/phac-nml/gasnomenclature/pull/53)
+
 ## [0.5.0] - 2025/04/02
 
 ### `Updated`
@@ -107,3 +117,4 @@ Initial release of the Genomic Address Nomenclature pipeline to be used to assig
 [0.3.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.3.1
 [0.4.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.4.0
 [0.5.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.5.0
+[0.5.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.5.1

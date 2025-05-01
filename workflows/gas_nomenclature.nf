@@ -147,7 +147,7 @@ workflow GAS_NOMENCLATURE {
     references = LOCIDEX_MERGE_REF(grouped_ref_files, ref_tag, merge_tsv)
     ch_versions = ch_versions.mix(references.versions)
 
-    queries = LOCIDEX_MERGE_QUERY(query_values, query_tag, merge_tsv)
+    queries = LOCIDEX_MERGE_QUERY(grouped_query_files, query_tag, merge_tsv)
     ch_versions = ch_versions.mix(queries.versions)
 
     // LOCIDEX Step 2:
@@ -159,7 +159,7 @@ workflow GAS_NOMENCLATURE {
         ref_tag,
         references.combined_profiles.collect().flatten().count())
 
-    // LOCIDEX Concatenate References
+    // LOCIDEX Concatenate Queries
     combined_queries = LOCIDEX_CONCAT_QUERY(queries.combined_profiles.collect(),
         queries.combined_error_report.collect(),
         query_tag,
@@ -177,7 +177,7 @@ workflow GAS_NOMENCLATURE {
         merged_references = combined_references.combined_profiles
     }
 
-    merged_queries = queries.combined_profiles
+    merged_queries = combined_queries.combined_profiles
 
     // PROFILE DISTS processes
 
