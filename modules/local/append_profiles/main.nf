@@ -30,7 +30,7 @@ process APPEND_PROFILES {
         echo "Usage in $PWD"
         du -sh $PWD
         echo "End disk usage"
-        echo "TMPDIR=$TMPDIR, TEMPDIR=$TEMPDIR, TMP=$TMP"
+        echo "TMPDIR=${TMPDIR:=empty}, TEMPDIR=${TEMPDIR:=empty}, TMP=${TMP:=empty}"
     }
 
     # Compare headers and exit if they do not match
