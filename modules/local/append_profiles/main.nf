@@ -25,12 +25,12 @@ process APPEND_PROFILES {
     }
 
     disk_usage() {
+        echo
         echo "Disk usage"
         df -h
-        echo "Usage in \$PWD"
-        du -sh \$PWD
+        du -sh \$PWD/*
+        du -sh /tmp
         echo "End disk usage"
-        echo "TMPDIR=\${TMPDIR:=empty}, TEMPDIR=\${TEMPDIR:=empty}, TMP=\${TMP:=empty}"
     }
 
     # Compare headers and exit if they do not match
@@ -53,7 +53,7 @@ process APPEND_PROFILES {
     disk_usage
 
     # Combine profiles from both the reference and database into a single file
-    csvtk concat -t reference_profiles_source.tsv additional_profiles_source.tsv | csvtk sort -t -k sample_id > combined_profiles.tsv
+    /usr/bin/time -v csvtk concat -t reference_profiles_source.tsv additional_profiles_source.tsv | csvtk sort -t -k sample_id > combined_profiles.tsv
     echo "Created combined_profiles.tsv"
     disk_usage
     col_num=\$(awk '{print NF}' combined_profiles.tsv | sort -nu | tail -n 1)
