@@ -57,7 +57,7 @@ process APPEND_PROFILES {
     disk_usage
 
     # Combine profiles from both the reference and database into a single file
-    /usr/bin/time -v csvtk concat -t reference_profiles_source.tsv additional_profiles_source.tsv | csvtk sort -t -k sample_id > combined_profiles.tsv
+    /usr/bin/time -v csvtk concat -t reference_profiles_source.tsv additional_profiles_source.tsv | /usr/bin/time -v csvtk sort -t -k sample_id > combined_profiles.tsv
     echo "Created combined_profiles.tsv"
     disk_usage
     col_num=\$(awk '{print NF}' combined_profiles.tsv | sort -nu | tail -n 1)
