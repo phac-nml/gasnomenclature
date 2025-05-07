@@ -201,7 +201,9 @@ workflow GAS_NOMENCLATURE {
     clusters = input.filter { meta, file ->
         meta.genomic_address_name != null
     }.collect { meta, file ->
-        meta }
+        meta
+    }.ifEmpty([])
+
     initial_clusters = CLUSTER_FILE(clusters)
 
     // Run APPEND_CLUSTERS if db_clusters parameter provided
