@@ -138,10 +138,20 @@ workflow GAS_NOMENCLATURE {
     // Merge MLST files into TSV
 
     // 1A) Divide up inputs into groups for LOCIDEX
+    def refbatchCounter = 1
     grouped_ref_files = reference_values.flatten() //
         .buffer( size: params.batch_size, remainder: true )
+        .map { batch ->
+        def index = refbatchCounter++
+        return tuple(index, batch)
+    }
+    def quebatchCounter = 1
     grouped_query_files = query_values.flatten() //
         .buffer( size: params.batch_size, remainder: true )
+        .map { batch ->
+        def index = quebatchCounter++
+        return tuple(index, batch)
+    }
 
     // 1B) Run LOCIDEX on grouped query and reference samples
     references = LOCIDEX_MERGE_REF(grouped_ref_files, ref_tag, merge_tsv)
@@ -246,7 +256,6 @@ workflow GAS_NOMENCLATURE {
 
     new_addresses = FILTER_QUERY(query_irida_ids, called_data.distances, "tsv", "tsv")
     ch_versions = ch_versions.mix(new_addresses.versions)
-
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )

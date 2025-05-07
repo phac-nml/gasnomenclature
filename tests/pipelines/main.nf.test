@@ -18,12 +18,12 @@ nextflow_pipeline {
             assert path("$launchDir/results").exists()
 
             // Check merged profiles
-            def actual_profile_ref = path("$launchDir/results/locidex/merge/ref/profile.tsv")
+            def actual_profile_ref = path("$launchDir/results/locidex/merge/ref/profile_1.tsv")
             def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected-profile1.tsv")
             assert actual_profile_ref.text == expected_profile_tsv.text
 
             // Check query profiles
-            def actual_profile_query = path("$launchDir/results/locidex/merge/query/profile.tsv")
+            def actual_profile_query = path("$launchDir/results/locidex/merge/query/profile_1.tsv")
             def expected_profile_query_tsv = path("$baseDir/tests/data/profiles/expected-profile2.tsv")
             assert actual_profile_query.text == expected_profile_query_tsv.text
 
@@ -73,12 +73,12 @@ nextflow_pipeline {
             assert path("$launchDir/results").exists()
 
             // Check merged profiles
-            def actual_profile_ref = path("$launchDir/results/locidex/merge/ref/profile.tsv")
+            def actual_profile_ref = path("$launchDir/results/locidex/merge/ref/profile_1.tsv")
             def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected-profile_scaled1.tsv")
             assert actual_profile_ref.text == expected_profile_tsv.text
 
             // Check query profiles
-            def actual_profile_query = path("$launchDir/results/locidex/merge/query/profile.tsv")
+            def actual_profile_query = path("$launchDir/results/locidex/merge/query/profile_1.tsv")
             def expected_profile_query_tsv = path("$baseDir/tests/data/profiles/expected-profile_scaled2.tsv")
             assert actual_profile_query.text == expected_profile_query_tsv.text
 
@@ -121,12 +121,12 @@ nextflow_pipeline {
             assert path("$launchDir/results").exists()
 
             // Check merged profiles
-            def actual_profile_ref = path("$launchDir/results/locidex/merge/ref/profile.tsv")
+            def actual_profile_ref = path("$launchDir/results/locidex/merge/ref/profile_1.tsv")
             def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected-profile_queries1.tsv")
             assert actual_profile_ref.text == expected_profile_tsv.text
 
             // Check query profiles
-            def actual_profile_query = path("$launchDir/results/locidex/merge/query/profile.tsv")
+            def actual_profile_query = path("$launchDir/results/locidex/merge/query/profile_1.tsv")
             def expected_profile_query_tsv = path("$baseDir/tests/data/profiles/expected-profile_queries2.tsv")
             assert actual_profile_query.text == expected_profile_query_tsv.text
 
@@ -320,7 +320,7 @@ nextflow_pipeline {
             def lines = []
 
             // Ensure that the error_reports are generated for query and reference samples
-            lines = path("$launchDir/results/locidex/merge/ref/MLST_error_report.csv").readLines()
+            lines = path("$launchDir/results/locidex/merge/ref/MLST_error_report_1.csv").readLines()
             assert lines.contains('sample3,"[\'extra_key\', \'sample4\']",No key in the MLST JSON file (sample3_multiplekeys_nomatch.mlst.json) matches the specified sample ID \'sample3\'. The first key \'extra_key\' has been forcefully changed to \'sample3\' and all other keys have been removed.')
 
             // Check filtered query csv results
