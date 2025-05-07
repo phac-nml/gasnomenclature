@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated genomic_address_service to version 0.2.0. [PR #59](https://github.com/phac-nml/gasnomenclature/pull/59)
 - Added software_versions.yml to pipeline output. [PR #59](https://github.com/phac-nml/gasnomenclature/pull/59)
 
+### Fixed
+
+- A bug where addresses weren't called when no samples in the input sample sheet had addressess already assigned. [PR #60](https://github.com/phac-nml/gasnomenclature/pull/60)
+
 ## [0.5.1] - 2025/05/01
 
 ### `Updated`
