@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fix`
 
-- Fixed issue [#57](https://github.com/phac-nml/gasnomenclature/issues/57), where `LOCIDEX_MERGE` had file collisions in pubDir due to multiple processes generating the same file name (when split into multiple batches). [PR #57](https://github.com/phac-nml/gasnomenclature/pull/57)
+- Fixed issue [#57](https://github.com/phac-nml/gasnomenclature/issues/57), where `LOCIDEX_MERGE` had file collisions in pubDir due to multiple processes generating the same file name (when split into multiple batches). [PR #58](https://github.com/phac-nml/gasnomenclature/pull/58)
 
 ## [0.5.1] - 2025/05/01
 
