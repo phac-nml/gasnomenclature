@@ -111,7 +111,7 @@ nextflow_pipeline {
 
         then {
             assert workflow.failed
-            assert (workflow.stdout =~ /Genomic address too short for samples: \[\'sample1\', \'sample2\', \'sample3\'\] based on \{0: 1\.0\}/).find()
+            assert workflow.stdout.join("\n").contains("genomic address length is incorrect for samples ['sample1', 'sample2', 'sample3']; expected length (1) based on thresholds")
         }
     }
 
@@ -143,7 +143,7 @@ nextflow_pipeline {
 
             // Check IRIDA Next JSON output
             assert path("$launchDir/results/iridanext.output.json").exists()
-            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/thresh1_iridanext.output.json").json
+            assert path("$launchDir/results/iridanext.output.json").json.sort() == path("$baseDir/tests/data/irida/thresh1_iridanext.output.json").json.sort()
 
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
             def iridanext_global = iridanext_json.files.global
@@ -170,7 +170,7 @@ nextflow_pipeline {
 
         then {
             assert workflow.failed
-            assert (workflow.stdout =~ /Genomic address too short for samples: \[\'sample1\', \'sample2\', \'sample3\'\] based on \{0: 1\.0, 1: 0\.0\}/).find()
+            assert workflow.stdout.join("\n").contains("genomic address length is incorrect for samples ['sample1', 'sample2', 'sample3']; expected length (2) based on thresholds")
         }
     }
 
