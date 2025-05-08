@@ -1,3 +1,3 @@
 sample,mlst_alleles,genomic_address_name
-E,/home/eric/projects/gasnomenclature/tests/data/reports/E.mlst.json,
-F,/home/eric/projects/gasnomenclature/tests/data/reports/F.mlst.json,
+E,https://raw.githubusercontent.com/phac-nml/gasnomenclature/refs/heads/dev/tests/data/reports/E.mlst.json,
+F,https://raw.githubusercontent.com/phac-nml/gasnomenclature/refs/heads/dev/tests/data/reports/F.mlst.json,
