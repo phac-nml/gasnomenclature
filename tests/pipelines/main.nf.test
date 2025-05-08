@@ -18,12 +18,12 @@ nextflow_pipeline {
             assert path("$launchDir/results").exists()
 
             // Check merged profiles
-            def actual_profile_ref = path("$launchDir/results/locidex/merge/ref/profile.tsv")
+            def actual_profile_ref = path("$launchDir/results/locidex/merge/ref/profile_1.tsv")
             def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected-profile1.tsv")
             assert actual_profile_ref.text == expected_profile_tsv.text
 
             // Check query profiles
-            def actual_profile_query = path("$launchDir/results/locidex/merge/query/profile.tsv")
+            def actual_profile_query = path("$launchDir/results/locidex/merge/query/profile_1.tsv")
             def expected_profile_query_tsv = path("$baseDir/tests/data/profiles/expected-profile2.tsv")
             assert actual_profile_query.text == expected_profile_query_tsv.text
 
@@ -73,12 +73,12 @@ nextflow_pipeline {
             assert path("$launchDir/results").exists()
 
             // Check merged profiles
-            def actual_profile_ref = path("$launchDir/results/locidex/merge/ref/profile.tsv")
+            def actual_profile_ref = path("$launchDir/results/locidex/merge/ref/profile_1.tsv")
             def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected-profile_scaled1.tsv")
             assert actual_profile_ref.text == expected_profile_tsv.text
 
             // Check query profiles
-            def actual_profile_query = path("$launchDir/results/locidex/merge/query/profile.tsv")
+            def actual_profile_query = path("$launchDir/results/locidex/merge/query/profile_1.tsv")
             def expected_profile_query_tsv = path("$baseDir/tests/data/profiles/expected-profile_scaled2.tsv")
             assert actual_profile_query.text == expected_profile_query_tsv.text
 
@@ -121,12 +121,12 @@ nextflow_pipeline {
             assert path("$launchDir/results").exists()
 
             // Check merged profiles
-            def actual_profile_ref = path("$launchDir/results/locidex/merge/ref/profile.tsv")
+            def actual_profile_ref = path("$launchDir/results/locidex/merge/ref/profile_1.tsv")
             def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected-profile_queries1.tsv")
             assert actual_profile_ref.text == expected_profile_tsv.text
 
             // Check query profiles
-            def actual_profile_query = path("$launchDir/results/locidex/merge/query/profile.tsv")
+            def actual_profile_query = path("$launchDir/results/locidex/merge/query/profile_1.tsv")
             def expected_profile_query_tsv = path("$baseDir/tests/data/profiles/expected-profile_queries2.tsv")
             assert actual_profile_query.text == expected_profile_query_tsv.text
 
@@ -320,7 +320,7 @@ nextflow_pipeline {
             def lines = []
 
             // Ensure that the error_reports are generated for query and reference samples
-            lines = path("$launchDir/results/locidex/merge/ref/MLST_error_report.csv").readLines()
+            lines = path("$launchDir/results/locidex/merge/ref/MLST_error_report_1.csv").readLines()
             assert lines.contains('sample3,"[\'extra_key\', \'sample4\']",No key in the MLST JSON file (sample3_multiplekeys_nomatch.mlst.json) matches the specified sample ID \'sample3\'. The first key \'extra_key\' has been forcefully changed to \'sample3\' and all other keys have been removed.')
 
             // Check filtered query csv results
@@ -403,6 +403,52 @@ nextflow_pipeline {
         }
     }
 
+    test("Testing when batch size is used for LOCIDEX_MERGE"){
+        // Downstream of LOCIDEX_MERGE, the batch size is used to split the input into smaller chunks.
+        // This is useful for large datasets to increase parallelism and reduce memory usage.
+
+        tag "batch-size"
+
+        when{
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet-batchsize.csv"
+                outdir = "results"
+                batch_size = 1
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+
+            // Check that LOCIDEX_MERGE was called with the correct batch size
+            // Profiles for reference samples
+            def lines1 = path("$launchDir/results/locidex/merge/ref/profile_1.tsv").readLines()
+            assert lines1.contains("sampleQ\t1\t2\t1")
+            def lines2 = path("$launchDir/results/locidex/merge/ref/profile_2.tsv").readLines()
+            assert lines2.contains("sampleP\t1\t1\t1")
+            def lines3 = path("$launchDir/results/locidex/merge/ref/profile_3.tsv").readLines()
+            assert lines3.contains("sample2\t1\t1\t1")
+            def lines4 = path("$launchDir/results/locidex/merge/ref/profile_4.tsv").readLines()
+            assert lines4.contains("sample3\t1\t1\t2")
+            // Profiles for query samples (same as the equivalent reference sample)
+            def lines1_query = path("$launchDir/results/locidex/merge/query/profile_1.tsv").readLines()
+            assert lines1_query == lines1
+
+            def lines2_query = path("$launchDir/results/locidex/merge/query/profile_2.tsv").readLines()
+            assert lines2_query == lines2
+
+            // Error reports
+            // Only error report for sampleP should have content to check`
+            def error_report = path("$launchDir/results/locidex/merge/ref/MLST_error_report_2.csv").readLines()
+            assert error_report.contains("sampleP,[\'sample1\'],sampleP ID and JSON key in sample1.mlst.json DO NOT MATCH. The 'sample1' key in sample1.mlst.json has been forcefully changed to 'sampleP': User should manually check input files to ensure correctness.")
+            // Error report for query sampleP should be the same as the reference sample
+            def error_report_query = path("$launchDir/results/locidex/merge/query/MLST_error_report_2.csv").readLines()
+            assert error_report_query == error_report
+        }
+    }
+
+
     test("No addresses in sample sheet"){
         // The data is based off the GAS walkthrough here:
         // https://github.com/phac-nml/genomic_address_service/blob/b440df37e56bd07e8661a14407de82bed4944fc4/docs/overview.md#gas-call-clustering-new-samples
@@ -423,14 +469,14 @@ nextflow_pipeline {
             assert path("$launchDir/results").exists()
 
             // Merged Profiles: Reference
-            def profile_reference = path("$launchDir/results/locidex/merge/ref/profile.tsv")
+            def profile_reference = path("$launchDir/results/locidex/merge/ref/profile_1.tsv")
             assert profile_reference.text.contains("sample_id\tl1\tl2\tl3\tl4\tl5\tl6\tl7\tl8")
             assert profile_reference.text.contains("E\t1\t2\t3\t1\t1\t1\t2\t1")
             assert profile_reference.text.contains("F\t2\t2\t1\t1\t1\t1\t1\t3")
             assert profile_reference.text.split("\n").size() == 3
 
             // Merged Profiles: Query
-            def profile_query = path("$launchDir/results/locidex/merge/query/profile.tsv")
+            def profile_query = path("$launchDir/results/locidex/merge/query/profile_1.tsv")
             assert profile_query.text.contains("sample_id\tl1\tl2\tl3\tl4\tl5\tl6\tl7\tl8")
             assert profile_query.text.contains("E\t1\t2\t3\t1\t1\t1\t2\t1")
             assert profile_query.text.contains("F\t2\t2\t1\t1\t1\t1\t1\t3")
