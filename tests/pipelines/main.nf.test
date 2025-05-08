@@ -448,6 +448,7 @@ nextflow_pipeline {
         }
     }
 
+
     test("No addresses in sample sheet"){
         // The data is based off the GAS walkthrough here:
         // https://github.com/phac-nml/genomic_address_service/blob/b440df37e56bd07e8661a14407de82bed4944fc4/docs/overview.md#gas-call-clustering-new-samples
@@ -460,6 +461,12 @@ nextflow_pipeline {
                 db_clusters = "$baseDir/tests/data/clusters/cluster_walkthrough.tsv"
                 gm_thresholds = "5,3,0"
                 outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
 
             // Merged Profiles: Reference
             def profile_reference = path("$launchDir/results/locidex/merge/ref/profile.tsv")
@@ -526,7 +533,6 @@ nextflow_pipeline {
 
             assert iridanext_metadata.containsKey("F")
             assert iridanext_metadata.F.genomic_address_name == "1.5.6"
-            }
         }
     }
 }
