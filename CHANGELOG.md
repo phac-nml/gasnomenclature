@@ -5,7 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-### Updated
+### `Updated`
 
 - Updated profile_dists to version 1.0.5. [PR #59](https://github.com/phac-nml/gasnomenclature/pull/59)
 - Updated genomic_address_service to version 0.2.0. [PR #59](https://github.com/phac-nml/gasnomenclature/pull/59)
@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fix`
 
+- A bug where addresses weren't called when no samples in the input sample sheet had addressess already assigned. [PR #60](https://github.com/phac-nml/gasnomenclature/pull/60)
 - Fixed issue [#57](https://github.com/phac-nml/gasnomenclature/issues/57), where `LOCIDEX_MERGE` had file collisions in pubDir due to multiple processes generating the same file name (when split into multiple batches). [PR #58](https://github.com/phac-nml/gasnomenclature/pull/58)
 
 ## [0.5.1] - 2025/05/01

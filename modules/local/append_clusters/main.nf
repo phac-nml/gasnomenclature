@@ -30,7 +30,7 @@ process APPEND_CLUSTERS {
     init_splits=\$(head -n 1 initial-cluster-address.txt | awk -F '${params.gm_delimiter}' '{print NF}')
     add_splits=\$( head -n 1 additional-cluster-address.txt | awk -F '${params.gm_delimiter}' '{print NF}')
 
-    if [ "\$init_splits" != "\$add_splits" ]; then
+    if [ "\$init_splits" != "\$add_splits" ] && [ "\$init_splits" != "" ]; then
         echo "Error: Genomic address service levels do not match between initial_clusters and --db_clusters."
         exit 1
     fi
