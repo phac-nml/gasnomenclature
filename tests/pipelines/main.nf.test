@@ -448,4 +448,85 @@ nextflow_pipeline {
         }
     }
 
+    test("No addresses in sample sheet"){
+        // The data is based off the GAS walkthrough here:
+        // https://github.com/phac-nml/genomic_address_service/blob/b440df37e56bd07e8661a14407de82bed4944fc4/docs/overview.md#gas-call-clustering-new-samples
+        tag "pipeline_no_addresses_in_samplesheet"
+
+        when{
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet_walkthrough.csv"
+                db_profiles = "$baseDir/tests/data/profiles/profiles_walkthrough.tsv"
+                db_clusters = "$baseDir/tests/data/clusters/cluster_walkthrough.tsv"
+                gm_thresholds = "5,3,0"
+                outdir = "results"
+
+            // Merged Profiles: Reference
+            def profile_reference = path("$launchDir/results/locidex/merge/ref/profile.tsv")
+            assert profile_reference.text.contains("sample_id\tl1\tl2\tl3\tl4\tl5\tl6\tl7\tl8")
+            assert profile_reference.text.contains("E\t1\t2\t3\t1\t1\t1\t2\t1")
+            assert profile_reference.text.contains("F\t2\t2\t1\t1\t1\t1\t1\t3")
+            assert profile_reference.text.split("\n").size() == 3
+
+            // Merged Profiles: Query
+            def profile_query = path("$launchDir/results/locidex/merge/query/profile.tsv")
+            assert profile_query.text.contains("sample_id\tl1\tl2\tl3\tl4\tl5\tl6\tl7\tl8")
+            assert profile_query.text.contains("E\t1\t2\t3\t1\t1\t1\t2\t1")
+            assert profile_query.text.contains("F\t2\t2\t1\t1\t1\t1\t1\t3")
+            assert profile_query.text.split("\n").size() == 3
+
+            // Check computed pairwise distances
+            def pairwise_distances = path("$launchDir/results/distances/results.text")
+            assert pairwise_distances.text.contains("query_id\tref_id\tdist")
+            assert pairwise_distances.text.contains("E\tE\t0")
+            assert pairwise_distances.text.contains("E\tA\t3")
+            assert pairwise_distances.text.contains("E\tB\t4")
+            assert pairwise_distances.text.contains("E\tC\t4")
+            assert pairwise_distances.text.contains("E\tF\t4")
+            assert pairwise_distances.text.contains("E\tD\t8")
+            assert pairwise_distances.text.contains("F\tF\t0")
+            assert pairwise_distances.text.contains("F\tB\t3")
+            assert pairwise_distances.text.contains("F\tA\t4")
+            assert pairwise_distances.text.contains("F\tE\t4")
+            assert pairwise_distances.text.contains("F\tC\t5")
+            assert pairwise_distances.text.contains("F\tD\t6")
+            assert pairwise_distances.text.split("\n").size() == 13
+
+            // Verify cluster file
+            def cluster = path("$launchDir/results/cluster/clusters.tsv")
+            assert cluster.text.contains("id\taddress")
+            assert cluster.text.split("\n").size() == 1
+
+            // Check called clusters
+            def called_clusters = path("$launchDir/results/call/Called/results.text")
+            assert called_clusters.text.contains("id\taddress")
+            assert called_clusters.text.contains("A\t1.1.1")
+            assert called_clusters.text.contains("B\t1.1.2")
+            assert called_clusters.text.contains("C\t1.2.3")
+            assert called_clusters.text.contains("D\t2.3.4")
+            assert called_clusters.text.contains("E\t1.4.5")
+            assert called_clusters.text.contains("F\t1.5.6")
+            assert called_clusters.text.split("\n").size() == 7
+
+            // Check IRIDA Next JSON output
+            assert path("$launchDir/results/iridanext.output.json").exists()
+
+            def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_global = iridanext_json.files.global
+            def iridanext_metadata = iridanext_json.metadata.samples
+
+            assert iridanext_global.findAll { it.path == "pipeline_info/software_versions.yml" }.size() == 1
+            assert iridanext_global.findAll { it.path == "locidex/concat/query/MLST_error_report_concat_query.csv" }.size() == 1
+            assert iridanext_global.findAll { it.path == "locidex/concat/reference/MLST_error_report_concat_ref.csv" }.size() == 1
+
+            assert iridanext_metadata.size() == 2
+
+            assert iridanext_metadata.containsKey("E")
+            assert iridanext_metadata.E.genomic_address_name == "1.4.5"
+
+            assert iridanext_metadata.containsKey("F")
+            assert iridanext_metadata.F.genomic_address_name == "1.5.6"
+            }
+        }
+    }
 }
