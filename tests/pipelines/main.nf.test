@@ -556,14 +556,14 @@ nextflow_pipeline {
             assert path("$launchDir/results").exists()
 
             // Merged Profiles: Reference
-            def profile_reference = path("$launchDir/results/locidex/merge/ref/profile.tsv")
+            def profile_reference = path("$launchDir/results/locidex/merge/ref/profile_1.tsv")
             assert profile_reference.text.contains("sample_id\tl1\tl2\tl3\tl4\tl5\tl6\tl7\tl8")
             assert profile_reference.text.contains("E\t1\t2\t3\t1\t1\t1\t2\t1")
             assert profile_reference.text.contains("F\t2\t2\t1\t1\t1\t1\t1\t3")
             assert profile_reference.text.split("\n").size() == 3
 
             // Merged Profiles: Query
-            def profile_query = path("$launchDir/results/locidex/merge/query/profile.tsv")
+            def profile_query = path("$launchDir/results/locidex/merge/query/profile_1.tsv")
             assert profile_query.text.contains("sample_id\tl1\tl2\tl3\tl4\tl5\tl6\tl7\tl8")
             assert profile_query.text.contains("E\t1\t2\t3\t1\t1\t1\t2\t1")
             assert profile_query.text.contains("F\t2\t2\t1\t1\t1\t1\t1\t3")
