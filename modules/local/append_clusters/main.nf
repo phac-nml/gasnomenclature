@@ -19,7 +19,7 @@ process APPEND_CLUSTERS {
     get_address() {
         if [[ "\${1##*.}" == "gz" ]]; then
             # This was seemingly NOT causing 141 pipe bash errors (unlike append_profiles), but this fix was added in anticpation of the error coming up:
-            zcat "\$1" | awk 'NR>1 {print \$2}'
+            zcat "\$1" | awk 'NR>1 {print \$2}' || { ec="\$?"; [ "\$ec" -eq 141 ] && true || (exit "\$ec"); }
         else
             awk 'NR>1 {print \$2}' "\$1"
         fi
