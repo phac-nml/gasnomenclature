@@ -39,11 +39,11 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 - `locidex/merge/`
   - reference samples:
-    - `reference/merged_ref/profile.tsv`
-    - `reference/merged_ref/MLST_error_report.csv`
+    - `reference/merged_ref/profile_{n}.tsv`
+    - `reference/merged_ref/MLST_error_report_{n}.csv`
   - query samples:
-    - `reference/merged_query/profile.tsv`
-    - `reference/merged_query/MLST_error_report.csv`
+    - `reference/merged_query/profile_{n}.tsv`
+    - `reference/merged_query/MLST_error_report_{n}.csv`
 - `locidex/concat/`
   - reference samples:
     - `reference/merged_ref/profile_concat_ref.tsv`
