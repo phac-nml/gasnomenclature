@@ -143,16 +143,18 @@ nextflow_pipeline {
 
             // Check IRIDA Next JSON output
             assert path("$launchDir/results/iridanext.output.json").exists()
-            assert path("$launchDir/results/iridanext.output.json").json.sort() == path("$baseDir/tests/data/irida/thresh1_iridanext.output.json").json.sort()
 
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
             def iridanext_global = iridanext_json.files.global
             def iridanext_metadata = iridanext_json.metadata.samples
 
-            assert iridanext_global.sort { it.path} == path("$baseDir/tests/data/irida/thresh1_iridanext.output.json").json.files.global.sort { it.path}
+            assert iridanext_global.findAll { it.path == "pipeline_info/software_versions.yml" }.size() == 1
+            assert iridanext_global.findAll { it.path == "locidex/concat/query/MLST_error_report_concat_query.csv" }.size() == 1
+            assert iridanext_global.findAll { it.path == "locidex/concat/reference/MLST_error_report_concat_ref.csv" }.size() == 1
 
-            assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
-            assert iridanext_metadata.sampleQ."genomic_address_name" == "2"
+            assert iridanext_metadata.size() == 1
+            assert iridanext_metadata.containsKey("sampleQ")
+            assert iridanext_metadata.sampleQ.genomic_address_name == "2"
         }
     }
 

@@ -18,7 +18,8 @@ process APPEND_PROFILES {
     # Function to get the header of the files, handling gzipped files
     get_header() {
         if [ "\${1##*.}" = "gz" ]; then
-            zcat "\$1" | head -n 1
+            # This was causing 141 pipe bash errors. A fix was added to catch this error:
+            zcat "\$1" | head -n 1 || { ec="\$?"; [ "\$ec" -eq 141 ] && true || (exit "\$ec"); }
         else
             head -n 1 "\$1"
         fi
