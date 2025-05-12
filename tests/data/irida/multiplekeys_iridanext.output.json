@@ -2,6 +2,9 @@
     "files": {
         "global": [
             {
+                "path": "pipeline_info/software_versions.yml"
+            },
+            {
                 "path": "locidex/concat/query/MLST_error_report_concat_query.csv"
             },
             {

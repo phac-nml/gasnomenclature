@@ -18,7 +18,8 @@ process APPEND_CLUSTERS {
     # Function to get the first genomic address service line from the files, handling gzipped files
     get_address() {
         if [[ "\${1##*.}" == "gz" ]]; then
-            zcat "\$1" | awk 'NR>1 {print \$2}'
+            # This was seemingly NOT causing 141 pipe bash errors (unlike append_profiles), but this fix was added in anticpation of the error coming up:
+            zcat "\$1" | awk 'NR>1 {print \$2}' || { ec="\$?"; [ "\$ec" -eq 141 ] && true || (exit "\$ec"); }
         else
             awk 'NR>1 {print \$2}' "\$1"
         fi
@@ -30,7 +31,7 @@ process APPEND_CLUSTERS {
     init_splits=\$(head -n 1 initial-cluster-address.txt | awk -F '${params.gm_delimiter}' '{print NF}')
     add_splits=\$( head -n 1 additional-cluster-address.txt | awk -F '${params.gm_delimiter}' '{print NF}')
 
-    if [ "\$init_splits" != "\$add_splits" ]; then
+    if [ "\$init_splits" != "\$add_splits" ] && [ "\$init_splits" != "" ]; then
         echo "Error: Genomic address service levels do not match between initial_clusters and --db_clusters."
         exit 1
     fi

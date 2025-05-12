@@ -3,6 +3,20 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2025/05/12
+
+### `Updated`
+
+- Updated profile_dists to version 1.0.5. [PR #59](https://github.com/phac-nml/gasnomenclature/pull/59)
+- Updated genomic_address_service to version 0.2.0. [PR #59](https://github.com/phac-nml/gasnomenclature/pull/59)
+- Added software_versions.yml to pipeline output. [PR #59](https://github.com/phac-nml/gasnomenclature/pull/59)
+
+### `Fix`
+
+- A bug where addresses weren't called when no samples in the input sample sheet had addressess already assigned. [PR #60](https://github.com/phac-nml/gasnomenclature/pull/60)
+- A bug where large gzipped files would cause pipe errors (141) and then the `append_profiles` process would fail. This would cause the whole pipeline to fail. A fix has been added to prevent this failure from failing the process. [PR #61](https://github.com/phac-nml/gasnomenclature/pull/61)
+- Fixed issue [#57](https://github.com/phac-nml/gasnomenclature/issues/57), where `LOCIDEX_MERGE` had file collisions in pubDir due to multiple processes generating the same file name (when split into multiple batches). [PR #58](https://github.com/phac-nml/gasnomenclature/pull/58)
+
 ## [0.5.1] - 2025/05/01
 
 ### `Updated`
@@ -118,3 +132,4 @@ Initial release of the Genomic Address Nomenclature pipeline to be used to assig
 [0.4.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.4.0
 [0.5.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.5.0
 [0.5.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.5.1
+[0.6.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.6.0

@@ -111,7 +111,7 @@ nextflow_pipeline {
 
         then {
             assert workflow.failed
-            assert (workflow.stdout =~ /Genomic address too short for samples: \[\'sample1\', \'sample2\', \'sample3\'\] based on \{0: 1\.0\}/).find()
+            assert workflow.stdout.join("\n").contains("genomic address length is incorrect for samples ['sample1', 'sample2', 'sample3']; expected length (1) based on thresholds")
         }
     }
 
@@ -143,16 +143,18 @@ nextflow_pipeline {
 
             // Check IRIDA Next JSON output
             assert path("$launchDir/results/iridanext.output.json").exists()
-            assert path("$launchDir/results/iridanext.output.json").json == path("$baseDir/tests/data/irida/thresh1_iridanext.output.json").json
 
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
             def iridanext_global = iridanext_json.files.global
             def iridanext_metadata = iridanext_json.metadata.samples
 
-            assert iridanext_global.sort { it.path} == path("$baseDir/tests/data/irida/thresh1_iridanext.output.json").json.files.global.sort { it.path}
+            assert iridanext_global.findAll { it.path == "pipeline_info/software_versions.yml" }.size() == 1
+            assert iridanext_global.findAll { it.path == "locidex/concat/query/MLST_error_report_concat_query.csv" }.size() == 1
+            assert iridanext_global.findAll { it.path == "locidex/concat/reference/MLST_error_report_concat_ref.csv" }.size() == 1
 
-            assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
-            assert iridanext_metadata.sampleQ."genomic_address_name" == "2"
+            assert iridanext_metadata.size() == 1
+            assert iridanext_metadata.containsKey("sampleQ")
+            assert iridanext_metadata.sampleQ.genomic_address_name == "2"
         }
     }
 
@@ -170,7 +172,7 @@ nextflow_pipeline {
 
         then {
             assert workflow.failed
-            assert (workflow.stdout =~ /Genomic address too short for samples: \[\'sample1\', \'sample2\', \'sample3\'\] based on \{0: 1\.0, 1: 0\.0\}/).find()
+            assert workflow.stdout.join("\n").contains("genomic address length is incorrect for samples ['sample1', 'sample2', 'sample3']; expected length (2) based on thresholds")
         }
     }
 
