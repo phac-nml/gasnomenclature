@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.6.1] - 2025/05/dd
 
 ### `Fix`
+
 - Fix Issue [#64](https://github.com/phac-nml/gasnomenclature/issues/64) by providing a new process `copyFile` to rename duplicate MLST files. [PR #63](https://github.com/phac-nml/gasnomenclature/pull/63)
 - Fix Issue [#63](https://github.com/phac-nml/gasnomenclature/issues/63) changing input type for `merge_tsv`. [PR #63](https://github.com/phac-nml/gasnomenclature/pull/63)
 
