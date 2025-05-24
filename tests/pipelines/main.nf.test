@@ -671,7 +671,7 @@ test("Testing for when there are repeat MLST allele files in multiple batches"){
 
         when{
             params {
-                input = "$baseDir/tests/data/samplesheets/samplesheet-samplename.csv"
+                input = "$baseDir/tests/data/samplesheets/samplesheet-duplicateMLST.csv"
                 outdir = "results"
                 batch_size = 10
             }
