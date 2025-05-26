@@ -3,6 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.1] - 2025/05/26
+
+### `Fix`
+
+- Fix Issue [#64](https://github.com/phac-nml/gasnomenclature/issues/64) by providing a new process `copyFile` to rename duplicate MLST files. [PR #63](https://github.com/phac-nml/gasnomenclature/pull/63)
+- Fix Issue [#63](https://github.com/phac-nml/gasnomenclature/issues/63) changing input type for `merge_tsv`. [PR #63](https://github.com/phac-nml/gasnomenclature/pull/63)
+
+### `Updated`
+
+- Update `profile_dists` to `v.1.0.6`. [PR #63](https://github.com/phac-nml/gasnomenclature/pull/63)
+
 ## [0.6.0] - 2025/05/12
 
 ### `Updated`
@@ -133,3 +144,4 @@ Initial release of the Genomic Address Nomenclature pipeline to be used to assig
 [0.5.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.5.0
 [0.5.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.5.1
 [0.6.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.6.0
+[0.6.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.6.1

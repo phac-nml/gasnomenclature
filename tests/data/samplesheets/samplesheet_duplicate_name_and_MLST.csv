@@ -1,0 +1,5 @@
+sample,sample_name,mlst_alleles,genomic_address_name
+sampleQ,sampleQ,https://raw.githubusercontent.com/phac-nml/gasnomenclature/dev/tests/data/reports/sampleQ.mlst.json,
+sample1,sampleA,https://raw.githubusercontent.com/phac-nml/gasnomenclature/dev/tests/data/reports/sample1.mlst.json,1.1.1
+sample2,sampleA,https://raw.githubusercontent.com/phac-nml/gasnomenclature/dev/tests/data/reports/sample1.mlst.json,1.1.1
+sample3,sampleC,https://raw.githubusercontent.com/phac-nml/gasnomenclature/dev/tests/data/reports/sample3.mlst.json,1.1.2
