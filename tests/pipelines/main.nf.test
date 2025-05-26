@@ -622,7 +622,7 @@ nextflow_pipeline {
             assert iridanext_metadata.F.genomic_address_name == "1.5.6"
         }
     }
-test("Testing for when there are repeat MLST allele files in multiple batches"){
+    test("Testing for when there are repeat MLST allele files in multiple batches"){
         // Previous versions of the pipeline would fail if there were repeat MLST allele files in the samplesheet.
         tag "repeat-mlst"
 
@@ -704,6 +704,42 @@ test("Testing for when there are repeat MLST allele files in multiple batches"){
             // Check called clusters
             def actual_calls = path("$launchDir/results/call/Called/results.text")
             def expected_calls = path("$baseDir/tests/data/called/expected_results_MLST_rename.text")
+            assert actual_calls.text == expected_calls.text
+        }
+    }
+
+    test("Testing for when there are repeat MLST allele files & repeat sample_name"){
+        tag "repeat-mlst-and-name"
+
+        when{
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet_duplicate_name_and_MLST.csv"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+
+            // Check that the COPY_FILE process was called for the correct samples
+            assert path("$launchDir/results/copy/sampleA_sample2_sample1.mlst.json").exists()
+            assert !path("$launchDir/results/copy/sampleQ_sampleQ.mlst.json").exists()
+            assert !path("$launchDir/results/copy/sample1_sample1.mlst.json").exists()
+            assert !path("$launchDir/results/copy/sample3_sample3.mlst.json").exists()
+
+            // The merge_tsv file used in renaming the MLST profiles in locidex merge has the right file paths
+            def merge_tsv_content = path("$launchDir/results/write/results.csv")
+            assert merge_tsv_content.text.split('\n').any { line -> line ==~ /^sampleA_sample2.*\/sampleA_sample2_sample1\.mlst\.json$/} // The file path (minus the work directory)
+
+            // Verify cluster file
+            def actual_cluster = path("$launchDir/results/cluster/clusters.tsv")
+            def expected_cluster = path("$baseDir/tests/data/clusters/clusters_MLST_sample_rename.tsv")
+            assert actual_cluster.text == expected_cluster.text
+
+            // Check called clusters
+            def actual_calls = path("$launchDir/results/call/Called/results.text")
+            def expected_calls = path("$baseDir/tests/data/called/expected_results_MLST_sample_rename.text")
             assert actual_calls.text == expected_calls.text
         }
     }
