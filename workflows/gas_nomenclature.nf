@@ -24,6 +24,7 @@ include { loadIridaSampleIds                                   } from 'plugin/nf
 //
 
 include { WRITE_METADATA                         } from "../modules/local/write/main"
+include { COPY_FILE                              } from "../modules/local/copyFile/main"
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_REF     } from "../modules/local/locidex/merge/main"
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_QUERY   } from "../modules/local/locidex/merge/main"
 include { LOCIDEX_CONCAT as LOCIDEX_CONCAT_QUERY } from "../modules/local/locidex/concat/main"
@@ -74,14 +75,16 @@ workflow GAS_NOMENCLATURE {
 
     ch_versions = Channel.empty()
 
-    // Track processed IDs
-    def processedIDs = [] as Set
+    // Track processed IDs and MLST files
+    def processedIDs  = [] as Set
+    def processedMLST  = [] as Set
 
     // Create a new channel of metadata from a sample sheet
     // NB: `input` corresponds to `params.input` and associated sample sheet schema
-    input = Channel.fromSamplesheet("input")
+    pre_input = Channel.fromSamplesheet("input")
     // and remove non-alphanumeric characters in sample_names (meta.id), whilst also correcting for duplicate sample_names (meta.id)
     .map { meta, mlst_file ->
+            uniqueMLST = true
             if (!meta.id) {
                 meta.id = meta.irida_id
             } else {
@@ -92,11 +95,26 @@ workflow GAS_NOMENCLATURE {
             while (processedIDs.contains(meta.id)) {
                 meta.id = "${meta.id}_${meta.irida_id}"
             }
+            // Check if the MLST file is unique
+            if (processedMLST.contains(mlst_file.baseName)) {
+                uniqueMLST = false
+            }
             // Add the ID to the set of processed IDs
             processedIDs << meta.id
-            tuple(meta, mlst_file)}.loadIridaSampleIds()
+            processedMLST << mlst_file.baseName
+            tuple(meta, mlst_file, uniqueMLST)}.loadIridaSampleIds()
 
-
+    // For the MLST files that are not unique, rename them
+    pre_input
+        .branch { meta, mlst_file, uniqueMLST ->
+            keep: uniqueMLST == true // Keep the unique MLST files as is
+            replace: uniqueMLST == false // Rename the non-unique MLST files to avoid collisions
+        }.set {mlst_file_rename}
+    renamed_input = COPY_FILE(mlst_file_rename.replace)
+    unchanged_input = mlst_file_rename.keep
+        .map { meta, mlst_file, uniqueMLST ->
+            tuple(meta, mlst_file) }
+    input = unchanged_input.mix(renamed_input)
 
     // Collect samples without genomic_address_name
     profiles = input.branch {
