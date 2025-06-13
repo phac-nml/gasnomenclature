@@ -3,11 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6.2] - 2025/06/dd
+## [0.6.2] - 2025/06/13
 
 ### `Updated`
 
-- Update `profile_dists` to `v.1.0.8`. [PR #68(https://github.com/phac-nml/gasnomenclature/pull/68)
+- Update `profile_dists` to `v.1.0.8`. [PR #68](https://github.com/phac-nml/gasnomenclature/pull/68)
 - Updated nf-core linting and some of the nf-core GitHub actions to the latest versions. [PR #68](https://github.com/phac-nml/gasnomenclature/pull/68)
 - Updated nf-core module [custom_dumpsoftwareversions](https://nf-co.re/modules/custom_dumpsoftwareversions/) to latest version (commit `05954dab2ff481bcb999f24455da29a5828af08d`). [PR #68](https://github.com/phac-nml/gasnomenclature/pull/68)
 
