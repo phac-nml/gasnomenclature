@@ -40,4 +40,34 @@ nextflow_process {
 
         }
     }
+    test("Check for self distances when specific samples are provided") {
+        tag "self_distances"
+        when {
+            process {
+                """
+                input[0] = Channel.of(
+                    ["$baseDir/tests/data/profiles/input-selfdistance-profile_query.tsv"])
+                input[1] = Channel.of(
+                    ["$baseDir/tests/data/profiles/input-selfdistance-profile_ref.tsv"])
+                input[2] = []
+                input[3] = []
+                """
+            }
+
+            params {
+                pd_distm = "hamming"
+                outdir = "self_distances"
+            }
+        }
+
+        then {
+            assert process.success
+
+            // Check profile distances
+            assert path("$launchDir/self_distances/distances/results.text").exists()
+            def lines = path("$launchDir/self_distances/distances/results.text").text
+            assert lines.contains("sample1\tsample1\t0") // Self distance should be zero, but in versions of profile_dists before 1.0.6, it was not calculated correctly.
+
+        }
+    }
 }
