@@ -7,13 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Updated`
 
-- Update `profile_dists` to `v.1.0.8`. [PR #67](https://github.com/phac-nml/gasnomenclature/pull/67)
-- Updated nf-core linting and some of the nf-core GitHub actions to the latest versions. [PR #67](https://github.com/phac-nml/gasnomenclature/pull/67)
-- Updated nf-core module [custom_dumpsoftwareversions](https://nf-co.re/modules/custom_dumpsoftwareversions/) to latest version (commit `05954dab2ff481bcb999f24455da29a5828af08d`). [PR #67](https://github.com/phac-nml/gasnomenclature/pull/67)
+- Update `profile_dists` to `v.1.0.8`. [PR #68(https://github.com/phac-nml/gasnomenclature/pull/68)
+- Updated nf-core linting and some of the nf-core GitHub actions to the latest versions. [PR #68](https://github.com/phac-nml/gasnomenclature/pull/68)
+- Updated nf-core module [custom_dumpsoftwareversions](https://nf-co.re/modules/custom_dumpsoftwareversions/) to latest version (commit `05954dab2ff481bcb999f24455da29a5828af08d`). [PR #68](https://github.com/phac-nml/gasnomenclature/pull/68)
 
 ### `Added`
 
-- Added an ubuntu container for the `COPY_FILE` process to ensure bash commands are functional. [PR #67](https://github.com/phac-nml/gasnomenclature/pull/67)
+- Added an ubuntu container for the `COPY_FILE` process to ensure bash commands are functional. [PR #68](https://github.com/phac-nml/gasnomenclature/pull/68)
 
 ## [0.6.1] - 2025/05/26
 
