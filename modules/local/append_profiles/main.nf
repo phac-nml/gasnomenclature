@@ -28,7 +28,8 @@ process APPEND_PROFILES {
     storage_space() {
         echo "\$1: Storage space"
         du -sh "\$PWD"
-        df -h | grep '/mnt'
+        df -h
+        echo ""
     }
 
     storage_space "Begin"
