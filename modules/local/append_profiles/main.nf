@@ -31,7 +31,7 @@ process APPEND_PROFILES {
         df -h | grep '/mnt'
     }
 
-    storage_space("Begin")
+    storage_space "Begin"
 
     # Compare headers and exit if they do not match
     ref_headers=\$(get_header "${reference_profiles}")
@@ -42,13 +42,13 @@ process APPEND_PROFILES {
         exit 1
     fi
 
-    storage_space("After get headers")
+    storage_space "After get headers"
 
     # Add a "source" column to differentiate the reference profiles and additional profiles
     csvtk mutate2 -t -n source -e " 'ref' " ${reference_profiles} > reference_profiles_source.tsv
     csvtk mutate2 -t -n source -e " 'db' " ${additional_profiles} > additional_profiles_source.tsv
 
-    storage_space("Adding ref and db")
+    storage_space "Adding ref and db"
 
     # Combine profiles from both the reference and database into a single file
     csvtk concat -t reference_profiles_source.tsv additional_profiles_source.tsv | csvtk sort -t -k sample_id > combined_profiles.tsv
@@ -57,7 +57,7 @@ process APPEND_PROFILES {
     # Calculate the frequency of each sample_id across both sources
     csvtk freq -t -f sample_id combined_profiles.tsv > sample_counts.tsv
 
-    storage_space("Calculate fequency")
+    storage_space "Calculate fequency"
 
     # For any sample_id that appears in both the reference and database, add a 'db_' prefix to the sample_id from the database
     csvtk join -t -f sample_id combined_profiles.tsv sample_counts.tsv |     csvtk mutate2 -t -n new_sample_id -e '(\$source == "db" && \$frequency > 1) ? "db_" + \$sample_id : \$sample_id' > tmp.txt
@@ -65,6 +65,6 @@ process APPEND_PROFILES {
     csvtk cut -t -f new_sample_id tmp.txt | csvtk rename -t -f new_sample_id -n sample_id > tmp3.txt
     paste tmp3.txt tmp2.txt > profiles_ref.tsv
 
-    storage_space("End")
+    storage_space "End"
     """
 }
