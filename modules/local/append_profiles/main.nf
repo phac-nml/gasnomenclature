@@ -28,6 +28,7 @@ process APPEND_PROFILES {
     storage_space() {
         echo "\$1: Storage space"
         du -sh "\$PWD"
+        du -sh /tmp
         df -h
         echo ""
     }
@@ -52,7 +53,15 @@ process APPEND_PROFILES {
     storage_space "Adding ref and db"
 
     # Combine profiles from both the reference and database into a single file
-    csvtk concat -t reference_profiles_source.tsv additional_profiles_source.tsv | csvtk sort -t -k sample_id > combined_profiles.tsv
+    csvtk concat -t reference_profiles_source.tsv additional_profiles_source.tsv > concat_profiles_tmp.tsv
+
+    storage_space "concat profiles"
+
+    csvtk sort -t -k sample_id concat_profiles_tmp.tsv > combined_profiles.tsv
+    head combined_profiles.tsv | cut -f 1,2,3,4
+
+    storage_space "sort profiles"
+
     col_num=\$(awk '{print NF}' combined_profiles.tsv | sort -nu | tail -n 1)
     n=\$((col_num -1))
     # Calculate the frequency of each sample_id across both sources
