@@ -39,7 +39,8 @@ process APPEND_PROFILES {
     csvtk mutate2 -t -n source -e " 'db' " ${additional_profiles} > additional_profiles_source.tsv
 
     # Combine profiles from both the reference and database into a single file
-    csvtk concat -t reference_profiles_source.tsv additional_profiles_source.tsv | csvtk sort -t -k sample_id > combined_profiles.tsv
+    csvtk concat -t reference_profiles_source.tsv additional_profiles_source.tsv > concat_profiles_tmp.tsv
+    csvtk sort -t -k sample_id concat_profiles_tmp.tsv > combined_profiles.tsv
     col_num=\$(awk '{print NF}' combined_profiles.tsv | sort -nu | tail -n 1)
     n=\$((col_num -1))
     # Calculate the frequency of each sample_id across both sources
