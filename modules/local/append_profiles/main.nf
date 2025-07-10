@@ -76,5 +76,7 @@ process APPEND_PROFILES {
     paste tmp3.txt tmp2.txt > profiles_ref.tsv
 
     storage_space "End"
+
+    exit 1
     """
 }
