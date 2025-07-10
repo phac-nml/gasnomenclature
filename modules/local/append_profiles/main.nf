@@ -29,6 +29,7 @@ process APPEND_PROFILES {
         echo "\$1: Storage space"
         du -sh "\$PWD"
         du -sh /tmp
+        du -sh $TMP
         df -h
         echo ""
     }
