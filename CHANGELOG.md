@@ -3,11 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6.3] - 2025/07/10
+## [0.6.3] - 2025/07/11
 
 ### `Fix`
 
-- Fixed issue with `csvtk cat | csvtk sort` failing in `APPEND_PROFILES` step when working with large amounts of data.
+- Fixed issue with `csvtk cat | csvtk sort` failing in `APPEND_PROFILES` step when working with large amounts of data. [PR #70](https://github.com/phac-nml/gasnomenclature/pull/70)
 
 ## [0.6.2] - 2025/06/13
 
