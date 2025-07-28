@@ -29,6 +29,7 @@ include { LOCIDEX_MERGE as LOCIDEX_MERGE_REF     } from "../modules/local/locide
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_QUERY   } from "../modules/local/locidex/merge/main"
 include { LOCIDEX_CONCAT as LOCIDEX_CONCAT_QUERY } from "../modules/local/locidex/concat/main"
 include { LOCIDEX_CONCAT as LOCIDEX_CONCAT_REF   } from "../modules/local/locidex/concat/main"
+include { PREPROCESS_PROFILES                    } from "../modules/local/preprocess_profiles/main"
 include { APPEND_PROFILES                        } from "../modules/local/append_profiles/main"
 include { PROFILE_DISTS                          } from "../modules/local/profile_dists/main"
 include { CLUSTER_FILE                           } from "../modules/local/cluster_file/main"
@@ -199,8 +200,13 @@ workflow GAS_NOMENCLATURE {
         if(additional_profiles == null) {
         exit 1, "${params.db_profiles}: Does not exist but was passed to the pipeline. Exiting now."
         }
-
-        merged_references = APPEND_PROFILES(combined_references.combined_profiles, additional_profiles)
+        if (!(params.skip_prefix_background)) {
+            additional_profiles = PREPROCESS_PROFILES(additional_profiles)
+            ch_versions = ch_versions.mix( additional_profiles.versions)
+            merged_references = APPEND_PROFILES(combined_references.combined_profiles, additional_profiles.processed)
+        } else {
+            merged_references = APPEND_PROFILES(combined_references.combined_profiles, additional_profiles)
+        }
     } else {
         merged_references = combined_references.combined_profiles
     }

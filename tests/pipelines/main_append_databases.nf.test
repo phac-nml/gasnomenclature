@@ -13,6 +13,8 @@ nextflow_pipeline {
 
                 db_profiles = "$baseDir/tests/data/databases/additional_profiles.tsv"
                 db_clusters = "$baseDir/tests/data/databases/additional_clusters.tsv"
+
+                skip_prefix_background = true // Skip preprocessing of profiles to remove background prefix
             }
         }
 
@@ -63,6 +65,8 @@ nextflow_pipeline {
                 outdir = "results"
 
                 db_profiles = "$baseDir/tests/data/databases/additional_profiles.tsv"
+
+                skip_prefix_background = true // Skip preprocessing of profiles to remove background prefix
             }
         }
 
@@ -100,6 +104,8 @@ nextflow_pipeline {
 
                 db_profiles = "$baseDir/tests/data/databases/additional_profiles.tsv.gz"
                 db_clusters = "$baseDir/tests/data/databases/additional_clusters.tsv.gz"
+
+                skip_prefix_background = true // Skip preprocessing of profiles to remove background prefix
             }
         }
 
@@ -134,6 +140,8 @@ nextflow_pipeline {
 
                 db_profiles = "$baseDir/tests/data/databases/additional_profiles_overlap.tsv"
                 db_clusters = "$baseDir/tests/data/databases/additional_clusters_overlap.tsv"
+
+                skip_prefix_background = true // Skip preprocessing of profiles to remove background prefix
             }
         }
 
@@ -168,6 +176,8 @@ nextflow_pipeline {
 
                 db_profiles = "$baseDir/tests/data/databases/additional_profiles_loci.tsv"
                 db_clusters = "$baseDir/tests/data/databases/additional_clusters.tsv"
+
+                skip_prefix_background = true // Skip preprocessing of profiles to remove background prefix
             }
         }
 
@@ -187,6 +197,8 @@ nextflow_pipeline {
 
                 db_profiles = "$baseDir/tests/data/databases/additional_profiles.tsv"
                 db_clusters = "$baseDir/tests/data/databases/additional_clusters_loci.tsv"
+
+                skip_prefix_background = true // Skip preprocessing of profiles to remove background prefix
             }
         }
 
