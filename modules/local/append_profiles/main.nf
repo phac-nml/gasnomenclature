@@ -30,6 +30,10 @@ process APPEND_PROFILES {
         # Compare headers and exit if they do not match
         ref_headers=\$(get_header "${reference_profiles}")
         add_headers=\$(get_header "${additional_profiles}")
+        if [ "\$ref_headers" != "\$add_headers" ]; then
+            echo "Error: Column headers do not match between reference_profiles and --db_profiles."
+            exit 1
+        fi
         cat <(cat ${reference_profiles}) <(zcat ${additional_profiles} | tail -n+2) > profiles_ref.tsv
         """
     } else {
@@ -47,6 +51,10 @@ process APPEND_PROFILES {
         # Compare headers and exit if they do not match
         ref_headers=\$(get_header "${reference_profiles}")
         add_headers=\$(get_header "${additional_profiles}")
+        if [ "\$ref_headers" != "\$add_headers" ]; then
+            echo "Error: Column headers do not match between reference_profiles and --db_profiles."
+            exit 1
+        fi
         cat <(cat ${reference_profiles}) <(cat ${additional_profiles} | tail -n+2) > profiles_ref.tsv
         """
     }

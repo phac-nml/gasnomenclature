@@ -141,7 +141,7 @@ nextflow_pipeline {
                 db_profiles = "$baseDir/tests/data/databases/additional_profiles_overlap.tsv"
                 db_clusters = "$baseDir/tests/data/databases/additional_clusters_overlap.tsv"
 
-                skip_prefix_background = true // Skip preprocessing of profiles to remove background prefix
+                skip_prefix_background = false // Preprocessing of profiles required due to overlap to remove background prefix
             }
         }
 
