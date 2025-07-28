@@ -1,6 +1,6 @@
 process PREPROCESS_PROFILES {
     tag "Preprocess reference profiles"
-    label 'process_high'
+    label 'process_low'
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/csvtk:0.22.0--h9ee0642_1' :
