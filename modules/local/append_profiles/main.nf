@@ -34,7 +34,17 @@ process APPEND_PROFILES {
             echo "Error: Column headers do not match between reference_profiles and --db_profiles."
             exit 1
         fi
+
+        ref_row=\$(csvtk nrow ${reference_profiles})
+        add_row=\$(zcat ${additional_profiles} | tail -n+1 ${additional_profiles} | csvtk nrow)
+        total_row=\$((ref_row + add_row))
+
         cat <(cat ${reference_profiles}) <(zcat ${additional_profiles} | tail -n+2) > profiles_ref.tsv
+        final_row=\$(csvtk nrow profiles_ref.tsv)
+        if [ "\$total_row" != "\$final_row" ]; then
+            echo "Error: Combining profiles did not work as expected."
+            exit 1
+        fi
         """
     } else {
         """
@@ -55,7 +65,17 @@ process APPEND_PROFILES {
             echo "Error: Column headers do not match between reference_profiles and --db_profiles."
             exit 1
         fi
+
+        ref_row=\$(csvtk nrow ${reference_profiles})
+        add_row=\$(tail -n+1 ${additional_profiles} | csvtk nrow)
+        total_row=\$((ref_row + add_row))
+
         cat <(cat ${reference_profiles}) <(cat ${additional_profiles} | tail -n+2) > profiles_ref.tsv
+        final_row=\$(csvtk nrow profiles_ref.tsv)
+        if [ "\$total_row" != "\$final_row" ]; then
+            echo "Error: Combining profiles did not work as expected."
+            exit 1
+        fi
         """
     }
 }
