@@ -29,6 +29,11 @@ process APPEND_PROFILES {
     ref_headers=\$(get_header "${reference_profiles}")
     add_headers=\$(get_header "${additional_profiles}")
 
+    if ($params.skip_prefix_background); then
+        echo "Skipping background prefix removal for profiles."
+    else
+        echo "Removing background prefix from profiles."
+    fi
     if [ "\$ref_headers" != "\$add_headers" ]; then
         echo "Error: Column headers do not match between reference_profiles and --db_profiles."
         exit 1
