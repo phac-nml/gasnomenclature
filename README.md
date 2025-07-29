@@ -96,6 +96,8 @@ Note that any address levels present in the additional databases but absent from
 | sampleB   | 1   | 1   | ... | 2   |
 | sampleC   | 2   | 1   | ... | 1   |
 
+_Note: sample_id for additional profiles are prefixed with `@` by default to ensure sample_id uniqueness (via `--skip_prefix_background_profiles true`)_
+
 - `--db_clusters`: Specifies the path to the database containing cluster addresses for additional samples in tab-separated format. To ensure compatibility, the database structure must adhere to the expected header format corresponding to the samples included in the input samplesheet:
 
 | id      | address |

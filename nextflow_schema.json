@@ -134,6 +134,17 @@
                 }
             }
         },
+        "append_profiles": {
+            "title": "Append Profiles",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "skip_prefix_background": {
+                    "type": "boolean"
+                }
+            }
+        },
         "databases": {
             "title": "Databases",
             "type": "object",
@@ -321,6 +332,9 @@
         },
         {
             "$ref": "#/definitions/locidex"
+        },
+        {
+            "$ref": "#/definitions/append_profiles"
         },
         {
             "$ref": "#/definitions/databases"
