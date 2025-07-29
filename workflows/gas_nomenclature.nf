@@ -207,6 +207,8 @@ workflow GAS_NOMENCLATURE {
         } else {
             merged_references = APPEND_PROFILES(combined_references.combined_profiles, additional_profiles)
         }
+        ch_versions = ch_versions.mix( merged_references.versions)
+        merged_references = merged_references.combined_profiles
     } else {
         merged_references = combined_references.combined_profiles
     }

@@ -11,7 +11,8 @@ process APPEND_PROFILES {
     path(additional_profiles)
 
     output:
-    path("profiles_ref.tsv")
+    path("profiles_ref.tsv"),           emit: combined_profiles
+    path "versions.yml",                emit: versions
 
     script:
     """
@@ -53,5 +54,10 @@ process APPEND_PROFILES {
         echo "Error: Combining profiles did not work as expected."
         exit 1
     fi
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        csvtk: \$(echo \$( csvtk version | sed -e "s/csvtk v//g" ))
+    END_VERSIONS
     """
 }
