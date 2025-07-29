@@ -45,7 +45,7 @@ process APPEND_PROFILES {
     fi
 
     ref_row=\$(csvtk nrow ${reference_profiles})
-    add_row=\$(cat_zcat "${additional_profiles}" | csvtk nrow)
+    add_row=\$(csvtk nrow "${additional_profiles}")
     total_row=\$((ref_row + add_row))
 
     cat <(cat_zcat "${reference_profiles}") <(cat_zcat "${additional_profiles}" | tail -n+2) > profiles_ref.tsv
