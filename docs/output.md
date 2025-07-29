@@ -7,6 +7,7 @@ This document describes the output produced by the pipeline.
 The directories listed below will be created in the results directory after the pipeline has finished. All paths are relative to the top-level results directory.
 
 - append: Contains reference MLST profile and cluster address files if additional databases were provided by the user.
+- preprocess: Modified additional profiles to have prefix `@` to ensure no sample_id overlap with samplesheet.
 - call: The cluster addresses from the [genomic_address_service](https://github.com/phac-nml/genomic_address_service).
 - cluster: The cluster file required by GAS_call.
 - distances: Distances between genomes from [profile_dists](https://github.com/phac-nml/profile_dists).
@@ -23,6 +24,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 - [Locidex merge](#locidex-merge) - Merges MLST profile JSON files into a single profiles file for reference and query samples. Performs a validation check on the samplesheet inputs to ensure that the sampleID precisely matches the MLST JSON key and enforces necessary changes where discrepancies are found. When split into multiple processes a concatation occurs after.
 - [Append profiles](#append-profiles) - Appends additional MLST profile information to reference samples if provided by user.
+- [Preprocess](#preprocess) - Adds `@` prefix to additional reference samples.
 - [Profile dists](#profile-dists) - Computes pairwise distances between genomes using MLST allele differences.
 - [Cluster file](#cluster-file) - Generates the expected_clusters.txt file from reference sample addresses for use in GAS_call.
 - [Append clusters](#append-clusters) - Appends additional cluster information to reference samples if provided by user.
@@ -53,6 +55,14 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
     - `reference/merged_query/MLST_error_report_concat_query.csv`
 
 </details>
+
+### Preprocess
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `preprocess/`
+  - preprocessed profiles: `prefixed_profiles.tsv`
 
 ### Append Profiles
 
