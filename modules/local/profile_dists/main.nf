@@ -23,20 +23,8 @@ process PROFILE_DISTS{
 
 
     script:
-    def args = ""
+    def args = task.ext.args ?: ''
 
-    if(mapping_file){
-        args = args + "--mapping_file $mapping_file"
-    }
-    if(columns){
-        args = args + " --columns $columns"
-    }
-    if(params.pd_skip){
-        args = args + " --skip"
-    }
-    if(params.pd_count_missing){
-        args = args + " --count_missing"
-    }
     // --match_threshold $params.profile_dists.match_thresh \\
     prefix = "distances_pairwise"
     """
