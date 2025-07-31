@@ -11,7 +11,8 @@ process APPEND_PROFILES {
     path(additional_profiles)
 
     output:
-    path("profiles_ref.tsv")
+    path("profiles_ref.tsv"),           emit: combined_profiles
+    path "versions.yml",                emit: versions
 
     script:
     """
@@ -25,6 +26,15 @@ process APPEND_PROFILES {
         fi
     }
 
+    # Function to get to perform cat or zcat for handling files that could be either gzipped or not
+    cat_zcat() {
+        if [ "\${1##*.}" = "gz" ]; then
+            zcat "\$1"
+        else
+            cat "\$1"
+        fi
+    }
+
     # Compare headers and exit if they do not match
     ref_headers=\$(get_header "${reference_profiles}")
     add_headers=\$(get_header "${additional_profiles}")
@@ -34,22 +44,20 @@ process APPEND_PROFILES {
         exit 1
     fi
 
-    # Add a "source" column to differentiate the reference profiles and additional profiles
-    csvtk mutate2 -t -n source -e " 'ref' " ${reference_profiles} > reference_profiles_source.tsv
-    csvtk mutate2 -t -n source -e " 'db' " ${additional_profiles} > additional_profiles_source.tsv
+    ref_row=\$(csvtk nrow ${reference_profiles})
+    add_row=\$(csvtk nrow "${additional_profiles}")
+    total_row=\$((ref_row + add_row))
 
-    # Combine profiles from both the reference and database into a single file
-    csvtk concat -t reference_profiles_source.tsv additional_profiles_source.tsv > concat_profiles_tmp.tsv
-    csvtk sort -t -k sample_id concat_profiles_tmp.tsv > combined_profiles.tsv
-    col_num=\$(awk '{print NF}' combined_profiles.tsv | sort -nu | tail -n 1)
-    n=\$((col_num -1))
-    # Calculate the frequency of each sample_id across both sources
-    csvtk freq -t -f sample_id combined_profiles.tsv > sample_counts.tsv
+    cat <(cat_zcat "${reference_profiles}") <(cat_zcat "${additional_profiles}" | tail -n+2) > profiles_ref.tsv
+    final_row=\$(csvtk nrow profiles_ref.tsv)
+    if [ "\$total_row" != "\$final_row" ]; then
+        echo "Error: Combining profiles did not work as expected."
+        exit 1
+    fi
 
-    # For any sample_id that appears in both the reference and database, add a 'db_' prefix to the sample_id from the database
-    csvtk join -t -f sample_id combined_profiles.tsv sample_counts.tsv |     csvtk mutate2 -t -n new_sample_id -e '(\$source == "db" && \$frequency > 1) ? "db_" + \$sample_id : \$sample_id' > tmp.txt
-    csvtk cut -t -f 2-\${n} tmp.txt > tmp2.txt
-    csvtk cut -t -f new_sample_id tmp.txt | csvtk rename -t -f new_sample_id -n sample_id > tmp3.txt
-    paste tmp3.txt tmp2.txt > profiles_ref.tsv
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        csvtk: \$(echo \$( csvtk version | sed -e "s/csvtk v//g" ))
+    END_VERSIONS
     """
 }
