@@ -8,10 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - Added a `PREPROCESS_PROFILES` process that adds a `@` prefix to the `--db_profiles` `sample_id` to force unique identifiers for samples (required for `profile_dists`). If reference/background profiles are already unique process can be overriden with `--skip_prefix_background_profiles true`. [PR #72](https://github.com/phac-nml/gasnomenclature/pull/72)
+- Made to new `profile_dists` parameters available to nextflow pipeline `--pd_max_cpus` and `--pd_max_batch_size`. [PR #73](https://github.com/phac-nml/gasnomenclature/pull/73)
 
 ### `Modified`
 
 - `APPEND_PROFILES` no longer renames `sample_id` with duplicate to prevent conflicts for `profile_dists`, user should keep the default `--skip_prefix_background_profiles` unless they know that there is no duplicates. [PR #72](https://github.com/phac-nml/gasnomenclature/pull/72)
+- Moved the setting of non-filepath parameters for `PROFILE_DISTS` to the `config/modules.config`. [PR #73](https://github.com/phac-nml/gasnomenclature/pull/73)
 
 ## [0.6.3] - 2025/07/11
 
