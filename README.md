@@ -58,7 +58,7 @@ The `--gm_thresholds` parameter sets thresholds for each cluster level, which di
 
 ## Profile_dists
 
-The following can be used to adjust parameters for the [profile_dists][] tool.
+The following can be used to adjust parameters for the [profile_dists](https://github.com/phac-nml/profile_dists) tool.
 
 - `--pd_distm`: The distance method/unit, either _hamming_ or _scaled_. For _hamming_ distances, the distance values will be a non-negative integer. For _scaled_ distances, the distance values are between 0.0 and 100.0. Please see the [Distance Method and Thresholds](#distance-method-and-thresholds) section for more information.
 - `--pd_missing_threshold`: The maximum proportion of missing data per locus for a locus to be kept in the analysis. Values from 0 to 1.
@@ -74,6 +74,8 @@ The following can be used to adjust parameters for the [profile_dists][] tool.
     loci3
     ```
 - `--pd_count_missing`: Count missing alleles as different. Can be used as a flag, `--pd_count_missing`, or passing a boolean, `--pd_count_missing true` or `--pd_count_missing false`. If true, will consider missing allele calls for the same locus between samples as a difference, increasing the distance counts.
+- `--pd_max_cpu`: Set the maximum number of CPUs for the profile distance calculation.
+- `--pd_max_batch_size`: Set the maximum number of maximum batch sizes for parallel profile distance calculation.
 
 ## GAS CALL
 
