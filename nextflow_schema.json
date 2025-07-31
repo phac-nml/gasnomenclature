@@ -116,16 +116,17 @@
                     "format": "file-path"
                 },
                 "pd_max_cpus": {
-                    "type": "number",
+                    "type": "integer",
                     "hidden": true,
                     "minimum": 1,
                     "default": 1,
                     "description": "Set the maximum number of CPUs for the profile distance calculation"
                 },
                 "pd_max_batch_size": {
-                    "type": "number",
+                    "type": "integer",
                     "hidden": true,
                     "default": 0,
+                    "minimum": 0,
                     "description": "Set the maximum number of maximum batch sizes for parallel profile distance calculation"
                 },
                 "pd_count_missing": {
