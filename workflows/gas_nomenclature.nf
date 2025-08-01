@@ -200,10 +200,14 @@ workflow GAS_NOMENCLATURE {
         if(additional_profiles == null) {
         exit 1, "${params.db_profiles}: Does not exist but was passed to the pipeline. Exiting now."
         }
+        additional_clusters = prepareFilePath(params.db_clusters, "Appending additional cluster addresses from ${params.db_clusters}")
+        if(additional_clusters == null) {
+        exit 1, "${params.db_clusters}: Does not exist but was passed to the pipeline. Exiting now."
+        }
         if (!(params.skip_prefix_background)) {
-            additional_profiles = PREPROCESS_PROFILES(additional_profiles)
+            additional_profiles = PREPROCESS_PROFILES(additional_profiles, additional_clusters)
             ch_versions = ch_versions.mix( additional_profiles.versions)
-            merged_references = APPEND_PROFILES(combined_references.combined_profiles, additional_profiles.processed)
+            merged_references = APPEND_PROFILES(combined_references.combined_profiles, additional_profiles.processed_profiles)
         } else {
             merged_references = APPEND_PROFILES(combined_references.combined_profiles, additional_profiles)
         }
@@ -249,7 +253,7 @@ workflow GAS_NOMENCLATURE {
         exit 1, "${params.db_clusters}: Does not exist but was passed to the pipeline. Exiting now."
         }
 
-        expected_clusters = APPEND_CLUSTERS(initial_clusters, additional_clusters)
+        expected_clusters = APPEND_CLUSTERS(initial_clusters, additional_profiles.processed_clusters)  // The processed_clusters from the PREPROCESS_PROFILES process
     } else {
         expected_clusters = initial_clusters
     }
