@@ -4,5 +4,4 @@ sample2	1.1.1
 sample3	1.1.2
 @sampleA	1.1.1
 @sampleB	1.1.2
-@sample3	1.1.2
-sampleQ	1.1.3
+@sampleC	2.1.1
