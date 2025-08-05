@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.1] - 2025/08/05
+
+### `Bug Fix`
+
+- Fix the bug that is caused by clusters not matching profiles [issue #75](https://github.com/phac-nml/gasnomenclature/issues/75). [PR #76](https://github.com/phac-nml/gasnomenclature/pull/76)
+
 ## [0.7.0] - 2025/07/31
 
 ### `Added`
@@ -178,3 +184,4 @@ Initial release of the Genomic Address Nomenclature pipeline to be used to assig
 [0.6.2]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.6.2
 [0.6.3]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.6.3
 [0.7.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.7.0
+[0.7.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.7.1
