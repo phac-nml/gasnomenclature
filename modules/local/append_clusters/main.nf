@@ -12,7 +12,7 @@ process APPEND_CLUSTERS {
 
     output:
     path("reference_clusters.tsv"),     emit: combined_clusters
-    path "versions.yml", emit: versions
+    path "versions.yml",                emit: versions
 
     script:
     """

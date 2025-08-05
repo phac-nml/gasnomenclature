@@ -243,6 +243,8 @@ workflow GAS_NOMENCLATURE {
         }
         ch_versions = ch_versions.mix( expected_clusters.versions)
         ch_versions = ch_versions.mix( merged_references.versions)
+        merged_references = merged_references.combined_profiles
+        expected_clusters = expected_clusters.combined_clusters
     } else {
         merged_references = combined_references.combined_profiles
         expected_clusters = initial_clusters
@@ -263,7 +265,7 @@ workflow GAS_NOMENCLATURE {
     }
 
     distances = PROFILE_DISTS(merged_queries,
-                            merged_references[0], // Use the first element so that if append profiles is used, the versions file is not included
+                            merged_references,
                             mapping_file,
                             columns_file)
     ch_versions = ch_versions.mix(distances.versions)
@@ -289,7 +291,7 @@ workflow GAS_NOMENCLATURE {
         exit 1, "'--pd_distm ${params.pd_distm}' is an invalid value. Please set to either 'hamming' or 'scaled'."
     }
 
-    called_data = GAS_CALL(expected_clusters[0], distances.results) // Use the first element so that if append clusters is used, the versions file is not included
+    called_data = GAS_CALL(expected_clusters, distances.results) // Use the first element so that if append clusters is used, the versions file is not included
     ch_versions = ch_versions.mix(called_data.versions)
 
     // Filter the new queried samples and addresses into a CSV/JSON file for the IRIDANext plug in and
