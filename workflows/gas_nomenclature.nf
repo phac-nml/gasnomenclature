@@ -29,7 +29,7 @@ include { LOCIDEX_MERGE as LOCIDEX_MERGE_REF     } from "../modules/local/locide
 include { LOCIDEX_MERGE as LOCIDEX_MERGE_QUERY   } from "../modules/local/locidex/merge/main"
 include { LOCIDEX_CONCAT as LOCIDEX_CONCAT_QUERY } from "../modules/local/locidex/concat/main"
 include { LOCIDEX_CONCAT as LOCIDEX_CONCAT_REF   } from "../modules/local/locidex/concat/main"
-include { PREPROCESS_PROFILES                    } from "../modules/local/preprocess_profiles/main"
+include { PREPROCESS_REFERENCES                  } from "../modules/local/preprocess_references/main"
 include { APPEND_PROFILES                        } from "../modules/local/append_profiles/main"
 include { PROFILE_DISTS                          } from "../modules/local/profile_dists/main"
 include { CLUSTER_FILE                           } from "../modules/local/cluster_file/main"
@@ -194,8 +194,31 @@ workflow GAS_NOMENCLATURE {
         query_tag,
         queries.combined_profiles.collect().flatten().count())
 
-    // Run APPEND_PROFILES if db_profiles parameter provided; update merged_profiles and merged_queries
-    if(params.db_profiles) {
+    // Preparing and Appending additional profiles and clusters
+
+    // APPEND_PROFILES; update expected profiles
+    // APPEND_CLUSTERS; update expected clusters
+
+    // Note: Additional reference samples to the pipeline: both --db_profiles and --db_clusters must be provided together.
+    // All sample_id's in --db_profiles must match the id's in --db_clusters
+
+    // Step 1: Generate the expected_clusters.txt file from the addresses of the provided reference samples
+
+    clusters = input.filter { meta, file ->
+        meta.genomic_address_name != null
+    }.collect { meta, file ->
+        meta
+    }.ifEmpty([])
+
+    initial_clusters = CLUSTER_FILE(clusters)
+
+    // Step 2: Append the additional profiles and clusters if provided
+
+    if(params.db_profiles && params.db_clusters) {
+
+        // Step 2A: Prepare the additional profiles and clusters files
+        // Note: If the files do not exist, the pipeline will exit with an error message
+
         additional_profiles = prepareFilePath(params.db_profiles, "Appending additional samples from ${params.db_profiles} to reference profiles")
         if(additional_profiles == null) {
         exit 1, "${params.db_profiles}: Does not exist but was passed to the pipeline. Exiting now."
@@ -204,17 +227,25 @@ workflow GAS_NOMENCLATURE {
         if(additional_clusters == null) {
         exit 1, "${params.db_clusters}: Does not exist but was passed to the pipeline. Exiting now."
         }
+        // Step 2B: Preprocess and/or merge additional profiles and clusters
+        // Note: If the --skip_prefix_background parameter is set, the additional profiles will not be prefixed with '@' in
+        // in their respective columns ( profiles: sample_id clusters: id).
+
         if (!(params.skip_prefix_background)) {
-            additional_profiles = PREPROCESS_PROFILES(additional_profiles, additional_clusters)
-            ch_versions = ch_versions.mix( additional_profiles.versions)
-            merged_references = APPEND_PROFILES(combined_references.combined_profiles, additional_profiles.processed_profiles)
+            additional_references = PREPROCESS_REFERENCES(additional_profiles, additional_clusters)
+            ch_versions = ch_versions.mix( additional_references.versions)
+
+            merged_references = APPEND_PROFILES(combined_references.combined_profiles, additional_references.processed_profiles)
+            expected_clusters = APPEND_CLUSTERS(initial_clusters, additional_references.processed_clusters)
         } else {
             merged_references = APPEND_PROFILES(combined_references.combined_profiles, additional_profiles)
+            expected_clusters = APPEND_CLUSTERS(initial_clusters, additional_clusters)
         }
+        ch_versions = ch_versions.mix( expected_clusters.versions)
         ch_versions = ch_versions.mix( merged_references.versions)
-        merged_references = merged_references.combined_profiles
     } else {
         merged_references = combined_references.combined_profiles
+        expected_clusters = initial_clusters
     }
 
     merged_queries = combined_queries.combined_profiles
@@ -232,31 +263,10 @@ workflow GAS_NOMENCLATURE {
     }
 
     distances = PROFILE_DISTS(merged_queries,
-                            merged_references,
+                            merged_references[0], // Use the first element so that if append profiles is used, the versions file is not included
                             mapping_file,
                             columns_file)
     ch_versions = ch_versions.mix(distances.versions)
-
-    // Generate the expected_clusters.txt file from the addresses of the provided reference samples
-    clusters = input.filter { meta, file ->
-        meta.genomic_address_name != null
-    }.collect { meta, file ->
-        meta
-    }.ifEmpty([])
-
-    initial_clusters = CLUSTER_FILE(clusters)
-
-    // Run APPEND_CLUSTERS if db_clusters parameter provided
-    if(params.db_clusters) {
-        additional_clusters = prepareFilePath(params.db_clusters, "Appending additional cluster addresses from ${params.db_clusters}")
-        if(additional_clusters == null) {
-        exit 1, "${params.db_clusters}: Does not exist but was passed to the pipeline. Exiting now."
-        }
-
-        expected_clusters = APPEND_CLUSTERS(initial_clusters, additional_profiles.processed_clusters)  // The processed_clusters from the PREPROCESS_PROFILES process
-    } else {
-        expected_clusters = initial_clusters
-    }
 
     // GAS CALL processes
 
@@ -279,7 +289,7 @@ workflow GAS_NOMENCLATURE {
         exit 1, "'--pd_distm ${params.pd_distm}' is an invalid value. Please set to either 'hamming' or 'scaled'."
     }
 
-    called_data = GAS_CALL(expected_clusters, distances.results)
+    called_data = GAS_CALL(expected_clusters[0], distances.results) // Use the first element so that if append clusters is used, the versions file is not included
     ch_versions = ch_versions.mix(called_data.versions)
 
     // Filter the new queried samples and addresses into a CSV/JSON file for the IRIDANext plug in and

@@ -1,4 +1,4 @@
-process PREPROCESS_PROFILES {
+process PREPROCESS_REFERENCES {
     tag "Preprocess reference profiles"
     label 'process_low'
 

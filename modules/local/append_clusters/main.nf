@@ -11,7 +11,8 @@ process APPEND_CLUSTERS {
     path(additional_clusters)
 
     output:
-    path("reference_clusters.tsv")
+    path("reference_clusters.tsv"),     emit: combined_clusters
+    path "versions.yml", emit: versions
 
     script:
     """
@@ -22,6 +23,15 @@ process APPEND_CLUSTERS {
             zcat "\$1" | awk 'NR>1 {print \$2}' || { ec="\$?"; [ "\$ec" -eq 141 ] && true || (exit "\$ec"); }
         else
             awk 'NR>1 {print \$2}' "\$1"
+        fi
+    }
+
+    # Function to get to perform cat or zcat for handling files that could be either gzipped or not
+    cat_zcat() {
+        if [ "\${1##*.}" = "gz" ]; then
+            zcat "\$1"
+        else
+            cat "\$1"
         fi
     }
 
@@ -36,19 +46,20 @@ process APPEND_CLUSTERS {
         exit 1
     fi
 
-    # Add a "source" column to differentiate the reference profiles and additional profiles
-    csvtk mutate2 -t -n source -e " 'ref' " ${initial_clusters} > reference_clusters_source.tsv
-    csvtk mutate2 -t -n source -e " 'db' " ${additional_clusters} > additional_clusters_source.tsv
+    ref_row=\$(csvtk nrow ${initial_clusters})
+    add_row=\$(csvtk nrow "${additional_clusters}")
+    total_row=\$((ref_row + add_row))
 
-    # Combine profiles from both the reference and database into a single file
-    csvtk concat -t reference_clusters_source.tsv additional_clusters_source.tsv | csvtk sort -t -k id > combined_profiles.tsv
+    cat <(cat_zcat "${initial_clusters}") <(cat_zcat "${additional_clusters}" | tail -n+2) > reference_clusters.tsv
+    final_row=\$(csvtk nrow reference_clusters.tsv)
+    if [ "\$total_row" != "\$final_row" ]; then
+        echo "Error: Combining profiles did not work as expected."
+        exit 1
+    fi
 
-    # Calculate the frequency of each sample_id across both sources
-    csvtk freq -t -f id combined_profiles.tsv > sample_counts.tsv
-
-    # For any sample_id that appears in both the reference and database, add a 'db_' prefix to the sample_id from the database
-    csvtk join -t -f id combined_profiles.tsv sample_counts.tsv | \
-    csvtk mutate2 -t -n id -e '(\$source == "db" && \$frequency > 1) ? "db_" + \$id : \$id' | \
-    csvtk cut -t -f id,address > reference_clusters.tsv
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        csvtk: \$(echo \$( csvtk version | sed -e "s/csvtk v//g" ))
+    END_VERSIONS
     """
 }
