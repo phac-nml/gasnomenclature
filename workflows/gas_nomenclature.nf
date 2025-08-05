@@ -221,11 +221,11 @@ workflow GAS_NOMENCLATURE {
 
         additional_profiles = prepareFilePath(params.db_profiles, "Appending additional samples from ${params.db_profiles} to reference profiles")
         if(additional_profiles == null) {
-        exit 1, "${params.db_profiles}: Does not exist but was passed to the pipeline. Exiting now."
+            exit 1, "${params.db_profiles}: Does not exist but was passed to the pipeline. Exiting now."
         }
         additional_clusters = prepareFilePath(params.db_clusters, "Appending additional cluster addresses from ${params.db_clusters}")
         if(additional_clusters == null) {
-        exit 1, "${params.db_clusters}: Does not exist but was passed to the pipeline. Exiting now."
+            exit 1, "${params.db_clusters}: Does not exist but was passed to the pipeline. Exiting now."
         }
         // Step 2B: Preprocess and/or merge additional profiles and clusters
         // Note: If the --skip_prefix_background parameter is set, the additional profiles will not be prefixed with '@' in
@@ -291,7 +291,7 @@ workflow GAS_NOMENCLATURE {
         exit 1, "'--pd_distm ${params.pd_distm}' is an invalid value. Please set to either 'hamming' or 'scaled'."
     }
 
-    called_data = GAS_CALL(expected_clusters, distances.results) // Use the first element so that if append clusters is used, the versions file is not included
+    called_data = GAS_CALL(expected_clusters, distances.results)
     ch_versions = ch_versions.mix(called_data.versions)
 
     // Filter the new queried samples and addresses into a CSV/JSON file for the IRIDANext plug in and

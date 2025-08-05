@@ -35,6 +35,16 @@ process APPEND_CLUSTERS {
         fi
     }
 
+    # Function to get the header of the files, handling gzipped files
+    get_header() {
+        if [ "\${1##*.}" = "gz" ]; then
+            # This was causing 141 pipe bash errors. A fix was added to catch this error:
+            zcat "\$1" | head -n 1 || { ec="\$?"; [ "\$ec" -eq 141 ] && true || (exit "\$ec"); }
+        else
+            head -n 1 "\$1"
+        fi
+    }
+
     # Check if two files have consistent delimeter splits in the genomic address service column
     get_address "${initial_clusters}" > initial-cluster-address.txt
     get_address "${additional_clusters}" > additional-cluster-address.txt
@@ -46,6 +56,15 @@ process APPEND_CLUSTERS {
         exit 1
     fi
 
+    # Compare headers and exit if they do not match
+    ref_headers=\$(get_header "${initial_clusters}")
+    add_headers=\$(get_header "${additional_clusters}")
+
+    if [ "\$ref_headers" != "\$add_headers" ]; then
+        echo "Error: Column headers do not match between reference_clusters and --db_clusters."
+        exit 1
+    fi
+
     ref_row=\$(csvtk nrow ${initial_clusters})
     add_row=\$(csvtk nrow "${additional_clusters}")
     total_row=\$((ref_row + add_row))
@@ -53,7 +72,7 @@ process APPEND_CLUSTERS {
     cat <(cat_zcat "${initial_clusters}") <(cat_zcat "${additional_clusters}" | tail -n+2) > reference_clusters.tsv
     final_row=\$(csvtk nrow reference_clusters.tsv)
     if [ "\$total_row" != "\$final_row" ]; then
-        echo "Error: Combining profiles did not work as expected."
+        echo "Error: Combining clusters did not work as expected."
         exit 1
     fi
 
