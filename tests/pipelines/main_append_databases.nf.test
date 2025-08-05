@@ -239,12 +239,12 @@ nextflow_pipeline {
 
             // Verify cluster file after appending additional database of cluster addresses
             def actual_cluster = path("$launchDir/results/append/reference_clusters.tsv")
-            def expected_cluster = path("$baseDir/tests/data/clusters/expected_clusters_append.txt")
+            def expected_cluster = path("$baseDir/tests/data/clusters/expected_clusters_append_preprocessed.txt")
             assert actual_cluster.text == expected_cluster.text
 
             // Check called clusters
             def actual_calls = path("$launchDir/results/call/Called/results.text")
-            def expected_calls = path("$baseDir/tests/data/called/expected_results_append.txt")
+            def expected_calls = path("$baseDir/tests/data/called/expected_results_append_processed.txt")
             assert actual_calls.text == expected_calls.text
 
             // Check IRIDA Next JSON output
