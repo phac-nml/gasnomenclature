@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.2] - 2025/08/06
+
+### `Modified`
+
+- Parameter logic for `PROFILE_DISTS` was changed to only use `--pd_max_cpus` if it is below the `task.cpus`. [PR #78](https://github.com/phac-nml/gasnomenclature/pull/78)
+- Remove `--max_mem` in favor of `--batch_size`. [PR #78](https://github.com/phac-nml/gasnomenclature/pull/78)
+
 ## [0.7.1] - 2025/08/05
 
 ### `Bug Fix`
@@ -185,3 +192,4 @@ Initial release of the Genomic Address Nomenclature pipeline to be used to assig
 [0.6.3]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.6.3
 [0.7.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.7.0
 [0.7.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.7.1
+[0.7.2]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.7.2

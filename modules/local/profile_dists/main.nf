@@ -31,6 +31,11 @@ process PROFILE_DISTS{
     if(columns){
         args = "--columns $columns " + args
     }
+    if(params.pd_max_cpus < task.cpus){
+        args = "--cpus $params.pd_max_cpus " + args
+    }else{
+        args = "--cpus ${task.cpus} " + args
+    }
 
     // --match_threshold $params.profile_dists.match_thresh \\
     prefix = "distances_pairwise"
@@ -41,8 +46,6 @@ process PROFILE_DISTS{
                 --file_type $params.pd_file_type \\
                 --missing_thresh $params.pd_missing_threshold \\
                 --sample_qual_thresh $params.pd_sample_quality_threshold \\
-                --max_mem ${task.memory.toGiga()} \\
-                --cpus ${task.cpus} \\
                 -o ${prefix}
 
     cat <<-END_VERSIONS > versions.yml
