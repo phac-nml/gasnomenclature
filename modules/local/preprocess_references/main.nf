@@ -10,6 +10,7 @@ process PREPROCESS_REFERENCES {
     path(reference_profiles)
     path(reference_clusters)
 
+
     output:
     path("prefixed_profiles.tsv"),      emit: processed_profiles
     path("prefixed_clusters.tsv"),      emit: processed_clusters
@@ -18,17 +19,35 @@ process PREPROCESS_REFERENCES {
     script:
     def commands = []
 
+    if ((!params.skip_reduce_loci) && !params.pd_columns) {
+        error "The --pd_columns parameter must be set if the --skip_reduce_loci parameter is not set."
+    } else if (!params.skip_reduce_loci) {
+        // Reduce profiles to minimum number of loci
+        commands.add("""
+                # Function to get to perform cat or zcat for handling files that could be either gzipped or not
+
+            cat_zcat() {
+                if [ "\${1##*.}" = "gz" ]; then
+                    zcat "\$1"
+                else
+                    cat "\$1"
+                fi
+            }
+            columns=\$(cat_zcat "${params.pd_columns}" | tr '\n' ',')
+            csvtk -t cut -f sample_id,"\${columns::-1}" $reference_profiles > loci_profiles.tsv
+
+        """)
+    } else {
+        commands.add("""
+            cp $reference_profiles loci_profiles.tsv
+        """)
+    }
+
     // Add prefix '@' to sample_id in profiles and id in clusters
     if (!params.skip_prefix_background) {
         commands.add("""
-            csvtk replace -t -f sample_id -p '(.*)' -r '@\${1}' $reference_profiles > prefixed_profiles.tsv
+            csvtk replace -t -f sample_id -p '(.*)' -r '@\${1}' loci_profiles.tsv > prefixed_profiles.tsv
             csvtk replace -t -f id -p '(.*)' -r '@\${1}' $reference_clusters > prefixed_clusters.tsv
-        """)
-    }
-    if (!params.skip_reduce_loci) {
-        // Reduce profiles to minimum number of loci
-        commands.add("""
-            echo "Reducing profiles to minimum number of loci..."
         """)
     }
     if (!(params.skip_prefix_background) || !(params.skip_reduce_loci)) {
