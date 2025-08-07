@@ -16,13 +16,31 @@ process PREPROCESS_REFERENCES {
     path "versions.yml",                emit: versions
 
     script:
-    """
-    csvtk replace -t -f sample_id -p '(.*)' -r '@\${1}' $reference_profiles > prefixed_profiles.tsv
-    csvtk replace -t -f id -p '(.*)' -r '@\${1}' $reference_clusters > prefixed_clusters.tsv
+    def commands = []
 
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        csvtk: \$(echo \$( csvtk version | sed -e "s/csvtk v//g" ))
-    END_VERSIONS
+    // Add prefix '@' to sample_id in profiles and id in clusters
+    if (!params.skip_prefix_background) {
+        commands.add("""
+            csvtk replace -t -f sample_id -p '(.*)' -r '@\${1}' $reference_profiles > prefixed_profiles.tsv
+            csvtk replace -t -f id -p '(.*)' -r '@\${1}' $reference_clusters > prefixed_clusters.tsv
+        """)
+    }
+    if (!params.skip_reduce_loci) {
+        // Reduce profiles to minimum number of loci
+        commands.add("""
+            echo "Reducing profiles to minimum number of loci..."
+        """)
+    }
+    if (!(params.skip_prefix_background) || !(params.skip_reduce_loci)) {
+        commands.add("""
+            cat <<-END_VERSIONS > versions.yml
+            "${task.process}":
+                csvtk: \$(echo \$( csvtk version | sed -e "s/csvtk v//g" ))
+            END_VERSIONS
+        """)
+    }
     """
+    ${commands.join('\n')}
+    """
+
 }

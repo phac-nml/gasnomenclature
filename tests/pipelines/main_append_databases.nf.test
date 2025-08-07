@@ -15,6 +15,7 @@ nextflow_pipeline {
                 db_clusters = "$baseDir/tests/data/databases/additional_clusters.tsv"
 
                 skip_prefix_background = true // Skip preprocessing of profiles to remove background prefix
+                skip_reduce_loci = true // Skip reducing loci in profiles to minimum number
             }
         }
 
@@ -67,6 +68,7 @@ nextflow_pipeline {
                 db_profiles = "$baseDir/tests/data/databases/additional_profiles.tsv"
 
                 skip_prefix_background = true // Skip preprocessing of profiles to remove background prefix
+                skip_reduce_loci = true // Skip reducing loci in profiles to minimum number
             }
         }
 
@@ -106,6 +108,7 @@ nextflow_pipeline {
                 db_clusters = "$baseDir/tests/data/databases/additional_clusters.tsv.gz"
 
                 skip_prefix_background = true // Skip preprocessing of profiles to remove background prefix
+                skip_reduce_loci = true // Skip reducing loci in profiles to minimum number
             }
         }
 
@@ -142,6 +145,7 @@ nextflow_pipeline {
                 db_clusters = "$baseDir/tests/data/databases/additional_clusters_overlap.tsv"
 
                 skip_prefix_background = false // Preprocessing of profiles required due to overlap to remove background prefix
+                skip_reduce_loci = true // Skip reducing loci in profiles to minimum number
             }
         }
 
@@ -178,6 +182,7 @@ nextflow_pipeline {
                 db_clusters = "$baseDir/tests/data/databases/additional_clusters.tsv"
 
                 skip_prefix_background = true // Skip preprocessing of profiles to remove background prefix
+                skip_reduce_loci = true // Skip reducing loci in profiles to minimum number
             }
         }
 
@@ -199,6 +204,7 @@ nextflow_pipeline {
                 db_clusters = "$baseDir/tests/data/databases/additional_clusters_loci.tsv"
 
                 skip_prefix_background = true // Skip preprocessing of profiles to remove background prefix
+                skip_reduce_loci = true // Skip reducing loci in profiles to minimum number
             }
         }
 
@@ -220,6 +226,7 @@ nextflow_pipeline {
                 db_clusters = "$baseDir/tests/data/databases/additional_clusters.tsv"
 
                 skip_prefix_background = false // Preprocessing of profiles to add @ to reference profiles
+                skip_reduce_loci = true // Skip reducing loci in profiles to minimum number
             }
         }
 

@@ -228,10 +228,12 @@ workflow GAS_NOMENCLATURE {
             exit 1, "${params.db_clusters}: Does not exist but was passed to the pipeline. Exiting now."
         }
         // Step 2B: Preprocess and/or merge additional profiles and clusters
-        // Note: If the --skip_prefix_background parameter is set, the additional profiles will not be prefixed with '@' in
-        // in their respective columns ( profiles: sample_id clusters: id).
+        // Note:
+        //      - If the --skip_prefix_background parameter is set, the additional profiles will not be prefixed with '@' in
+        //      in their respective columns ( profiles: sample_id clusters: id).
+        //      - If the --skip_reduce_loci parameter is set, the additional profiles will not be reduced to the minimum number of loci.
 
-        if (!(params.skip_prefix_background)) {
+        if (!(params.skip_prefix_background) || !(params.skip_reduce_loci)) {
             additional_references = PREPROCESS_REFERENCES(additional_profiles, additional_clusters)
             ch_versions = ch_versions.mix( additional_references.versions)
 

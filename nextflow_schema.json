@@ -10,7 +10,10 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["input", "outdir"],
+            "required": [
+                "input",
+                "outdir"
+            ],
             "properties": {
                 "input": {
                     "type": "string",
@@ -54,7 +57,11 @@
                     "type": "string",
                     "default": "average",
                     "description": "Clustering linkage method.",
-                    "enum": ["single", "average", "complete"]
+                    "enum": [
+                        "single",
+                        "average",
+                        "complete"
+                    ]
                 },
                 "gm_delimiter": {
                     "type": "string",
@@ -73,7 +80,10 @@
                 "pd_distm": {
                     "type": "string",
                     "description": "The distance method/unit",
-                    "enum": ["hamming", "scaled"],
+                    "enum": [
+                        "hamming",
+                        "scaled"
+                    ],
                     "default": "hamming"
                 },
                 "pd_missing_threshold": {
@@ -93,7 +103,10 @@
                 "pd_file_type": {
                     "type": "string",
                     "description": "Output format file type",
-                    "enum": ["text", "parquet"],
+                    "enum": [
+                        "text",
+                        "parquet"
+                    ],
                     "default": "text"
                 },
                 "pd_mapping_file": {
@@ -148,14 +161,19 @@
                 }
             }
         },
-        "append_profiles": {
-            "title": "Append Profiles",
+        "preprocess_references": {
+            "title": "Preprocess References",
             "type": "object",
             "description": "",
             "default": "",
             "properties": {
                 "skip_prefix_background": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "description": "Skip adding a prefix '@' is added to all reference sample names"
+                },
+                "skip_reduce_loci": {
+                    "type": "boolean",
+                    "description": "Skip selecting only the loci specified by \"pd_columns\" for reference profiles"
                 }
             }
         },
@@ -273,7 +291,14 @@
                     "description": "Method used to save pipeline results to output directory.",
                     "help_text": "The Nextflow `publishDir` option specifies which intermediate files should be saved to the output directory. This option tells the pipeline what method should be used to move these files. See [Nextflow docs](https://www.nextflow.io/docs/latest/process.html#publishdir) for details.",
                     "fa_icon": "fas fa-copy",
-                    "enum": ["symlink", "rellink", "link", "copy", "copyNoFollow", "move"],
+                    "enum": [
+                        "symlink",
+                        "rellink",
+                        "link",
+                        "copy",
+                        "copyNoFollow",
+                        "move"
+                    ],
                     "hidden": true
                 },
                 "email_on_fail": {
@@ -348,7 +373,7 @@
             "$ref": "#/definitions/locidex"
         },
         {
-            "$ref": "#/definitions/append_profiles"
+            "$ref": "#/definitions/preprocess_references"
         },
         {
             "$ref": "#/definitions/databases"
