@@ -39,7 +39,7 @@ process PREPROCESS_REFERENCES {
         """)
     } else {
         commands.add("""
-            cp $reference_profiles loci_profiles.tsv
+            ln -sf $reference_profiles loci_profiles.tsv
         """)
     }
 
