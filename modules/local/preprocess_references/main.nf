@@ -49,6 +49,10 @@ process PREPROCESS_REFERENCES {
             csvtk replace -t -f sample_id -p '(.*)' -r '@\${1}' loci_profiles.tsv > prefixed_profiles.tsv
             csvtk replace -t -f id -p '(.*)' -r '@\${1}' $reference_clusters > prefixed_clusters.tsv
         """)
+    } else {
+        commands.add("""
+            ln -sf loci_profiles.tsv prefixed_profiles.tsv
+        """)
     }
     if (!(params.skip_prefix_background) || !(params.skip_reduce_loci)) {
         commands.add("""
