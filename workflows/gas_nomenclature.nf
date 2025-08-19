@@ -234,7 +234,15 @@ workflow GAS_NOMENCLATURE {
         //      - If the --skip_reduce_loci parameter is set, the additional profiles will not be reduced to the minimum number of loci.
 
         if (!(params.skip_prefix_background) || !(params.skip_reduce_loci)) {
-            additional_references = PREPROCESS_REFERENCES(additional_profiles, additional_clusters)
+            if ((!params.skip_reduce_loci) && !params.pd_columns) {
+            exit 1, "error the --pd_columns parameter must be set if the --skip_reduce_loci parameter is not set."
+            }
+            if (params.pd_columns) {
+            columns_path = file(params.pd_columns)
+            additional_references = PREPROCESS_REFERENCES(additional_profiles, additional_clusters, columns_path)
+            } else {
+            additional_references = PREPROCESS_REFERENCES(additional_profiles, additional_clusters, [])
+            }
             ch_versions = ch_versions.mix( additional_references.versions)
 
             merged_references = APPEND_PROFILES(combined_references.combined_profiles, additional_references.processed_profiles)

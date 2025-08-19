@@ -9,6 +9,7 @@ process PREPROCESS_REFERENCES {
     input:
     path(reference_profiles)
     path(reference_clusters)
+    path(pd_columns)
 
 
     output:
@@ -19,9 +20,8 @@ process PREPROCESS_REFERENCES {
     script:
     def commands = []
 
-    if ((!params.skip_reduce_loci) && !params.pd_columns) {
-        error "The --pd_columns parameter must be set if the --skip_reduce_loci parameter is not set."
-    } else if (!params.skip_reduce_loci) {
+
+    if (!params.skip_reduce_loci) {
         // Reduce profiles to minimum number of loci
         commands.add("""
                 # Function to get to perform cat or zcat for handling files that could be either gzipped or not
@@ -33,7 +33,7 @@ process PREPROCESS_REFERENCES {
                     cat "\$1"
                 fi
             }
-            columns=\$(cat_zcat "${params.pd_columns}" | tr '\n' ',')
+            columns=\$(cat_zcat $pd_columns | tr '\n' ',')
             csvtk -t cut -f sample_id,"\${columns::-1}" $reference_profiles > loci_profiles.tsv
 
         """)

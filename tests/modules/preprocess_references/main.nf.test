@@ -12,12 +12,13 @@ nextflow_process {
                     ["$baseDir/tests/data/databases/additional_profiles.tsv"])
                 input[1] = Channel.of(
                     ["$baseDir/tests/data/clusters/clusters_MLST_rename.tsv"])
+                input[2] = Channel.of(
+                    ["$baseDir/tests/data/columns/remove-loci.txt"])
                 """
             }
 
             params {
                 outdir = "results"
-                pd_columns = "$baseDir/tests/data/columns/remove-loci.txt"
             }
         }
 
