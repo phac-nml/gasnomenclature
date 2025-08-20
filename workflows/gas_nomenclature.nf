@@ -235,13 +235,13 @@ workflow GAS_NOMENCLATURE {
 
         if (!(params.skip_prefix_background) || !(params.skip_reduce_loci)) {
             if ((!params.skip_reduce_loci) && !params.pd_columns) {
-            exit 1, "error the --pd_columns parameter must be set if the --skip_reduce_loci parameter is not set."
+                exit 1, "error the --pd_columns parameter must be set if the --skip_reduce_loci parameter is not set."
             }
             if (params.pd_columns) {
-            columns_path = file(params.pd_columns)
-            additional_references = PREPROCESS_REFERENCES(additional_profiles, additional_clusters, columns_path)
+                columns_path = file(params.pd_columns)
+                additional_references = PREPROCESS_REFERENCES(additional_profiles, additional_clusters, columns_path)
             } else {
-            additional_references = PREPROCESS_REFERENCES(additional_profiles, additional_clusters, [])
+                additional_references = PREPROCESS_REFERENCES(additional_profiles, additional_clusters, [])
             }
             ch_versions = ch_versions.mix( additional_references.versions)
 
