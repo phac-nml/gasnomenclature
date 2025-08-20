@@ -52,6 +52,7 @@ process PREPROCESS_REFERENCES {
     } else {
         commands.add("""
             ln -sf loci_profiles.tsv prefixed_profiles.tsv
+            ln -sf $reference_clusters prefixed_clusters.tsv
         """)
     }
     if (!(params.skip_prefix_background) || !(params.skip_reduce_loci)) {
