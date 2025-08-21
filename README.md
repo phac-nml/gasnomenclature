@@ -114,6 +114,11 @@ _Note: To add additional reference samples to the pipeline, both `--db_profiles`
 
 When large samplesheets are provided to LOCIDEX, they are split-up, into batches (default batch size: 100), to allow for `LOCIDEX_MERGE` to be run in parallel. To modify the size of batches use the parameter `--batch_size n`
 
+## PREPROCESSING
+
+- `--skip_prefix_background` : When additional reference profiles and clusters are used `sample_id` and `id` column values are prefixed with `@` to ensure unique values. (**default:** _false_)
+- `--skip_reduce_loci` : Selecting only the loc specified by `--pd_columns` for cgMLST. (**default:** _false_)
+
 ## Other
 
 Other parameters (defaults from nf-core) are defined in [nextflow_schema.json](nextflow_schmea.json).

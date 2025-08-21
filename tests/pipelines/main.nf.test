@@ -460,6 +460,7 @@ nextflow_pipeline {
                 db_profiles = "$baseDir/tests/data/profiles/profiles_walkthrough.tsv"
                 db_clusters = "$baseDir/tests/data/clusters/cluster_walkthrough.tsv"
                 skip_prefix_background = true // Skip preprocessing of profiles to remove background prefix
+                skip_reduce_loci = true // Skip reducing loci in profiles to minimum number
                 gm_thresholds = "5,3,0"
                 outdir = "results"
             }
@@ -548,6 +549,7 @@ nextflow_pipeline {
                 db_profiles = "$baseDir/tests/data/profiles/large.tsv.gz"
                 db_clusters = "$baseDir/tests/data/clusters/large.tsv.gz"
                 skip_prefix_background = true // Skip preprocessing of profiles to remove background prefix
+                skip_reduce_loci = true // Skip reducing loci in profiles to minimum number
                 gm_thresholds = "5,3,0"
                 outdir = "results"
             }

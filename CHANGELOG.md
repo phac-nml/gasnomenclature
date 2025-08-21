@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2025/08/dd
+
+- Update the `PREPROCESS_REFERENCES` stage to output the reference profiles containing only the selected cgMLST columns from the `--pd_columns` parameter. [PR #80](https://github.com/phac-nml/gasnomenclature/pull/80)
+  - Add parameter `--skip_reduce_loci` which can be used to skip this step. [PR #80](https://github.com/phac-nml/gasnomenclature/pull/80)
+
 ## [0.7.2] - 2025/08/06
 
 ### `Modified`
@@ -193,3 +198,4 @@ Initial release of the Genomic Address Nomenclature pipeline to be used to assig
 [0.7.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.7.0
 [0.7.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.7.1
 [0.7.2]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.7.2
+[0.8.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.8.0
