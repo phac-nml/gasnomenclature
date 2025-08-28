@@ -173,21 +173,21 @@ workflow GAS_NOMENCLATURE {
     }
 
     // If LOCIDEX merge when run with reduce loci, the --pd_columns parameter must be set to be used with locidex merge --loci
-    if (!(params.skip_prefix_background) || !(params.skip_reduce_loci)) {
-            if ((!params.skip_reduce_loci) && !params.pd_columns) {
+    if (!(params.skip_reduce_loci)) {
+        if ((!params.skip_reduce_loci) && !params.pd_columns) {
                 exit 1, "error the --pd_columns parameter must be set if the --skip_reduce_loci parameter is not set."
             }
-            if (params.pd_columns) {
+        if (params.pd_columns) {
                 columns_path = file(params.pd_columns)
                 // 1B) Run LOCIDEX on grouped query and reference samples with loci reduction
                 references = LOCIDEX_MERGE_REF(grouped_ref_files, ref_tag, merge_tsv, columns_path)
                 queries = LOCIDEX_MERGE_QUERY(grouped_query_files, query_tag, merge_tsv, columns_path)
             }
     } else {
-    // 1B) Run LOCIDEX on grouped query and reference samples without loci reduction
         references = LOCIDEX_MERGE_REF(grouped_ref_files, ref_tag, merge_tsv, [])
         queries = LOCIDEX_MERGE_QUERY(grouped_query_files, query_tag, merge_tsv, [])
     }
+
     ch_versions = ch_versions.mix(references.versions)
     ch_versions = ch_versions.mix(queries.versions)
 
@@ -256,6 +256,7 @@ workflow GAS_NOMENCLATURE {
                 additional_references = PREPROCESS_REFERENCES(additional_profiles, additional_clusters, [])
             }
             ch_versions = ch_versions.mix( additional_references.versions)
+            ch_versions.view()
 
             merged_references = APPEND_PROFILES(combined_references.combined_profiles, additional_references.processed_profiles)
             expected_clusters = APPEND_CLUSTERS(initial_clusters, additional_references.processed_clusters)
