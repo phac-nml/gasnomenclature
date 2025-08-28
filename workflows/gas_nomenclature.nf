@@ -172,11 +172,14 @@ workflow GAS_NOMENCLATURE {
         return tuple(index, batch)
     }
 
+    // If LOCIDEX merge is run with --loci parameter, ensure that --pd_columns is staged
+    columns_path = file(params.pd_columns)
+
     // 1B) Run LOCIDEX on grouped query and reference samples
-    references = LOCIDEX_MERGE_REF(grouped_ref_files, ref_tag, merge_tsv)
+    references = LOCIDEX_MERGE_REF(grouped_ref_files, ref_tag, merge_tsv, columns_path)
     ch_versions = ch_versions.mix(references.versions)
 
-    queries = LOCIDEX_MERGE_QUERY(grouped_query_files, query_tag, merge_tsv)
+    queries = LOCIDEX_MERGE_QUERY(grouped_query_files, query_tag, merge_tsv, columns_path)
     ch_versions = ch_versions.mix(queries.versions)
 
     // LOCIDEX Step 2:
@@ -244,6 +247,7 @@ workflow GAS_NOMENCLATURE {
                 additional_references = PREPROCESS_REFERENCES(additional_profiles, additional_clusters, [])
             }
             ch_versions = ch_versions.mix( additional_references.versions)
+            ch_versions.view()
 
             merged_references = APPEND_PROFILES(combined_references.combined_profiles, additional_references.processed_profiles)
             expected_clusters = APPEND_CLUSTERS(initial_clusters, additional_references.processed_clusters)

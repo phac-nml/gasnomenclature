@@ -1,7 +1,7 @@
 process PREPROCESS_REFERENCES {
     tag "Preprocess reference profiles"
     label 'process_low'
-
+    conda "bioconda::csvtk=0.22.0"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/csvtk:0.22.0--h9ee0642_1' :
         'biocontainers/csvtk:0.22.0--h9ee0642_1' }"
@@ -55,16 +55,14 @@ process PREPROCESS_REFERENCES {
             ln -sf $reference_clusters prefixed_clusters.tsv
         """)
     }
-    if (!(params.skip_prefix_background) || !(params.skip_reduce_loci)) {
-        commands.add("""
-            cat <<-END_VERSIONS > versions.yml
-            "${task.process}":
-                csvtk: \$(echo \$( csvtk version | sed -e "s/csvtk v//g" ))
-            END_VERSIONS
-        """)
-    }
+
     """
     ${commands.join('\n')}
+
+cat <<-END_VERSIONS > versions.yml
+"${task.process}":
+    csvtk: \$(echo \$( csvtk version | sed -e "s/csvtk v//g" ))
+END_VERSIONS
     """
 
 }

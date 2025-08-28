@@ -13,7 +13,8 @@ process LOCIDEX_MERGE {
     input:
     tuple val(batch_index), path(input_values) // [file(sample1), file(sample2), file(sample3), etc...]
     val  input_tag    // makes output unique and denotes the item as the reference or query to prevent name collision
-    path  merge_tsv
+    path(merge_tsv)
+    path(pd_columns)
 
     output:
     path("${input_tag}/profile_${batch_index}.tsv"),           emit: combined_profiles
@@ -22,6 +23,10 @@ process LOCIDEX_MERGE {
 
     script:
     def args = task.ext.args ?: ''
+
+    if(pd_columns){
+        args = "--loci $pd_columns " + args
+    }
 
     """
     locidex merge -i ${input_values.join(' ')} -o ${input_tag} -p ${merge_tsv} $args
