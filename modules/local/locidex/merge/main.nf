@@ -6,8 +6,8 @@ process LOCIDEX_MERGE {
     fair true
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/locidex%3A0.3.0--pyhdfd78af_0' :
-        'biocontainers/locidex:0.3.0--pyhdfd78af_0' }"
+        'https://depot.galaxyproject.org/singularity/locidex%3A0.4.0--pyhdfd78af_0' :
+        'biocontainers/locidex:0.4.0--pyhdfd78af_0' }"
 
 
     input:
@@ -21,8 +21,10 @@ process LOCIDEX_MERGE {
     path "versions.yml",           emit: versions
 
     script:
+    def args = task.ext.args ?: ''
+
     """
-    locidex merge -i ${input_values.join(' ')} -o ${input_tag} -p ${merge_tsv}
+    locidex merge -i ${input_values.join(' ')} -o ${input_tag} -p ${merge_tsv} $args
 
     mv ${input_tag}/MLST_error_report.csv ${input_tag}/MLST_error_report_${batch_index}.csv
     mv ${input_tag}/profile.tsv ${input_tag}/profile_${batch_index}.tsv
