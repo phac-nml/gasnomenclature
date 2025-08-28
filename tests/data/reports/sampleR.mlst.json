@@ -8,11 +8,11 @@
         "max_internal_stops": 0
     },
     "data": {
-        "sample_name": "sample4",
+        "sample_name": "sampleR",
         "profile": {
-            "sample1": {
+            "sampleQ": {
                 "l1": "1",
-                "l2": "1",
+                "l2": "2",
                 "l3": "1",
                 "l4": "1",
                 "l5": "1"
