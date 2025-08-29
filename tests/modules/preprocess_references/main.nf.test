@@ -9,14 +9,17 @@ nextflow_process {
             process {
                 """
                 input[0] = Channel.of(
-                    ["$baseDir/tests/data/profiles/input-selfdistance-profile_query.tsv"])
+                    ["$baseDir/tests/data/databases/additional_profiles.tsv"])
                 input[1] = Channel.of(
                     ["$baseDir/tests/data/clusters/clusters_MLST_rename.tsv"])
+                input[2] = Channel.of(
+                    ["$baseDir/tests/data/columns/remove-loci.txt"])
                 """
             }
 
             params {
                 outdir = "results"
+                skip_reduce_loci = false
             }
         }
 
@@ -26,13 +29,15 @@ nextflow_process {
             // Check profile distances
             assert path("$launchDir/results/preprocess/prefixed_profiles.tsv").exists()
             def lines = path("$launchDir/results/preprocess/prefixed_profiles.tsv").text
-            assert lines.contains("@sample1")
-            assert lines.contains("@sample2")
-
+            assert lines.contains("@sampleA")
+            assert lines.contains("@sampleB")
+            // Check clusters
             assert path("$launchDir/results/preprocess/prefixed_clusters.tsv").exists()
             def lines2 = path("$launchDir/results/preprocess/prefixed_clusters.tsv").text
             assert lines2.contains("@sample1")
             assert lines2.contains("@sample2")
+            // That loci l1 was removed
+            assert !lines.contains("l1")
 
         }
     }

@@ -148,14 +148,20 @@
                 }
             }
         },
-        "append_profiles": {
-            "title": "Append Profiles",
+        "preprocess_references": {
+            "title": "Preprocess References",
             "type": "object",
             "description": "",
             "default": "",
             "properties": {
                 "skip_prefix_background": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "description": "Skip adding a prefix '@' is added to all reference sample names"
+                },
+                "skip_reduce_loci": {
+                    "type": "boolean",
+                    "description": "Skip selecting only the loci specified by \"pd_columns\" for reference profiles",
+                    "default": true
                 }
             }
         },
@@ -348,7 +354,7 @@
             "$ref": "#/definitions/locidex"
         },
         {
-            "$ref": "#/definitions/append_profiles"
+            "$ref": "#/definitions/preprocess_references"
         },
         {
             "$ref": "#/definitions/databases"

@@ -3,6 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2025/08/29
+
+### `Added`
+
+**Reduce the Number of Loci used in Analysis**
+
+- Update the `PREPROCESS_REFERENCES` process to use only the selected loci specified by the `--pd_columns` parameter. [PR #80](https://github.com/phac-nml/gasnomenclature/pull/80)
+- Update the `LOCIDEX_MERGE` process to include only the selected loci specified by the `--pd_columns` parameter in the `profile.tsv` file. [PR #81](https://github.com/phac-nml/gasnomenclature/pull/81)
+  - Updated `locidex` version to [v.0.4.0](https://github.com/phac-nml/locidex/releases/tag/v0.4.0) which adds a `--loci` parameter to input select loci for included in `profile.tsv`. [PR #81](https://github.com/phac-nml/gasnomenclature/pull/81)
+- Add parameter `--skip_reduce_loci` to skip reducing loci. [PR #80](https://github.com/phac-nml/gasnomenclature/pull/80)
+
 ## [0.7.2] - 2025/08/06
 
 ### `Modified`
@@ -193,3 +204,4 @@ Initial release of the Genomic Address Nomenclature pipeline to be used to assig
 [0.7.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.7.0
 [0.7.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.7.1
 [0.7.2]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.7.2
+[0.8.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.8.0

@@ -172,11 +172,23 @@ workflow GAS_NOMENCLATURE {
         return tuple(index, batch)
     }
 
-    // 1B) Run LOCIDEX on grouped query and reference samples
-    references = LOCIDEX_MERGE_REF(grouped_ref_files, ref_tag, merge_tsv)
-    ch_versions = ch_versions.mix(references.versions)
+    // If LOCIDEX merge when run with reduce loci, the --pd_columns parameter must be set to be used with locidex merge --loci
+    if (!(params.skip_reduce_loci)) {
+        if ((!params.skip_reduce_loci) && !params.pd_columns) {
+                exit 1, "error the --pd_columns parameter must be set if the --skip_reduce_loci parameter is not set."
+            }
+        if (params.pd_columns) {
+                columns_path = file(params.pd_columns)
+                // 1B) Run LOCIDEX on grouped query and reference samples with loci reduction
+                references = LOCIDEX_MERGE_REF(grouped_ref_files, ref_tag, merge_tsv, columns_path)
+                queries = LOCIDEX_MERGE_QUERY(grouped_query_files, query_tag, merge_tsv, columns_path)
+            }
+    } else {
+        references = LOCIDEX_MERGE_REF(grouped_ref_files, ref_tag, merge_tsv, [])
+        queries = LOCIDEX_MERGE_QUERY(grouped_query_files, query_tag, merge_tsv, [])
+    }
 
-    queries = LOCIDEX_MERGE_QUERY(grouped_query_files, query_tag, merge_tsv)
+    ch_versions = ch_versions.mix(references.versions)
     ch_versions = ch_versions.mix(queries.versions)
 
     // LOCIDEX Step 2:
@@ -228,11 +240,21 @@ workflow GAS_NOMENCLATURE {
             exit 1, "${params.db_clusters}: Does not exist but was passed to the pipeline. Exiting now."
         }
         // Step 2B: Preprocess and/or merge additional profiles and clusters
-        // Note: If the --skip_prefix_background parameter is set, the additional profiles will not be prefixed with '@' in
-        // in their respective columns ( profiles: sample_id clusters: id).
+        // Note:
+        //      - If the --skip_prefix_background parameter is set, the additional profiles will not be prefixed with '@' in
+        //      in their respective columns ( profiles: sample_id clusters: id).
+        //      - If the --skip_reduce_loci parameter is set, the additional profiles will not be reduced to the minimum number of loci.
 
-        if (!(params.skip_prefix_background)) {
-            additional_references = PREPROCESS_REFERENCES(additional_profiles, additional_clusters)
+        if (!(params.skip_prefix_background) || !(params.skip_reduce_loci)) {
+            if ((!params.skip_reduce_loci) && !params.pd_columns) {
+                exit 1, "error the --pd_columns parameter must be set if the --skip_reduce_loci parameter is not set."
+            }
+            if (params.pd_columns) {
+                columns_path = file(params.pd_columns)
+                additional_references = PREPROCESS_REFERENCES(additional_profiles, additional_clusters, columns_path)
+            } else {
+                additional_references = PREPROCESS_REFERENCES(additional_profiles, additional_clusters, [])
+            }
             ch_versions = ch_versions.mix( additional_references.versions)
 
             merged_references = APPEND_PROFILES(combined_references.combined_profiles, additional_references.processed_profiles)
