@@ -172,11 +172,23 @@ workflow GAS_NOMENCLATURE {
         return tuple(index, batch)
     }
 
-    // 1B) Run LOCIDEX on grouped query and reference samples
-    references = LOCIDEX_MERGE_REF(grouped_ref_files, ref_tag, merge_tsv)
-    ch_versions = ch_versions.mix(references.versions)
+    // If LOCIDEX merge when run with reduce loci, the --pd_columns parameter must be set to be used with locidex merge --loci
+    if (!(params.skip_reduce_loci)) {
+        if ((!params.skip_reduce_loci) && !params.pd_columns) {
+                exit 1, "error the --pd_columns parameter must be set if the --skip_reduce_loci parameter is not set."
+            }
+        if (params.pd_columns) {
+                columns_path = file(params.pd_columns)
+                // 1B) Run LOCIDEX on grouped query and reference samples with loci reduction
+                references = LOCIDEX_MERGE_REF(grouped_ref_files, ref_tag, merge_tsv, columns_path)
+                queries = LOCIDEX_MERGE_QUERY(grouped_query_files, query_tag, merge_tsv, columns_path)
+            }
+    } else {
+        references = LOCIDEX_MERGE_REF(grouped_ref_files, ref_tag, merge_tsv, [])
+        queries = LOCIDEX_MERGE_QUERY(grouped_query_files, query_tag, merge_tsv, [])
+    }
 
-    queries = LOCIDEX_MERGE_QUERY(grouped_query_files, query_tag, merge_tsv)
+    ch_versions = ch_versions.mix(references.versions)
     ch_versions = ch_versions.mix(queries.versions)
 
     // LOCIDEX Step 2:

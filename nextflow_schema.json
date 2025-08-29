@@ -160,7 +160,8 @@
                 },
                 "skip_reduce_loci": {
                     "type": "boolean",
-                    "description": "Skip selecting only the loci specified by \"pd_columns\" for reference profiles"
+                    "description": "Skip selecting only the loci specified by \"pd_columns\" for reference profiles",
+                    "default": true
                 }
             }
         },

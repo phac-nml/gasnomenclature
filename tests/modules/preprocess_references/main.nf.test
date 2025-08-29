@@ -19,6 +19,7 @@ nextflow_process {
 
             params {
                 outdir = "results"
+                skip_reduce_loci = false
             }
         }
 

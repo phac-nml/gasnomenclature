@@ -117,7 +117,7 @@ When large samplesheets are provided to LOCIDEX, they are split-up, into batches
 ## PREPROCESSING
 
 - `--skip_prefix_background` : When additional reference profiles and clusters are used `sample_id` and `id` column values are prefixed with `@` to ensure unique values. (**default:** _false_)
-- `--skip_reduce_loci` : Selecting only the loc specified by `--pd_columns` for cgMLST. (**default:** _false_)
+- `--skip_reduce_loci` : Selecting only the loci specified by `--pd_columns` for cgMLST. This includes removing loci during `LOCIDEX_MERGE` (**default:** _true_)
 
 ## Other
 
