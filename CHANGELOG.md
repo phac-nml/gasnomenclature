@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.8.0] - 2025/08/dd
+## [0.8.0] - 2025/08/29
 
 - Update the `PREPROCESS_REFERENCES` stage to output the reference profiles containing only the selected cgMLST columns from the `--pd_columns` parameter. [PR #80](https://github.com/phac-nml/gasnomenclature/pull/80)
   - Add parameter `--skip_reduce_loci` which can be used to skip this step. [PR #80](https://github.com/phac-nml/gasnomenclature/pull/80)
