@@ -256,7 +256,6 @@ workflow GAS_NOMENCLATURE {
                 additional_references = PREPROCESS_REFERENCES(additional_profiles, additional_clusters, [])
             }
             ch_versions = ch_versions.mix( additional_references.versions)
-            ch_versions.view()
 
             merged_references = APPEND_PROFILES(combined_references.combined_profiles, additional_references.processed_profiles)
             expected_clusters = APPEND_CLUSTERS(initial_clusters, additional_references.processed_clusters)
