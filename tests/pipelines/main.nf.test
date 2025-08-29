@@ -747,4 +747,58 @@ nextflow_pipeline {
             assert actual_calls.text == expected_calls.text
         }
     }
+        test("Small-scale test of full pipeline with loci-reduction"){
+        tag "pipeline_reduce_loci"
+
+        when{
+            params {
+                input = "$baseDir/tests/data/samplesheets/samplesheet-removeloci.csv" // Will change to include a samplesheet with loci to drop
+                outdir = "results"
+                skip_reduce_loci = false
+                pd_columns = "$baseDir/tests/data/columns/remove-loci-pipeline.txt"
+
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+
+            // Check merged profiles
+            def actual_profile_ref = path("$launchDir/results/locidex/merge/ref/profile_1.tsv")
+            def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected-profile_removeloci1.tsv")
+            assert actual_profile_ref.text == expected_profile_tsv.text
+
+            // Check query profiles
+            def actual_profile_query = path("$launchDir/results/locidex/merge/query/profile_1.tsv")
+            def expected_profile_query_tsv = path("$baseDir/tests/data/profiles/expected-profile_removeloci2.tsv")
+            assert actual_profile_query.text == expected_profile_query_tsv.text
+
+            // Check computed pairwise distances
+            def actual_distances = path("$launchDir/results/distances/results.text")
+            def expected_distances = path("$baseDir/tests/data/distances/expected_dists_removeloci.txt")
+            assert actual_distances.text == expected_distances.text
+
+            // Verify cluster file
+            def actual_cluster = path("$launchDir/results/cluster/clusters.tsv")
+            def expected_cluster = path("$baseDir/tests/data/clusters/expected_clusters_removeloci.txt")
+            assert actual_cluster.text == expected_cluster.text
+
+            // Check called clusters
+            def actual_calls = path("$launchDir/results/call/Called/results.text")
+            def expected_calls = path("$baseDir/tests/data/called/expected_results_removeloci.txt")
+            assert actual_calls.text == expected_calls.text
+
+            // Check IRIDA Next JSON output
+            assert path("$launchDir/results/iridanext.output.json").exists()
+
+            def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_global = iridanext_json.files.global
+            def iridanext_metadata = iridanext_json.metadata.samples
+
+            assert iridanext_global.sort { it.path} == path("$baseDir/tests/data/irida/test_iridanext.output.json").json.files.global.sort { it.path}
+            assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleR")
+            assert iridanext_metadata.sampleR."genomic_address_name" == "1.1.3"
+        }
+    }
 }
