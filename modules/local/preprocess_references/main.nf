@@ -1,7 +1,7 @@
 process PREPROCESS_REFERENCES {
     tag "Preprocess reference profiles"
     label 'process_low'
-    conda "bioconda::csvtk=0.22.0"
+    conda "bioconda::csvtk=0.31.0"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/csvtk:0.31.0--h9ee0642_0' :
         'biocontainers/csvtk:0.31.0--h9ee0642_0' }"
