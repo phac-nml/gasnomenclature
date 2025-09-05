@@ -38,6 +38,8 @@ nextflow_process {
             assert lines2.contains("@sample2")
             // That loci l1 was removed
             assert !lines.contains("l1")
+            assert lines.contains("l2")
+            assert lines.contains("l3")
 
         }
     }
@@ -78,6 +80,8 @@ nextflow_process {
             assert lines2.contains("@sample2")
             // That loci l1 was removed
             assert !lines.contains("l1")
+            assert lines.contains("l2")
+            assert lines.contains("l3")
 
         }
     }
