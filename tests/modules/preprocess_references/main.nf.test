@@ -3,7 +3,7 @@ nextflow_process {
     script "modules/local/preprocess_references/main.nf"
     process "PREPROCESS_REFERENCES"
 
-    test("Perform preprocessing on reference") {
+    test("Perform preprocessing on reference: no header on column file") {
         tag "preprocessing_references"
         when {
             process {
@@ -38,6 +38,50 @@ nextflow_process {
             assert lines2.contains("@sample2")
             // That loci l1 was removed
             assert !lines.contains("l1")
+            assert lines.contains("l2")
+            assert lines.contains("l3")
+
+        }
+    }
+
+    test("Perform preprocessing on reference: header on column file") {
+        tag "preprocessing_column_header"
+        // There should be no change in the behaviour of the process when --pd_column file has a column header
+        when {
+            process {
+                """
+                input[0] = Channel.of(
+                    ["$baseDir/tests/data/databases/additional_profiles.tsv"])
+                input[1] = Channel.of(
+                    ["$baseDir/tests/data/clusters/clusters_MLST_rename.tsv"])
+                input[2] = Channel.of(
+                    ["$baseDir/tests/data/columns/remove-loci-header.txt"])
+                """
+            }
+
+            params {
+                outdir = "results"
+                skip_reduce_loci = false
+            }
+        }
+
+        then {
+            assert process.success
+
+            // Check profile distances
+            assert path("$launchDir/results/preprocess/prefixed_profiles.tsv").exists()
+            def lines = path("$launchDir/results/preprocess/prefixed_profiles.tsv").text
+            assert lines.contains("@sampleA")
+            assert lines.contains("@sampleB")
+            // Check clusters
+            assert path("$launchDir/results/preprocess/prefixed_clusters.tsv").exists()
+            def lines2 = path("$launchDir/results/preprocess/prefixed_clusters.tsv").text
+            assert lines2.contains("@sample1")
+            assert lines2.contains("@sample2")
+            // That loci l1 was removed
+            assert !lines.contains("l1")
+            assert lines.contains("l2")
+            assert lines.contains("l3")
 
         }
     }

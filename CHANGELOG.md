@@ -3,6 +3,16 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.1] - 2025/09/04
+
+### `Updated`
+
+- `PREPROCESS_REFERENCES` csvtk container updated to `0.31.0` for which `csvtk cut` has a `-m` `--allow-missing-col` missing column flag. [PR #83](https://github.com/phac-nml/gasnomenclature/pull/83)
+
+### `Added`
+
+- Added a process level `nf-test` for `LOCIDEX_MERGE` to confirm backward compatibility between MLST JSON files with and without a `"manfiest"` key. [PR #83](https://github.com/phac-nml/gasnomenclature/pull/83)
+
 ## [0.8.0] - 2025/08/29
 
 ### `Added`
@@ -205,3 +215,4 @@ Initial release of the Genomic Address Nomenclature pipeline to be used to assig
 [0.7.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.7.1
 [0.7.2]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.7.2
 [0.8.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.8.0
+[0.8.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.8.1
