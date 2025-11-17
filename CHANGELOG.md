@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated `profile_dists` dependency to version `1.0.10` and `genomic_address_service` to `0.3.0`. [PR #86](https://github.com/phac-nml/gasnomenclature/pull/86)
 - Adding GitHub CI tests against Nextflow `24.10.3`. [PR #85](https://github.com/phac-nml/gasnomenclature/pull/85)
-    - Set Nextflow `24.10.3` as the minimum Nextflow version. [PR #86](https://github.com/phac-nml/gasnomenclature/pull/86)
+  - Set Nextflow `24.10.3` as the minimum Nextflow version. [PR #86](https://github.com/phac-nml/gasnomenclature/pull/86)
 - Updated GitHub CI tests to use template from `nf-core` version `3.4.1`. [PR #86](https://github.com/phac-nml/gasnomenclature/pull/86)
 - Updated nf-core module `custom/dumpsoftwareversions` to latest version. [PR #86](https://github.com/phac-nml/gasnomenclature/pull/86)
 
