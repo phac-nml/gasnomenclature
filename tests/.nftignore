@@ -1,0 +1,5 @@
+.DS_Store
+pipeline_info/*.{html,json,txt,yml}
+call/Called/run.json
+distances/run.json
+iridanext.output.json
