@@ -39,6 +39,6 @@ lint:
 template:
   prefix: phac-nml
   name: gasnomenclature
-  description: gasnomenclature Pipeline
+  description: gasnomenclature pipeline
   outdir: .
   is_nfcore: false
