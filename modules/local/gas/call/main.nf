@@ -7,8 +7,8 @@ process GAS_CALL{
     // Update singularlity to Galaxy depot if it becomes available.
     // Likely: // https://depot.galaxyproject.org/singularity/genomic_address_service:0.2.0--pyhdfd78af_0
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'biocontainers/genomic_address_service:0.2.0--pyhdfd78af_0' :
-        'biocontainers/genomic_address_service:0.2.0--pyhdfd78af_0' }"
+        'https://depot.galaxyproject.org/singularity/genomic_address_service%3A0.3.0--pyhdfd78af_0' :
+        'biocontainers/genomic_address_service:0.3.0--pyhdfd78af_0' }"
 
     input:
     path(reference_clusters)
