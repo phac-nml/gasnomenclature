@@ -45,5 +45,4 @@ process LOCIDEX_CONCAT {
         csvtk: \$(echo \$( csvtk version | sed -e "s/csvtk v//g" ))
     END_VERSIONS
     """
-
-    }
+}
