@@ -174,6 +174,24 @@ To run with the test profile, please do:
 nextflow run phac-nml/gasnomenclature -profile docker,test -r main -latest --outdir results
 ```
 
+# Unit and Integration tests
+
+In order to run the unit and integration test suite, please install [nf-test](https://www.nf-test.com/) and then run:
+
+## Using docker
+
+```bash
+nf-test test --profile +docker
+```
+
+## Using singularity
+
+```bash
+nf-test test --profile +singularity
+```
+
+This assumes you have both `nextflow` and `docker` (or `singularity`) installed.
+
 # Legal
 
 Copyright 2024 Government of Canada
