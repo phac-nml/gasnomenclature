@@ -1,4 +1,4 @@
-[![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A523.04.3-brightgreen.svg)](https://www.nextflow.io/)
+[![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A524.10.3-brightgreen.svg)](https://www.nextflow.io/)
 
 # Genomic Address Service Nomenclature Workflow
 
@@ -173,6 +173,24 @@ To run with the test profile, please do:
 ```bash
 nextflow run phac-nml/gasnomenclature -profile docker,test -r main -latest --outdir results
 ```
+
+# Unit and Integration tests
+
+In order to run the unit and integration test suite, please install [nf-test](https://www.nf-test.com/) and then run:
+
+## Using docker
+
+```bash
+nf-test test --profile +docker
+```
+
+## Using singularity
+
+```bash
+nf-test test --profile +singularity
+```
+
+This assumes you have both `nextflow` and `docker` (or `singularity`) installed.
 
 # Legal
 

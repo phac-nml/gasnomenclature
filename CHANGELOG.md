@@ -3,6 +3,21 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2025/11/19
+
+### `Updated`
+
+- Updated `profile_dists` dependency to version `1.0.10` and `genomic_address_service` to `0.3.0`. [PR #86](https://github.com/phac-nml/gasnomenclature/pull/86)
+- Adding GitHub CI tests against Nextflow `24.10.3`. [PR #85](https://github.com/phac-nml/gasnomenclature/pull/85)
+  - Set Nextflow `24.10.3` as the minimum Nextflow version. [PR #86](https://github.com/phac-nml/gasnomenclature/pull/86)
+- Updated GitHub CI tests to use template from `nf-core` version `3.4.1`. [PR #86](https://github.com/phac-nml/gasnomenclature/pull/86)
+- Updated nf-core module `custom/dumpsoftwareversions` to latest version. [PR #86](https://github.com/phac-nml/gasnomenclature/pull/86)
+- Updated `README.md` to include instructions for running unit/integration tests using `nf-test`. [PR #89](https://github.com/phac-nml/gasnomenclature/pull/89)
+
+### `Fixed`
+
+- Fixed `containerOptions` string so the required options are only passed when using the `docker` profile (and not for `singularity`). [PR #88](https://github.com/phac-nml/gasnomenclature/pull/88)
+
 ## [0.8.1] - 2025/09/05
 
 ### `Updated`
@@ -216,3 +231,4 @@ Initial release of the Genomic Address Nomenclature pipeline to be used to assig
 [0.7.2]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.7.2
 [0.8.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.8.0
 [0.8.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.8.1
+[0.9.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.9.0
