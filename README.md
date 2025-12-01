@@ -143,12 +143,6 @@ An example of the what the contents of the IRIDA Next JSON file looks like for t
 {
     "files": {
         "global": [
-            {
-                "path": "locidex/concat/reference/concat_ref/MLST_error_report_concat_ref.csv"
-            },
-            {
-                "path": "locidex/concat/query/concat_query/MLST_error_report_concat_query.csv"
-            }
         ],
         "samples": {
 
