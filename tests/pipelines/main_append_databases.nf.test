@@ -262,6 +262,7 @@ nextflow_pipeline {
             def iridanext_metadata = iridanext_json.metadata.samples
 
             assert iridanext_global.sort { it.path} == path("$baseDir/tests/data/irida/append_iridanext.output.json").json.files.global.sort { it.path}
+            assert iridanext_json.files.samples.size() == 0
 
             assert iridanext_metadata.size() == 1 && iridanext_metadata.containsKey("sampleQ")
             assert iridanext_metadata.sampleQ."genomic_address_name" == "1.1.3"
