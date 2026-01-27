@@ -10,7 +10,7 @@
                     "csvtk": "0.22.0"
                 },
                 "GAS_CALL": {
-                    "genomic_address_service": "0.3.0"
+                    "genomic_address_service": "0.3.2"
                 },
                 "LOCIDEX_MERGE_QUERY": {
                     "locidex": "0.4.0"
@@ -83,9 +83,9 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.0"
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.6"
         },
-        "timestamp": "2025-11-27T14:44:03.628445191"
+        "timestamp": "2026-01-27T15:28:34.378610835"
     }
 }
