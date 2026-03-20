@@ -5,8 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### `Updated`
+
 - Updated `genomic_address_service` to version `0.3.2`. [PR #92](https://github.com/phac-nml/gasnomenclature/pull/92).
   - NOTE: Changes to `genomic_address_service` impact `gas mcluster` not used in this pipeline.
+- Set nextflow version 25.10.4 to replace 'latest-everything' to confirm compatibility with next IRIDA-Next nextflow version in `.github/workflows` for nf-test. [PR #93](https://github.com/phac-nml/gasnomenclature/pull/93)
 
 ## [0.9.1] - 2025/12/01
 
