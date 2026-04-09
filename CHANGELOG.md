@@ -3,13 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [0.9.2] - 2026/04/9
 
 ### `Updated`
 
 - Updated `genomic_address_service` to version `0.3.2`. [PR #92](https://github.com/phac-nml/gasnomenclature/pull/92).
   - NOTE: Changes to `genomic_address_service` impact `gas mcluster` not used in this pipeline.
 - Set nextflow version 25.10.4 to replace 'latest-everything' to confirm compatibility with next IRIDA-Next nextflow version in `.github/workflows` for nf-test. [PR #93](https://github.com/phac-nml/gasnomenclature/pull/93)
+
+### `Changed`
+
+- `LOCIDEX_MERGE` resource `label` needs to be switched to `process_single` so that the pipeline runs more efficiently. [PR #94](https://github.com/phac-nml/gasnomenclature/pull/94)
 
 ## [0.9.1] - 2025/12/01
 
@@ -247,3 +251,4 @@ Initial release of the Genomic Address Nomenclature pipeline to be used to assig
 [0.8.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.8.1
 [0.9.0]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.9.0
 [0.9.1]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.9.1
+[0.9.2]: https://github.com/phac-nml/gasnomenclature/releases/tag/0.9.2
