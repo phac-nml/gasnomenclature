@@ -17,6 +17,9 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/results").exists()
 
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
+
             // Check merged profiles
             def actual_profile_ref = path("$launchDir/results/locidex/merge/ref/profile_1.tsv")
             def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected-profile1.tsv")
@@ -73,6 +76,9 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/results").exists()
 
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
+
             // Check merged profiles
             def actual_profile_ref = path("$launchDir/results/locidex/merge/ref/profile_1.tsv")
             def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected-profile_scaled1.tsv")
@@ -121,6 +127,9 @@ nextflow_pipeline {
         then {
             assert workflow.success
             assert path("$launchDir/results").exists()
+
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
 
             // Check merged profiles
             def actual_profile_ref = path("$launchDir/results/locidex/merge/ref/profile_1.tsv")
@@ -180,6 +189,9 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/results").exists()
 
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
+
             // Check called clusters
             def actual_calls = path("$launchDir/results/call/Called/results.text")
             def expected_calls = path("$baseDir/tests/data/called/expected_results.txt")
@@ -216,6 +228,9 @@ nextflow_pipeline {
         then {
             assert workflow.success
             assert path("$launchDir/results").exists()
+
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
 
             // Check outputs
             def lines = []
@@ -268,6 +283,9 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/results").exists()
 
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
+
             // Check called clusters
             def actual_calls = path("$launchDir/results/call/Called/results.text")
             def expected_calls = path("$baseDir/tests/data/called/expected_results.txt")
@@ -316,6 +334,9 @@ nextflow_pipeline {
         then {
             assert workflow.success
             assert path("$launchDir/results").exists()
+
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
 
             // Check called clusters
             def actual_calls = path("$launchDir/results/call/Called/results.text")
@@ -381,6 +402,9 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/results").exists()
 
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
+
             // Check outputs
             def lines = []
 
@@ -428,6 +452,9 @@ nextflow_pipeline {
         then {
             assert workflow.success
             assert path("$launchDir/results").exists()
+
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
 
             // Check that LOCIDEX_MERGE was called with the correct batch size
             // Profiles for reference samples
@@ -477,6 +504,9 @@ nextflow_pipeline {
         then {
             assert workflow.success
             assert path("$launchDir/results").exists()
+
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
 
             // Merged Profiles: Reference
             def profile_reference = path("$launchDir/results/locidex/merge/ref/profile_1.tsv")
@@ -566,6 +596,9 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/results").exists()
 
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
+
             // Merged Profiles: Reference
             def profile_reference = path("$launchDir/results/locidex/merge/ref/profile_1.tsv")
             assert profile_reference.text.contains("sample_id\tl1\tl2\tl3\tl4\tl5\tl6\tl7\tl8")
@@ -648,6 +681,9 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/results").exists()
 
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
+
             // Check that the COPY_FILE process was called for the correct samples
             assert path("$launchDir/results/copy/sample2_sample1.mlst.json").exists()
             assert !path("$launchDir/results/copy/sampleQ_sampleQ.mlst.json").exists()
@@ -691,6 +727,9 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/results").exists()
 
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
+
             // Check that the COPY_FILE process was called for the correct samples
             assert path("$launchDir/results/copy/sample2_sample1.mlst.json").exists()
             assert !path("$launchDir/results/copy/sampleQ_sampleQ.mlst.json").exists()
@@ -732,6 +771,9 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/results").exists()
 
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
+
             // Check that the COPY_FILE process was called for the correct samples
             assert path("$launchDir/results/copy/sampleA_sample2_sample1.mlst.json").exists()
             assert !path("$launchDir/results/copy/sampleQ_sampleQ.mlst.json").exists()
@@ -769,6 +811,9 @@ nextflow_pipeline {
         then {
             assert workflow.success
             assert path("$launchDir/results").exists()
+
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
 
             // Check merged profiles
             def actual_profile_ref = path("$launchDir/results/locidex/merge/ref/profile_1.tsv")

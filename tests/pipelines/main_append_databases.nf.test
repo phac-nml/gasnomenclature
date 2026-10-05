@@ -23,6 +23,9 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/results").exists()
 
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
+
             // Check merged profiles after appending additional database of profiles
             def actual_profile_ref = path("$launchDir/results/append/profiles_ref.tsv")
             def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected_profiles_append.tsv")
@@ -116,6 +119,9 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/results").exists()
 
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
+
             // Check merged profiles after appending additional database of profiles
             def actual_profile_ref = path("$launchDir/results/append/profiles_ref.tsv")
             def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected_profiles_append.tsv")
@@ -152,6 +158,9 @@ nextflow_pipeline {
         then {
             assert workflow.success
             assert path("$launchDir/results").exists()
+
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
 
             // Check merged profiles after appending additional database of profiles
             def actual_profile_ref = path("$launchDir/results/append/profiles_ref.tsv")
@@ -233,6 +242,9 @@ nextflow_pipeline {
         then {
             assert workflow.success
             assert path("$launchDir/results").exists()
+
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
 
             // Check merged profiles after appending additional database of profiles
             def actual_profile_ref = path("$launchDir/results/append/profiles_ref.tsv")

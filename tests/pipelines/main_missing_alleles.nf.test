@@ -19,6 +19,9 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/results").exists()
 
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
+
             // Check merged profiles
             def actual_profile_ref = path("$launchDir/results/locidex/merge/ref/profile_1.tsv")
             def expected_profile_tsv = path("$baseDir/tests/data/profiles/expected-profile_missing1.tsv")
@@ -76,6 +79,9 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/results").exists()
 
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
+
             // Check computed pairwise distances
             def actual_distances = path("$launchDir/results/distances/results.text")
             def expected_distances = path("$baseDir/tests/data/distances/expected_dists_count-missing.txt")
@@ -118,6 +124,9 @@ nextflow_pipeline {
         then {
             assert workflow.success
             assert path("$launchDir/results").exists()
+
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
 
             // Check computed pairwise distances
             def actual_distances = path("$launchDir/results/distances/results.text")
