@@ -1,0 +1,54 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/phac-nml/gasnomenclature/main/assets/schema_output.json",
+    "title": "Genomic Address Service Nomenclature Output Schema",
+    "description": "The Genomic Address Service Nomenclature-specific schema used for validating IRIDA Next JSON output data",
+    "type": "object",
+    "properties": {
+        "files": {
+            "type": "object",
+            "properties": {
+                "global": {
+                    "type": "array",
+                    "items": {
+                        "properties": {},
+                        "additionalProperties": false
+                    },
+                    "uniqueItems": true
+                },
+                "samples": {
+                    "type": "object",
+                    "patternProperties": {
+                        "^.*$": {
+                            "type": "array",
+                            "items": {
+                                "properties": {},
+                                "additionalProperties": false
+                            },
+                            "uniqueItems": true
+                        }
+                    }
+                }
+            }
+        },
+        "metadata": {
+            "type": "object",
+            "properties": {
+                "samples": {
+                    "type": "object",
+                    "patternProperties": {
+                        "^.*$": {
+                            "type": "object",
+                            "properties": {
+                                "genomic_address_name": {
+                                    "description": "The hierarchal clustering address for the sample."
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

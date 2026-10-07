@@ -131,6 +131,9 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/results").exists()
 
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
+
             // Check computed pairwise distances
             def actual_distances = path("$launchDir/results/distances/results.text")
             def expected_distances = path("$baseDir/tests/data/distances/expected_dists_thresh_1.txt")
@@ -190,6 +193,9 @@ nextflow_pipeline {
         then {
             assert workflow.success
             assert path("$launchDir/results").exists()
+
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
 
             // Check computed pairwise distances
             def actual_distances = path("$launchDir/results/distances/results.text")
